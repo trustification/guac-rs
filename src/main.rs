@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use chrono::Utc;
+use chrono::{Utc, DateTime};
 use openvex::{Metadata, OpenVex, Status, Statement};
 use reqwest::blocking::Client;
 use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery};
@@ -44,10 +44,8 @@ fn main() -> Result<(), anyhow::Error> {
             }
         };
 
-        //let tm = &vuln.time_scanned[0..36];
-        //let now_parsed = DateTime::parse_from_str("%Y-%m-%d %H:%M:%S%.f %z %Z", tm).unwrap();
-        //TODO parse &vuln.time_scanned
-        let now_parsed = Utc::now();
+        let now_parsed = DateTime::parse_from_rfc3339(&vuln.time_scanned).unwrap();
+        //let now_parsed = Utc::now();
 
         let statement = Statement {
           vulnerability: Some(id.clone()),
@@ -56,7 +54,7 @@ fn main() -> Result<(), anyhow::Error> {
             products: products.drain().collect(),
             subcomponents: Vec::new(),
             status,
-            status_notes: Some("Vulnerabilities found in Guac".into()),
+            status_notes: Some("Vulnerabilities reported by Guac".into()),
             justification,
             impact_statement: None,
             action_statement: Some(format!(
