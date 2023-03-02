@@ -2,10 +2,12 @@ use std::collections::HashSet;
 
 use chrono::{Utc, DateTime};
 use openvex::{Metadata, OpenVex, Status, Statement};
+use packageurl::PackageUrl;
 use reqwest::blocking::Client;
 use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery};
 use anyhow::*;
-use crate::q4::AllCertifyVulnVulnerability::OSV;
+use crate::certify_vuln::AllCertifyVulnVulnerability::OSV;
+use std::str::FromStr;
 
 
 
@@ -15,16 +17,33 @@ use crate::q4::AllCertifyVulnVulnerability::OSV;
     query_path = "src/query/certify_vuln.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct Q4;
+pub struct CertifyVuln;
 
 
 fn main() -> Result<(), anyhow::Error> {
-    let variables = q4::Variables;
+
+    let purl = PackageUrl::from_str("pkg:pypi/django")?;
+    println!("{:?} - {:?} - {:?}", purl.ty(), purl.namespace(), purl.name());
+
+    let pkg = certify_vuln::PkgSpec {
+        type_: Some(purl.ty().to_string()),
+        namespace: purl.namespace().map(|s| s.to_string()),
+        name: Some(purl.name().to_string()),
+        subpath: purl.subpath().map(|s|s.to_string()),
+        version: purl.version().map(|s|s.to_string()),
+        qualifiers: None, //TODO fix qualifiers
+        match_only_empty_qualifiers: Some(false),
+    };
+
+    let variables = certify_vuln::Variables {
+        package: Some(pkg)
+    };
 
     let client = Client::new();
 
+
     let response_body =
-        post_graphql::<Q4, _>(&client, "http://localhost:8080/query", variables).unwrap();
+        post_graphql::<CertifyVuln, _>(&client, "http://localhost:8080/query", variables).unwrap();
 
     let response_data = response_body.data.expect("missing response data");
 

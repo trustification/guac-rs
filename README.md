@@ -1,5 +1,11 @@
 # Guac Rust library
 
+### Run Guac server
+
+```
+BACKEND=testing TEST=true go run pkg/assembler/graphql/main/server.go
+```
+
 ### Update schema
 
 ```

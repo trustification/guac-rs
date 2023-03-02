@@ -44,26 +44,8 @@ fragment allCertifyVuln on CertifyVuln {
   collector
 }
 
-query Q1 {
-  CertifyVuln(certifyVulnSpec: {}) {
-    ...allCertifyVuln
-  }
-}
-
-query Q2 {
-  CertifyVuln(certifyVulnSpec: {origin: "testing backend"}) {
-    ...allCertifyVuln
-  }
-}
-
-query Q3 {
-  CertifyVuln(certifyVulnSpec: {package: {name: "openssl"}}) {
-    ...allCertifyVuln
-  }
-}
-
-query Q4 {
-  CertifyVuln(certifyVulnSpec: {package: {name: "django"}}) {
+query CertifyVuln($package: PkgSpec) {
+  CertifyVuln(certifyVulnSpec: {package: $package}) {
     ...allCertifyVuln
   }
 }
