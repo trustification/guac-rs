@@ -3,7 +3,7 @@
 ### Run Guac server
 
 ```
-BACKEND=testing TEST=true go run pkg/assembler/graphql/main/server.go
+go run cmd/graphql_playground/main.go --neo4j=false --memory
 ```
 
 ### Update schema

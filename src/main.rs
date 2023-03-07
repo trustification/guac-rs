@@ -3,12 +3,13 @@ use std::collections::HashSet;
 use chrono::{Utc, DateTime};
 use openvex::{Metadata, OpenVex, Status, Statement};
 use packageurl::PackageUrl;
-use reqwest::blocking::Client;
-use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery};
+use reqwest::Client;
+use graphql_client::{reqwest::post_graphql, GraphQLQuery};
 use anyhow::*;
 use crate::certify_vuln::AllCertifyVulnVulnerability::OSV;
 use std::str::FromStr;
 
+mod client;
 
 
 #[derive(GraphQLQuery)]
@@ -19,10 +20,12 @@ use std::str::FromStr;
 )]
 pub struct CertifyVuln;
 
-
-fn main() -> Result<(), anyhow::Error> {
+#[tokio::main]
+async fn main() -> Result<(), anyhow::Error> {
 
     let purl = PackageUrl::from_str("pkg:pypi/django")?;
+    //let purl = PackageUrl::from_str("pkg:maven/io.vertx/vertx-web@4.3.7")?;
+
     println!("{:?} - {:?} - {:?}", purl.ty(), purl.namespace(), purl.name());
 
     let pkg = certify_vuln::PkgSpec {
@@ -35,21 +38,12 @@ fn main() -> Result<(), anyhow::Error> {
         match_only_empty_qualifiers: Some(false),
     };
 
-    let variables = certify_vuln::Variables {
-        package: Some(pkg)
-    };
-
-    let client = Client::new();
-
-
-    let response_body =
-        post_graphql::<CertifyVuln, _>(&client, "http://localhost:8080/query", variables).unwrap();
-
-    let response_data = response_body.data.expect("missing response data");
+    let guac = client::GuacClient::new("http://localhost:8080/query".to_string());
+    let vulns = guac.certify_vuln(pkg).await?;
 
     let mut vex = openvex();
 
-    for vuln in response_data.certify_vuln {
+    for vuln in vulns {
         let mut products = HashSet::new();
         let status = Status::Affected;
         let justification = None;
@@ -64,7 +58,6 @@ fn main() -> Result<(), anyhow::Error> {
         };
 
         let now_parsed = DateTime::parse_from_rfc3339(&vuln.time_scanned).unwrap();
-        //let now_parsed = Utc::now();
 
         let statement = Statement {
           vulnerability: Some(id.clone()),
