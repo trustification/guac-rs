@@ -1,7 +1,15 @@
-use crate::{CertifyVuln, certify_vuln::{PkgSpec, self, allCertifyVuln}};
 use graphql_client::{GraphQLQuery, reqwest::post_graphql};
 use anyhow::*;
 
+use self::certify_vuln::{allCertifyVuln, PkgSpec};
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/schema.json",
+    query_path = "src/query/certify_vuln.gql",
+    response_derives = "Debug, Serialize, Deserialize"
+)]
+pub struct CertifyVuln;
 
 pub struct GuacClient {
     client: reqwest::Client,

@@ -1,24 +1,22 @@
 use std::collections::HashSet;
 
 use chrono::{Utc, DateTime};
+use guac_rs::client::{GuacClient, certify_vuln::*, certify_vuln::AllCertifyVulnVulnerability::OSV};
 use openvex::{Metadata, OpenVex, Status, Statement};
 use packageurl::PackageUrl;
 use reqwest::Client;
 use graphql_client::{reqwest::post_graphql, GraphQLQuery};
 use anyhow::*;
-use crate::certify_vuln::AllCertifyVulnVulnerability::OSV;
 use std::str::FromStr;
 
-mod client;
 
-
-#[derive(GraphQLQuery)]
-#[graphql(
-    schema_path = "src/schema.json",
-    query_path = "src/query/certify_vuln.gql",
-    response_derives = "Debug, Serialize, Deserialize"
-)]
-pub struct CertifyVuln;
+// #[derive(GraphQLQuery)]
+// #[graphql(
+//     schema_path = "src/schema.json",
+//     query_path = "src/query/certify_vuln.gql",
+//     response_derives = "Debug, Serialize, Deserialize"
+// )]
+// pub struct CertifyVuln;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
@@ -28,7 +26,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
     println!("{:?} - {:?} - {:?}", purl.ty(), purl.namespace(), purl.name());
 
-    let pkg = certify_vuln::PkgSpec {
+    let pkg = PkgSpec {
         type_: Some(purl.ty().to_string()),
         namespace: purl.namespace().map(|s| s.to_string()),
         name: Some(purl.name().to_string()),
@@ -38,7 +36,7 @@ async fn main() -> Result<(), anyhow::Error> {
         match_only_empty_qualifiers: Some(false),
     };
 
-    let guac = client::GuacClient::new("http://localhost:8080/query".to_string());
+    let guac = GuacClient::new("http://localhost:8080/query".to_string());
     let vulns = guac.certify_vuln(pkg).await?;
 
     let mut vex = openvex();
