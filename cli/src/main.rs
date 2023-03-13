@@ -1,3 +1,5 @@
+
+
 use guac_rs::client::{GuacClient, certify_vuln::*, vulns2vex};
 use packageurl::PackageUrl;
 use anyhow::*;
@@ -31,5 +33,3 @@ async fn main() -> Result<(), anyhow::Error> {
     Ok(())
 
 }
-
-
