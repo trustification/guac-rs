@@ -76,7 +76,8 @@ pub fn vulns2vex(vulns: Vec<allCertifyVuln>) -> OpenVex {
             }
         };
 
-        let now_parsed = DateTime::parse_from_rfc3339(&vuln.time_scanned).unwrap();
+        //let now_parsed = DateTime::parse_from_rfc3339(&vuln.time_scanned).unwrap();
+        let now_parsed = Utc::now(); //TODO fix time problem
 
         let statement = Statement {
           vulnerability: Some(id.clone()),

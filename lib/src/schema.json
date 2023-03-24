@@ -107,7 +107,7 @@
       "subscriptionType": null,
       "types": [
         {
-          "description": "Artifact represents the artifact and contains a digest field\n\nalgorithm is mandatory in the from strings.ToLower(string(checksum.Algorithm)) (sha256, sha1...etc)\ndigest is mandatory in the form checksum.Value.",
+          "description": "Artifact represents the artifact and contains a digest field\n\nBoth field are mandatory and canonicalized to be lowercase.\n\nIf having a `checksum` Go object, `algorithm` can be\n`strings.ToLower(string(checksum.Algorithm))` and `digest` can be\n`checksum.Value`.",
           "enumValues": [],
           "fields": [
             {
@@ -150,7 +150,46 @@
           "possibleTypes": []
         },
         {
-          "description": "ArtifactSpec allows filtering the list of artifacts to return.",
+          "description": "ArtifactInputSpec is the same as Artifact, but used as mutation input.\n\nBoth arguments will be canonicalized to lowercase.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "algorithm",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "digest",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "ArtifactInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "ArtifactSpec allows filtering the list of artifacts to return.\n\nBoth arguments will be canonicalized to lowercase.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -191,7 +230,7 @@
           "possibleTypes": []
         },
         {
-          "description": "Builder represents the builder such as (FRSCA or github actions) and contains a uri field\n\nuri is mandatory and represents the specific builder.\n\nThis node is a singleton: backends guarantee that there is exactly one node with\nthe same `uri` value.",
+          "description": "Builder represents the builder such as (FRSCA or github actions).\n\nCurrently builders are identified by the `uri` field, which is mandatory.",
           "enumValues": [],
           "fields": [
             {
@@ -218,6 +257,31 @@
           "possibleTypes": []
         },
         {
+          "description": "BuilderInputSpec is the same as Builder, but used for mutation ingestion.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "uri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "BuilderInputSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "BuilderSpec allows filtering the list of builders to return.",
           "enumValues": [],
           "fields": [],
@@ -239,7 +303,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CVE represents common vulnerabilities and exposures. It contains the year along\nwith the CVE ID.\n\nyear is mandatory.\n\nThis node is a singleton: backends guarantee that there is exactly one node with\nthe same `year` value.",
+          "description": "CVE represents common vulnerabilities and exposures. It contains the year along\nwith the CVE ID.\n\nThe year is mandatory.\n\nThis node is a singleton: backends guarantee that there is exactly one node\nwith the same `year` value.",
           "enumValues": [],
           "fields": [
             {
@@ -290,7 +354,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CVEId is the actual ID that is given to a specific vulnerability\n\nid field is mandatory.\n\nThis node can be referred to by other parts of GUAC.",
+          "description": "CVEId is the actual ID that is given to a specific vulnerability\n\nThe `id` field is mandatory and canonicalized to be lowercase.\n\nThis node can be referred to by other parts of GUAC.",
           "enumValues": [],
           "fields": [
             {
@@ -314,6 +378,45 @@
           "interfaces": [],
           "kind": "OBJECT",
           "name": "CVEId",
+          "possibleTypes": []
+        },
+        {
+          "description": "CVEInputSpec is the same as CVESpec, but used for mutation ingestion.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "year",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "cveId",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "CVEInputSpec",
           "possibleTypes": []
         },
         {
@@ -348,7 +451,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyBad is an attestation represents when a package, source or artifact is considered bad\n\nSubject - union type that can be either a package, source or artifact object type\nJustification - string value representing why the subject is considered bad\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation\n\nNote: Attestation must occur at the PackageName or the PackageVersion or at the SourceName.",
+          "description": "CertifyBad is an attestation represents when a package, source or artifact is considered bad\n\nsubject - union type that can be either a package, source or artifact object type\njustification (property) - string value representing why the subject is considered bad\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation\n\nNote: Attestation must occur at the PackageName or the PackageVersion or at the SourceName.",
           "enumValues": [],
           "fields": [
             {
@@ -362,7 +465,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "PkgSrcArtObject",
+                  "name": "PackageSourceOrArtifact",
                   "ofType": null
                 }
               }
@@ -423,6 +526,59 @@
           "possibleTypes": []
         },
         {
+          "description": "CertifyBadInputSpec is the same as CertifyBad but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "CertifyBadInputSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "CertifyBadSpec allows filtering the list of CertifyBad to return.\nNote: Package, Source or artifact must be specified but not at the same time\nFor package - a PackageName or PackageVersion must be specified (name or name, version, qualifiers and subpath)\nFor source - a SourceName must be specified (name, tag or commit)",
           "enumValues": [],
           "fields": [],
@@ -430,30 +586,10 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "package",
+              "name": "subject",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "PkgSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "source",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "SourceSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "artifact",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ArtifactSpec",
+                "name": "PackageSourceOrArtifactSpec",
                 "ofType": null
               }
             },
@@ -494,7 +630,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyPkg is an attestation that represents when a package objects are similar\n\nPackages - list of package objects\nJustification - string value representing why the packages are similar\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation",
+          "description": "CertifyPkg is an attestation that represents when a package objects are similar\n\npackages (subject) - list of package objects\njustification (property) - string value representing why the packages are similar\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
             {
@@ -577,6 +713,59 @@
           "possibleTypes": []
         },
         {
+          "description": "CertifyPkgInputSpec is the same as CertifyPkg but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "CertifyPkgInputSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "CertifyPkgSpec allows filtering the list of CertifyPkg to return.\n\nSpecifying just the package allows to query for all similar packages (if they exist)",
           "enumValues": [],
           "fields": [],
@@ -632,13 +821,13 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyScorecard is an attestation represents the scorecard of a particular source\n\nSource - the source object type that represents the source\ntimeScanned - timestamp when this was last scanned (exact time)\naggregateScore - overall scorecard score for the source\nchecks - individual scorecard check scores (Branch-Protection, Code-Review...etc)\nscorecardVersion - version of the scorecard when the source was scanned\nscorecardCommit - commit of scorecard when the source was scanned\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation",
+          "description": "CertifyScorecard is an attestation which represents the scorecard of a\nparticular source repository.",
           "enumValues": [],
           "fields": [
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "The source repository that is being scanned (attestation subject)",
               "isDeprecated": false,
               "name": "source",
               "type": {
@@ -654,119 +843,15 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "The Scorecard attached to the repository (attestation object)",
               "isDeprecated": false,
-              "name": "timeScanned",
+              "name": "scorecard",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "aggregateScore",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "checks",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "ScorecardCheck",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "scorecardVersion",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "scorecardCommit",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "origin",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "collector",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "OBJECT",
+                  "name": "Scorecard",
                   "ofType": null
                 }
               }
@@ -799,7 +884,7 @@
               "name": "timeScanned",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Time",
                 "ofType": null
               }
             },
@@ -878,7 +963,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVuln is an attestation that represents when a package has a vulnerability\n\nPackage - the package object type that represents the package\nvulnerability - union type that consists of osv, cve or ghsa\ntimeScanned - timestamp of when the package was last scanned\ndbUri - scanner vulnerability database uri\ndbVersion - scanner vulnerability database version\nscannerUri - vulnerability scanner's uri \nscannerVersion - vulnerability scanner version\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation",
+          "description": "CertifyVEXStatement is an attestation that represents when a package or artifact has a VEX about a specific vulnerability (CVE or GHSA)\n\nsubject - union type that represents a package or artifact\nvulnerability (object) - union type that consists of cve or ghsa\njustification (property) - justification for VEX\nknownSince (property) - timestamp of the VEX (exact time in RFC 3339 format)\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
             {
@@ -886,13 +971,13 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "package",
+              "name": "subject",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Package",
+                  "kind": "UNION",
+                  "name": "PackageOrArtifact",
                   "ofType": null
                 }
               }
@@ -908,7 +993,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "OsvCveGhsaObject",
+                  "name": "CveOrGhsa",
                   "ofType": null
                 }
               }
@@ -918,7 +1003,7 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "timeScanned",
+              "name": "justification",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -934,61 +1019,13 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "dbUri",
+              "name": "knownSince",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "dbVersion",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "scannerUri",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "scannerVersion",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "name": "Time",
                   "ofType": null
                 }
               }
@@ -1029,6 +1066,136 @@
           "inputFields": [],
           "interfaces": [],
           "kind": "OBJECT",
+          "name": "CertifyVEXStatement",
+          "possibleTypes": []
+        },
+        {
+          "description": "CertifyVEXStatementSpec allows filtering the list of CertifyVEXStatement to return.\nOnly package or artifact and CVE or GHSA can be specified at once.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "subject",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PackageOrArtifactSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "vulnerability",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CveOrGhsaSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "knownSince",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "CertifyVEXStatementSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "CertifyVuln is an attestation that represents when a package has a vulnerability",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "package (subject) - the package object type that represents the package",
+              "isDeprecated": false,
+              "name": "package",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Package",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "vulnerability (object) - union type that consists of osv, cve or ghsa",
+              "isDeprecated": false,
+              "name": "vulnerability",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "OsvCveOrGhsa",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "metadata (property) - contains all the vulnerability metadata ",
+              "isDeprecated": false,
+              "name": "metadata",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "VulnerabilityMetaData",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
           "name": "CertifyVuln",
           "possibleTypes": []
         },
@@ -1050,30 +1217,10 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "osv",
+              "name": "vulnerability",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "OSVSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cve",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CVESpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsa",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "GHSASpec",
+                "name": "OsvCveOrGhsaSpec",
                 "ofType": null
               }
             },
@@ -1083,7 +1230,7 @@
               "name": "timeScanned",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Time",
                 "ofType": null
               }
             },
@@ -1154,13 +1301,13 @@
           "possibleTypes": []
         },
         {
-          "description": "CveGhsaObject is a union of CVE and GHSA.",
+          "description": "CveOrGhsa is a union of CVE and GHSA.",
           "enumValues": [],
           "fields": [],
           "inputFields": [],
           "interfaces": [],
           "kind": "UNION",
-          "name": "CveGhsaObject",
+          "name": "CveOrGhsa",
           "possibleTypes": [
             {
               "kind": "OBJECT",
@@ -1175,6 +1322,68 @@
           ]
         },
         {
+          "description": "CveOrGhsaInput allows using CveOrGhsa union as\ninput type to be used in mutations.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "cve",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CVEInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "ghsa",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GHSAInputSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "CveOrGhsaInput",
+          "possibleTypes": []
+        },
+        {
+          "description": "CveOrGhsaSpec allows using CveOrGhsa union as\ninput type to be used in read queries.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "cve",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CVESpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "ghsa",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GHSASpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "CveOrGhsaSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).",
           "enumValues": [],
           "fields": [],
@@ -1185,7 +1394,7 @@
           "possibleTypes": []
         },
         {
-          "description": "GHSA represents github security advisory. It contains the ghsa ID (GHSA-pgvh-p3g4-86jw)",
+          "description": "GHSA represents GitHub security advisories.\n\nWe create a separate node to allow retrieving all GHSAs.",
           "enumValues": [],
           "fields": [
             {
@@ -1220,7 +1429,7 @@
           "possibleTypes": []
         },
         {
-          "description": "GHSAId is the actual ID that is given to a specific vulnerability on github\n\nid field is mandatory.\n\nThis node can be referred to by other parts of GUAC.",
+          "description": "GHSAId is the actual ID that is given to a specific vulnerability on GitHub\n\nThe `id` field is mandatory and canonicalized to be lowercase.\n\nThis node can be referred to by other parts of GUAC.",
           "enumValues": [],
           "fields": [
             {
@@ -1247,7 +1456,32 @@
           "possibleTypes": []
         },
         {
-          "description": "GHSASpec allows filtering the list of ghsa to return.",
+          "description": "GHSAInputSpec is the same as GHSASpec, but used for mutation ingestion.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "ghsaId",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "GHSAInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "GHSASpec allows filtering the list of GHSA to return.\n\nThe argument will be canonicalized to lowercase.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -1268,7 +1502,7 @@
           "possibleTypes": []
         },
         {
-          "description": "HasSBOM is an attestation represents that a package object or source object has an SBOM associated with a uri\n\nSubject - union type that can be either a package or source object type\nPackage - the package object type that represents the package\nSource - the source object type that represents the source\nuri - identifier string for the SBOM\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation\n\nNote: Only package object or source object can be defined. Not both.",
+          "description": "HasSBOM is an attestation represents that a package object or source object has an SBOM associated with a uri\n\nsubject - union type that can be either a package or source object type\nuri (property) - identifier string for the SBOM\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation\n\nNote: Only package object or source object can be defined. Not both.",
           "enumValues": [],
           "fields": [
             {
@@ -1282,7 +1516,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "PkgSrcObject",
+                  "name": "PackageOrSource",
                   "ofType": null
                 }
               }
@@ -1343,27 +1577,70 @@
           "possibleTypes": []
         },
         {
-          "description": "HashEqualSpec allows filtering the list of HasSBOM to return.\n\nOnly the package or source can be added, not both. HasSourceAt will be used to create the package to source\nrelationship. ",
+          "description": "HasSBOMInputSpec is the same as HasSBOM but for mutation input.\n\nAll fields are required.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
             {
               "defaultValue": null,
               "description": null,
-              "name": "package",
+              "name": "uri",
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "PkgSpec",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               }
             },
             {
               "defaultValue": null,
               "description": null,
-              "name": "source",
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "HasSBOMInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "HashEqualSpec allows filtering the list of HasSBOM to return.\n\nOnly the package or source can be added, not both. HasSourceAt will be used to create the package to source\nrelationship.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "subject",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "SourceSpec",
+                "name": "PackageOrSourceSpec",
                 "ofType": null
               }
             },
@@ -1404,13 +1681,13 @@
           "possibleTypes": []
         },
         {
-          "description": "HasSLSA is an attestation represents that the subject has a SLSA attestation associated with it.\n\nSubject - an union type that consists of package, source or artifact\nBuiltFrom - list of union types that consists of the package, source or artifact that the subject was build from\nBuiltBy - represents the builder that was used to build the subject\nBuildType - individual scorecard check scores (Branch-Protection, Code-Review...etc)\nslsaPredicate - a list of key value pair that consist of the keys and values of the SLSA predicate\nSlsaVersion - version of the SLSA predicate\nStartedOn - timestamp when the SLSA predicate was recorded during the build time of the subject\nFinishedOn - timestamp when the SLSA predicate was completed during the build time of the subject\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation",
+          "description": "HasSLSA records that a subject node has a SLSA attestation.",
           "enumValues": [],
           "fields": [
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "The subject of SLSA attestation: package, source, or artifact.",
               "isDeprecated": false,
               "name": "subject",
               "type": {
@@ -1418,7 +1695,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "PkgSrcArtObject",
+                  "name": "PackageSourceOrArtifact",
                   "ofType": null
                 }
               }
@@ -1426,161 +1703,13 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "The SLSA attestation.",
               "isDeprecated": false,
-              "name": "builtFrom",
+              "name": "slsa",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "UNION",
-                      "name": "PkgSrcArtObject",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "builtBy",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Builder",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "buildType",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "slsaPredicate",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "SLSAPredicate",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "slsaVersion",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "startedOn",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "finishedOn",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "origin",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "collector",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "SLSA",
+                "ofType": null
               }
             }
           ],
@@ -1598,72 +1727,28 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "package",
+              "name": "subject",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "PkgSpec",
+                "name": "PackageSourceOrArtifactSpec",
                 "ofType": null
               }
             },
             {
               "defaultValue": null,
               "description": null,
-              "name": "source",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "SourceSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "artifact",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ArtifactSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "builtFromPackages",
+              "name": "builtFrom",
               "type": {
                 "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "PkgSpec",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "builtFromSource",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "SourceSpec",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "builtFromArtifact",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ArtifactSpec",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PackageSourceOrArtifactSpec",
+                    "ofType": null
+                  }
                 }
               }
             },
@@ -1721,7 +1806,7 @@
               "name": "startedOn",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Time",
                 "ofType": null
               }
             },
@@ -1731,7 +1816,7 @@
               "name": "finishedOn",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Time",
                 "ofType": null
               }
             },
@@ -1762,9 +1847,25 @@
           "possibleTypes": []
         },
         {
-          "description": "HasSourceAt is an attestation represents that a package object has a source object since a timestamp\n\nPackage - the package object type that represents the package\nSource - the source object type that represents the source\nKnownSince - timestamp when this was last checked (exact time)\nJustification - string value representing why the package has a source specified\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation",
+          "description": "HasSourceAt is an attestation represents that a package object has a source object since a timestamp\n\npackage (subject) - the package object type that represents the package\nsource (object) - the source object type that represents the source\nknownSince (property) - timestamp when this was last checked (exact time)\njustification (property) - string value representing why the package has a source specified\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -1808,7 +1909,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "Time",
                   "ofType": null
                 }
               }
@@ -1869,10 +1970,87 @@
           "possibleTypes": []
         },
         {
+          "description": "HasSourceAtInputSpec is the same as HasSourceAt but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "knownSince",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "HasSourceAtInputSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "HasSourceAtSpec allows filtering the list of HasSourceAt to return.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             {
               "defaultValue": null,
               "description": null,
@@ -1899,7 +2077,7 @@
               "name": "knownSince",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Time",
                 "ofType": null
               }
             },
@@ -1940,25 +2118,9 @@
           "possibleTypes": []
         },
         {
-          "description": "HashEqual is an attestation that represents when two artifact hash are similar based on a justification.\n\nJustification - string value representing why the artifacts are the equal\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation\nArtifacts - the artifacts (represented by algorithm and digest) that are equal",
+          "description": "HashEqual is an attestation that represents when two artifact hash are similar based on a justification.\n\nartifacts (subject) - the artifacts (represented by algorithm and digest) that are equal\njustification (property) - string value representing why the artifacts are the equal\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "justification",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
             {
               "args": [],
               "deprecationReason": null,
@@ -1980,6 +2142,22 @@
                       "ofType": null
                     }
                   }
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
                 }
               }
             },
@@ -2023,7 +2201,7 @@
           "possibleTypes": []
         },
         {
-          "description": "HashEqualSpec allows filtering the list of HashEqual to return.\n\nSpecifying just the artifacts allows to query for all equivalent artifacts (if they exist)",
+          "description": "HashEqualInputSpec is the same as HashEqual but for mutation input.\n\nAll fields are required.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -2032,11 +2210,54 @@
               "description": null,
               "name": "justification",
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               }
             },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "HashEqualInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "HashEqualSpec allows filtering the list of HashEqual to return.\n\nSpecifying just the artifacts allows to query for all equivalent artifacts (if they exist)",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
             {
               "defaultValue": null,
               "description": null,
@@ -2049,6 +2270,16 @@
                   "name": "ArtifactSpec",
                   "ofType": null
                 }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               }
             },
             {
@@ -2098,7 +2329,7 @@
           "possibleTypes": []
         },
         {
-          "description": "IsDependency is an attestation that represents when a package is dependent on another package\n\nPackage - the package object type that represents the package\ndependentPackage - the package object type that represents the packageName (cannot be to the packageVersion)\nVersionRange - string value for version range that applies to the dependent package\nJustification - string value representing why the artifacts are the equal\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation",
+          "description": "IsDependency is an attestation that represents when a package is dependent on another package\n\npackage (subject) - the package object type that represents the package\ndependentPackage (object) - the package object type that represents the packageName (cannot be to the packageVersion)\nversionRange (property) - string value for version range that applies to the dependent package\njustification (property) - string value representing why the artifacts are the equal\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
             {
@@ -2205,6 +2436,73 @@
           "possibleTypes": []
         },
         {
+          "description": "IsDependencyInputSpec is the same as IsDependency but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "versionRange",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "IsDependencyInputSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "IsDependencySpec allows filtering the list of IsDependency to return.\n\nNote: the package object must be defined to return its dependent packages.\nDependent Packages must represent the packageName (cannot be the packageVersion)",
           "enumValues": [],
           "fields": [],
@@ -2276,13 +2574,13 @@
           "possibleTypes": []
         },
         {
-          "description": "IsOccurrence is an attestation represents when either a package or source is represented by an artifact\n\nSubject - union type that can be either a package or source object type\noccurrenceArtifacts - list of artifacts that represent the the package or source\nJustification - string value representing why the package or source is represented by the specified artifact\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation\n\nNote: Package or Source must be specified but not both at the same time.\nAttestation must occur at the PackageName or the PackageVersion or at the SourceName.\n\nIsOccurrence does not connect a package with a source. \nHasSourceAt attestation will be used to connect a package with a source",
+          "description": "IsOccurrence is an attestation represents when either a package or source is represented by an artifact\n\nNote: Package or Source must be specified but not both at the same time.\nAttestation must occur at the PackageVersion or at the SourceName.",
           "enumValues": [],
           "fields": [
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "subject - union type that can be either a package or source object type",
               "isDeprecated": false,
               "name": "subject",
               "type": {
@@ -2290,7 +2588,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "PkgSrcObject",
+                  "name": "PackageOrSource",
                   "ofType": null
                 }
               }
@@ -2298,31 +2596,23 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "artifact (object) - artifact that represent the the package or source",
               "isDeprecated": false,
-              "name": "occurrenceArtifacts",
+              "name": "artifact",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Artifact",
-                      "ofType": null
-                    }
-                  }
+                  "kind": "OBJECT",
+                  "name": "Artifact",
+                  "ofType": null
                 }
               }
             },
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "justification (property) - string value representing why the package or source is represented by the specified artifact",
               "isDeprecated": false,
               "name": "justification",
               "type": {
@@ -2338,7 +2628,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "origin (property) - where this attestation was generated from (based on which document)",
               "isDeprecated": false,
               "name": "origin",
               "type": {
@@ -2354,7 +2644,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "collector (property) - the GUAC collector that collected the document that generated this attestation",
               "isDeprecated": false,
               "name": "collector",
               "type": {
@@ -2375,7 +2665,7 @@
           "possibleTypes": []
         },
         {
-          "description": "IsOccurrenceSpec allows filtering the list of IsOccurrence to return.\nNote: Package or Source must be specified but not both at the same time\nFor package - a PackageName or PackageVersion must be specified (name or name, version, qualifiers and subpath)\nFor source - a SourceName must be specified (name, tag or commit)",
+          "description": "IsOccurrenceInputSpec is the same as IsOccurrence but for mutation input.\n\nAll fields are required.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -2384,43 +2674,82 @@
               "description": null,
               "name": "justification",
               "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "IsOccurrenceInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "IsOccurrenceSpec allows filtering the list of IsOccurrence to return.\nNote: Package or Source must be specified but not both at the same time\nFor package - PackageVersion must be specified (version, qualifiers and subpath)\nor it defaults to empty string for version, subpath and empty list for qualifiers\nFor source - a SourceName must be specified (name, tag or commit)",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "subject",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PackageOrSourceSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "artifact",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ArtifactSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "package",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "PkgSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "source",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "SourceSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "artifacts",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ArtifactSpec",
-                  "ofType": null
-                }
               }
             },
             {
@@ -2450,7 +2779,7 @@
           "possibleTypes": []
         },
         {
-          "description": "IsVulnerability is an attestation that represents when an OSV ID represents a CVE or GHSA\n\nOSV - the osv object type that represents OSV and its ID\nVulnerability - union type that consists of cve or ghsa\nJustification - the reason why the osv ID represents the cve or ghsa\nOrigin - where this attestation was generated from (based on which document)\nCollector - the GUAC collector that collected the document that generated this attestation",
+          "description": "IsVulnerability is an attestation that represents when an OSV ID represents a CVE or GHSA\n\nosv (subject) - the osv object type that represents OSV and its ID\nvulnerability (object) - union type that consists of cve or ghsa\njustification (property) - the reason why the osv ID represents the cve or ghsa\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
             {
@@ -2480,7 +2809,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "CveGhsaObject",
+                  "name": "CveOrGhsa",
                   "ofType": null
                 }
               }
@@ -2541,6 +2870,59 @@
           "possibleTypes": []
         },
         {
+          "description": "IsVulnerabilityInputSpec is the same as IsVulnerability but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "IsVulnerabilityInputSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "IsVulnerabilitySpec allows filtering the list of IsVulnerability to return.\nOnly CVE or GHSA can be specified at once.",
           "enumValues": [],
           "fields": [],
@@ -2558,20 +2940,10 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "cve",
+              "name": "vulnerability",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "CVESpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsa",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "GHSASpec",
+                "name": "CveOrGhsaSpec",
                 "ofType": null
               }
             },
@@ -2612,6 +2984,31 @@
           "possibleTypes": []
         },
         {
+          "description": "MatchFlags is used to input the PkgMatchType enum.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "pkg",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "PkgMatchType",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "MatchFlags",
+          "possibleTypes": []
+        },
+        {
           "description": null,
           "enumValues": [],
           "fields": [
@@ -2620,11 +3017,909 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "pkg",
+                  "name": "artifact",
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "PkgInputSpec",
+                    "name": "ArtifactInputSpec",
                     "ofType": null
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingest a new artifact. Returns the ingested artifact",
+              "isDeprecated": false,
+              "name": "ingestArtifact",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Artifact",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "builder",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "BuilderInputSpec",
+                    "ofType": null
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingest a new builder. Returns the ingested builder",
+              "isDeprecated": false,
+              "name": "ingestBuilder",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Builder",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "subject",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PackageSourceOrArtifactInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkgMatchType",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "MatchFlags",
+                    "ofType": null
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "certifyBad",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CertifyBadInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Adds a certification that two packages are similar",
+              "isDeprecated": false,
+              "name": "ingestCertifyBad",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CertifyBad",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "depPkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "certifyPkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CertifyPkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Adds a certification that two packages are similar",
+              "isDeprecated": false,
+              "name": "ingestCertifyPkg",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CertifyPkg",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "source",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SourceInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "scorecard",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "ScorecardInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Certifies the Scorecard scanning of a source repository",
+              "isDeprecated": false,
+              "name": "certifyScorecard",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CertifyScorecard",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "subject",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PackageOrArtifactInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CveOrGhsaInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vexStatement",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VexStatementInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "certify that an either a package or artifact has an associated VEX for a CVE or GHSA",
+              "isDeprecated": false,
+              "name": "ingestVEXStatement",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CertifyVEXStatement",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "OsvCveOrGhsaInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "certifyVuln",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityMetaDataInput",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "certify that a package is vulnerable to a vulnerability (OSV, CVE or GHSA)",
+              "isDeprecated": false,
+              "name": "ingestVulnerability",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CertifyVuln",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "cve",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CVEInputSpec",
+                    "ofType": null
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingest a new CVE. Returns the ingested object",
+              "isDeprecated": false,
+              "name": "ingestCVE",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CVE",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "ghsa",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "GHSAInputSpec",
+                    "ofType": null
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingest a new GHSA. Returns the ingested object",
+              "isDeprecated": false,
+              "name": "ingestGHSA",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "GHSA",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "subject",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PackageOrSourceInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "hasSBOM",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "HasSBOMInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Certifies that a package or a source has SBOM at the URI",
+              "isDeprecated": false,
+              "name": "ingestHasSBOM",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "HasSBOM",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "subject",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PackageSourceOrArtifactInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "builtFrom",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "PackageSourceOrArtifactInput",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "builtBy",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "BuilderInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "slsa",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SLSAInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingests a SLSA attestation.\n\nNote that materials and builder are extracted as separate arguments. This is\nbecause this ingestion method assumes that the subject and the materials are\nalready ingested and only creates the SLSA node.",
+              "isDeprecated": false,
+              "name": "ingestSLSA",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "HasSLSA",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "materials",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "PackageSourceOrArtifactInput",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingests a set of packages, sources, and artifacts.\n\nThis is a helper mutation for ingesting SLSA nodes. It should be more\nefficient to call this method to ingest a set materials instead of ingesting\nthem one by one.",
+              "isDeprecated": false,
+              "name": "ingestMaterials",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "PackageSourceOrArtifact",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkgMatchType",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "MatchFlags",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "source",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SourceInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "hasSourceAt",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "HasSourceAtInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Adds a certification that a package (either at the version level or package name level) is associated with the source",
+              "isDeprecated": false,
+              "name": "ingestHasSourceAt",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "HasSourceAt",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "artifact",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "ArtifactInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "equalArtifact",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "ArtifactInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "hashEqual",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "HashEqualInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "certify that two artifacts are the same (hashes are equal)",
+              "isDeprecated": false,
+              "name": "ingestHashEqual",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "HashEqual",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "depPkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "dependency",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "IsDependencyInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Adds dependency between two packages",
+              "isDeprecated": false,
+              "name": "ingestDependency",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "IsDependency",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "subject",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PackageOrSourceInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "artifact",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "ArtifactInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "occurrence",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "IsOccurrenceInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Adds an artifact as an occurrence for either a package or a source",
+              "isDeprecated": false,
+              "name": "ingestOccurrence",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "IsOccurrence",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "osv",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "OSVInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CveOrGhsaInput",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "isVulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "IsVulnerabilityInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "certify that a OSV is associated with either a CVE or GHSA",
+              "isDeprecated": false,
+              "name": "ingestIsVulnerability",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "IsVulnerability",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "osv",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "OSVInputSpec",
+                    "ofType": null
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingest a new OSV. Returns the ingested object",
+              "isDeprecated": false,
+              "name": "ingestOSV",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "OSV",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
                   }
                 }
               ],
@@ -2641,6 +3936,37 @@
                   "ofType": null
                 }
               }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "source",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SourceInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingest a new source. Returns the ingested source trie",
+              "isDeprecated": false,
+              "name": "ingestSource",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Source",
+                  "ofType": null
+                }
+              }
             }
           ],
           "inputFields": [],
@@ -2650,7 +3976,7 @@
           "possibleTypes": []
         },
         {
-          "description": "OSV represents Open Source Vulnerability . It contains a OSV ID.",
+          "description": "OSV represents an Open Source Vulnerability.\n\nWe create a separate node to allow retrieving all OSVs.",
           "enumValues": [],
           "fields": [
             {
@@ -2685,7 +4011,7 @@
           "possibleTypes": []
         },
         {
-          "description": "OSVId is the actual ID that is given to a specific vulnerability\n\nid field is mandatory. This maps to a GHSA or CVE ID\n\nThis node can be referred to by other parts of GUAC.",
+          "description": "OSVId is the actual ID that is given to a specific vulnerability.\n\nThe `id` field is mandatory and canonicalized to be lowercase.\n\nThis maps to a vulnerability ID specific to the environment (e.g., GHSA ID or\nCVE ID).\n\nThis node can be referred to by other parts of GUAC.",
           "enumValues": [],
           "fields": [
             {
@@ -2712,7 +4038,32 @@
           "possibleTypes": []
         },
         {
-          "description": "OSVSpec allows filtering the list of osv to return.",
+          "description": "OSVInputSpec is the same as OSVSpec, but used for mutation ingestion.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "osvId",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "OSVInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "OSVSpec allows filtering the list of OSV to return.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -2739,7 +4090,7 @@
           "inputFields": [],
           "interfaces": [],
           "kind": "UNION",
-          "name": "OsvCveGhsaObject",
+          "name": "OsvCveOrGhsa",
           "possibleTypes": [
             {
               "kind": "OBJECT",
@@ -2759,9 +4110,107 @@
           ]
         },
         {
-          "description": "Package represents a package.\n\nIn the pURL representation, each Package matches a `pkg:<type>` partial pURL.\nThe `type` field matches the pURL types but we might also use `\"guac\"` for the\ncases where the pURL representation is not complete or when we have custom\nrules.\n\nThis node is a singleton: backends guarantee that there is exactly one node with\nthe same `type` value.\n\nAlso note that this is named `Package`, not `PackageType`. This is only to make\nqueries more readable.",
+          "description": "OsvCveOrGhsaInput allows using OsvCveOrGhsa union as\ninput type to be used in mutations.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "osv",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "OSVInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "cve",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CVEInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "ghsa",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GHSAInputSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "OsvCveOrGhsaInput",
+          "possibleTypes": []
+        },
+        {
+          "description": "OsvCveOrGhsaSpec allows using OsvCveOrGhsa union as\ninput type to be used in read queries.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "osv",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "OSVSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "cve",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CVESpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "ghsa",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GHSASpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "OsvCveOrGhsaSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "Package represents a package.\n\nIn the pURL representation, each Package matches a `pkg:<type>` partial pURL.\nThe `type` field matches the pURL types but we might also use `\"guac\"` for the\ncases where the pURL representation is not complete or when we have custom\nrules.\n\nThis node is a singleton: backends guarantee that there is exactly one node\nwith the same `type` value.\n\nAlso note that this is named `Package`, not `PackageType`. This is only to make\nqueries more readable.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -2818,6 +4267,22 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
               "name": "name",
               "type": {
                 "kind": "NON_NULL",
@@ -2869,6 +4334,22 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
               "name": "namespace",
               "type": {
                 "kind": "NON_NULL",
@@ -2909,6 +4390,172 @@
           "interfaces": [],
           "kind": "OBJECT",
           "name": "PackageNamespace",
+          "possibleTypes": []
+        },
+        {
+          "description": "PackageOrArtifact is a union of Package and Artifact. Any of these objects can be specified",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "UNION",
+          "name": "PackageOrArtifact",
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "Package",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Artifact",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "description": "PackageOrArtifactInput allows using PackageOrArtifact union as\ninput type to be used in mutations.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "package",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PkgInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "artifact",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ArtifactInputSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PackageOrArtifactInput",
+          "possibleTypes": []
+        },
+        {
+          "description": "PackageOrArtifactSpec allows using PackageOrArtifact union as\ninput type to be used in read queries.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "package",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PkgSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "artifact",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ArtifactSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PackageOrArtifactSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "PackageOrSource is a union of Package and Source. Any of these objects can be specified",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "UNION",
+          "name": "PackageOrSource",
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "Package",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Source",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "description": "PackageOrSourceInput allows using PackageOrSource union as\ninput type to be used in mutations.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "package",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PkgInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "source",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SourceInputSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PackageOrSourceInput",
+          "possibleTypes": []
+        },
+        {
+          "description": "PackageOrSourceSpec allows using PackageOrSource union as\ninput type to be used in read queries.\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "package",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PkgSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "source",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SourceSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PackageOrSourceSpec",
           "possibleTypes": []
         },
         {
@@ -3029,9 +4676,133 @@
           "possibleTypes": []
         },
         {
+          "description": "PackageSourceOrArtifact is a union of Package, Source, and Artifact.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "UNION",
+          "name": "PackageSourceOrArtifact",
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "Package",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Source",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Artifact",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "description": "PackageSourceOrArtifactInput allows using PackageSourceOrArtifact union as\ninput type to be used in mutations.\n\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "package",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PkgInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "source",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SourceInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "artifact",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ArtifactInputSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PackageSourceOrArtifactInput",
+          "possibleTypes": []
+        },
+        {
+          "description": "PackageSourceOrArtifactSpec allows using PackageSourceOrArtifact union as\ninput type to be used in read queries.\n\nExactly one of the value must be set to non-nil.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "package",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PkgSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "source",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "SourceSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "artifact",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ArtifactSpec",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PackageSourceOrArtifactSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "PackageVersion is a package version.\n\nIn the pURL representation, each PackageName matches the\n`pkg:<type>/<namespace>/<name>@<version>` pURL.\n\nVersions are optional and each Package type defines own rules for handling them.\nFor this level of GUAC, these are just opaque strings.\n\nThis node can be referred to by other parts of GUAC.\n\nSubpath and qualifiers are optional. Lack of qualifiers is represented by an\nempty list and lack of subpath by empty string (to be consistent with\noptionality of namespace and version). Two nodes that have different qualifiers\nand/or subpath but the same version mean two different packages in the trie\n(they are different). Two nodes that have same version but qualifiers of one are\na subset of the qualifier of the other also mean two different packages in the\ntrie.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -3096,7 +4867,7 @@
           "possibleTypes": []
         },
         {
-          "description": "PkgInputSpec specifies a package for a mutation.\n\nThis is different than PkgSpec because we want to encode mandatatory fields:\n`type` and `name`. All optional fields are given empty default values.",
+          "description": "PkgInputSpec specifies a package for a mutation.\n\nThis is different than PkgSpec because we want to encode mandatory fields:\n`type` and `name`. All optional fields are given empty default values.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -3183,6 +4954,29 @@
           "possibleTypes": []
         },
         {
+          "description": "PkgMatchType is an enum to determine if the attestation should be done at the\nspecific version or package name",
+          "enumValues": [
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ALL_VERSIONS"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "SPECIFIC_VERSION"
+            }
+          ],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "ENUM",
+          "name": "PkgMatchType",
+          "possibleTypes": []
+        },
+        {
           "description": "PkgNameSpec is used for IsDependency to input dependent packages. This is different from PkgSpec\nas the IsDependency attestation should only be allowed to be made to the packageName node and not the\npackageVersion node. Versions will be handled by the version_range in the IsDependency attestation node.",
           "enumValues": [],
           "fields": [],
@@ -3228,6 +5022,16 @@
           "enumValues": [],
           "fields": [],
           "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             {
               "defaultValue": null,
               "description": null,
@@ -3311,53 +5115,6 @@
           "kind": "INPUT_OBJECT",
           "name": "PkgSpec",
           "possibleTypes": []
-        },
-        {
-          "description": "PkgSrcArtObject is a union of Package, Source and Artifact. Any of these objects can be specified",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "UNION",
-          "name": "PkgSrcArtObject",
-          "possibleTypes": [
-            {
-              "kind": "OBJECT",
-              "name": "Package",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "Source",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "Artifact",
-              "ofType": null
-            }
-          ]
-        },
-        {
-          "description": "PkgSrcObject is a union of Package and Source. Any of these objects can be specified",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "UNION",
-          "name": "PkgSrcObject",
-          "possibleTypes": [
-            {
-              "kind": "OBJECT",
-              "name": "Package",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "Source",
-              "ofType": null
-            }
-          ]
         },
         {
           "description": null,
@@ -3508,7 +5265,7 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "certifyScorecardSpec",
+                  "name": "scorecardSpec",
                   "type": {
                     "kind": "INPUT_OBJECT",
                     "name": "CertifyScorecardSpec",
@@ -3517,9 +5274,9 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all CertifyScorecard",
+              "description": "Returns all Scorecard certifications matching the filter",
               "isDeprecated": false,
-              "name": "CertifyScorecard",
+              "name": "scorecards",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3532,6 +5289,41 @@
                     "ofType": {
                       "kind": "OBJECT",
                       "name": "CertifyScorecard",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "certifyVEXStatementSpec",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CertifyVEXStatementSpec",
+                    "ofType": null
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all CertifyVEXStatement",
+              "isDeprecated": false,
+              "name": "CertifyVEXStatement",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CertifyVEXStatement",
                       "ofType": null
                     }
                   }
@@ -3587,7 +5379,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all cve",
+              "description": "Returns all CVEs",
               "isDeprecated": false,
               "name": "cve",
               "type": {
@@ -3622,7 +5414,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all ghsa",
+              "description": "Returns all GHSA nodes",
               "isDeprecated": false,
               "name": "ghsa",
               "type": {
@@ -3659,7 +5451,7 @@
               "deprecationReason": null,
               "description": "Returns all HasSBOM",
               "isDeprecated": false,
-              "name": "HasSBOMs",
+              "name": "HasSBOM",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3692,7 +5484,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all HasSLSA",
+              "description": "Returns all SLSA attestations matching the filter",
               "isDeprecated": false,
               "name": "HasSLSA",
               "type": {
@@ -3764,7 +5556,7 @@
               "deprecationReason": null,
               "description": "Returns all HashEqual",
               "isDeprecated": false,
-              "name": "HashEquals",
+              "name": "HashEqual",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3834,7 +5626,7 @@
               "deprecationReason": null,
               "description": "Returns all IsOccurrence",
               "isDeprecated": false,
-              "name": "IsOccurrences",
+              "name": "IsOccurrence",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -3902,7 +5694,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all osv",
+              "description": "Returns all OSV",
               "isDeprecated": false,
               "name": "osv",
               "type": {
@@ -4001,7 +5793,295 @@
           "possibleTypes": []
         },
         {
-          "description": "SLSAPredicate are the values from the SLSA predicate in key-value pair form.\n// Predicate:\n\"predicateType\": \"https://slsa.dev/provenance/v1\",\n\"predicate\": {\n    \"buildDefinition\": {\n        \"buildType\": string,\n        \"externalParameters\": object,\n        \"systemParameters\": object,\n        \"resolvedDependencies\": [ ...#ArtifactReference ],\n    },\n    \"runDetails\": {\n        \"builder\": {\n            \"id\": string,\n            \"version\": string,\n            \"builderDependencies\": [ ...#ArtifactReference ],\n        },\n        \"metadata\": {\n            \"invocationId\": string,\n            \"startedOn\": #Timestamp,\n            \"finishedOn\": #Timestamp,\n        },\n        \"byproducts\": [ ...#ArtifactReference ],\n    }\n}\nwhere\n\"externalParameters\": {\n    \"repository\": \"https://github.com/octocat/hello-world\",\n    \"ref\": \"refs/heads/main\"\n},\n\nFor example: key = \"buildDefinition.externalParameters.repository\" value = \"https://github.com/octocat/hello-world\"\nThis node cannot be directly referred by other parts of GUAC.",
+          "description": "SLSA contains all of the fields present in a SLSA attestation.\n\nThe materials and builders are objects of the HasSLSA predicate, everything\nelse are properties extracted from the attestation.\n\nWe also include fields to specify under what conditions the check was performed\n(time of scan, version of scanners, etc.) as well as how this information got\nincluded into GUAC (origin document and the collector for that document).",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Sources of the build resulting in subject (materials)",
+              "isDeprecated": false,
+              "name": "builtFrom",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "PackageSourceOrArtifact",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Builder performing the build",
+              "isDeprecated": false,
+              "name": "builtBy",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Builder",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Type of the builder",
+              "isDeprecated": false,
+              "name": "buildType",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Individual predicates found in the attestation",
+              "isDeprecated": false,
+              "name": "slsaPredicate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "SLSAPredicate",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Version of the SLSA predicate",
+              "isDeprecated": false,
+              "name": "slsaVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Timestamp (RFC3339Nano format) of build start time",
+              "isDeprecated": false,
+              "name": "startedOn",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Timestamp (RFC3339Nano format) of build end time",
+              "isDeprecated": false,
+              "name": "finishedOn",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Document from which this attestation is generated from",
+              "isDeprecated": false,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "GUAC collector for the document",
+              "isDeprecated": false,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "SLSA",
+          "possibleTypes": []
+        },
+        {
+          "description": "SLSAInputSpec is the same as SLSA but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "buildType",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "slsaPredicate",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SLSAPredicateInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "slsaVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "startedOn",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "finishedOn",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "SLSAInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "SLSAPredicate are the values from the SLSA predicate in key-value pair form.\n\nFor example, given the following predicate\n\n```\n\"predicate\": {\n  \"buildDefinition\": {\n    \"externalParameters\": {\n      \"repository\": \"https://github.com/octocat/hello-world\",\n      ...\n    },\n    ...\n  },\n  ...\n}\n```\n\nwe have\n\n```\nkey   = \"buildDefinition.externalParameters.repository\"\nvalue = \"https://github.com/octocat/hello-world\"\n```\n\nThis node cannot be directly referred by other parts of GUAC.\n\nTODO(mihaimaruseac): Can we define these directly?",
           "enumValues": [],
           "fields": [
             {
@@ -4044,7 +6124,46 @@
           "possibleTypes": []
         },
         {
-          "description": "SLSAPredicateSpec is the same as SLSAPredicateSpec, but usable as query\ninput.",
+          "description": "SLSAPredicateInputSpec is the same as SLSAPredicateSpec, but for mutation\ninput.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "key",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "value",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "SLSAPredicateInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "SLSAPredicateSpec is the same as SLSAPredicate, but usable as query input.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -4083,7 +6202,138 @@
           "possibleTypes": []
         },
         {
-          "description": "ScorecardCheck are the individual checks from scorecard and their values, a key-value pair.\nFor example:  Branch-Protection, Code-Review...etc\nBased off scorecard's:\ntype jsonCheckResultV2 struct {\n\tDetails []string                 `json:\"details\"`\n\tScore   int                      `json:\"score\"`\n\tReason  string                   `json:\"reason\"`\n\tName    string                   `json:\"name\"`\n\tDoc     jsonCheckDocumentationV2 `json:\"documentation\"`\n}\nThis node cannot be directly referred by other parts of GUAC.",
+          "description": "Scorecard contains all of the fields present in a Scorecard attestation.\n\nWe also include fields to specify under what conditions the check was performed\n(time of scan, version of scanners, etc.) as well as how this information got\nincluded into GUAC (origin document and the collector for that document).",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Individual Scorecard check scores (Branch-Protection, Code-Review, ...)",
+              "isDeprecated": false,
+              "name": "checks",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "ScorecardCheck",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Overall Scorecard score for the source",
+              "isDeprecated": false,
+              "name": "aggregateScore",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Exact timestamp when the source was last scanned (in RFC 3339 format)",
+              "isDeprecated": false,
+              "name": "timeScanned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Version of the Scorecard scanner used to analyze the source",
+              "isDeprecated": false,
+              "name": "scorecardVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Commit of the Scorecards repository at the time of scanning the source",
+              "isDeprecated": false,
+              "name": "scorecardCommit",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Document from which this attestation is generated from",
+              "isDeprecated": false,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "GUAC collector for the document",
+              "isDeprecated": false,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "Scorecard",
+          "possibleTypes": []
+        },
+        {
+          "description": "ScorecardCheck are the individual checks from scorecard and their values as a\nkey-value pair.\n\nFor example:  Branch-Protection, Code-Review...etc\n\nBased off scorecard's:\ntype jsonCheckResultV2 struct {\n  Details []string                 `json:\"details\"`\n  Score   int                      `json:\"score\"`\n  Reason  string                   `json:\"reason\"`\n  Name    string                   `json:\"name\"`\n  Doc     jsonCheckDocumentationV2 `json:\"documentation\"`\n}\nThis node cannot be directly referred by other parts of GUAC.",
           "enumValues": [],
           "fields": [
             {
@@ -4126,7 +6376,46 @@
           "possibleTypes": []
         },
         {
-          "description": "ScorecardCheckSpec is the same as ScorecardCheck, but usable as query\ninput.",
+          "description": "ScorecardCheckInputSpec is the same as ScorecardCheck, but for mutation input.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "check",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "score",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "ScorecardCheckInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "ScorecardCheckSpec is the same as ScorecardCheck, but usable as query input.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -4165,9 +6454,142 @@
           "possibleTypes": []
         },
         {
-          "description": "Source represents a source.\n\nThis can be the version control system that is being used.\n\nThis node is a singleton: backends guarantee that there is exactly one node with\nthe same `type` value.\n\nAlso note that this is named `Source`, not `SourceType`. This is only to make\nqueries more readable.",
+          "description": "ScorecardInputSpec is the same as Scorecard but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "checks",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "ScorecardCheckInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "aggregateScore",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "timeScanned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "scorecardVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "scorecardCommit",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "ScorecardInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "Source represents a source.\n\nThis can be the version control system that is being used.\n\nThis node is a singleton: backends guarantee that there is exactly one node\nwith the same `type` value.\n\nAlso note that this is named `Source`, not `SourceType`. This is only to make\nqueries more readable.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -4216,9 +6638,98 @@
           "possibleTypes": []
         },
         {
-          "description": "SourceName is a url of the repository and its tag or commit.\n\nSourceName is mandatory. Either a tag or commit needs to be specified.\n\nThis is the first node in the trie that can be referred to by other parts of\nGUAC.",
+          "description": "SourceInputSpec specifies a source for a mutation.\n\nThis is different than SourceSpec because we want to encode that all fields\nexcept tag and commit are mandatory fields. All optional fields are given\nempty default values.\n\nIt is an error to set both `tag` and `commit` fields to values different than\nthe default.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "type",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "namespace",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "name",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": "\"\"",
+              "description": null,
+              "name": "tag",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": "\"\"",
+              "description": null,
+              "name": "commit",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "SourceInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "SourceName is a url of the repository and its tag or commit.\n\nThe `name` field is mandatory. The `tag` and `commit` fields are optional, but\nit is an error to specify both.\n\nThis is the only source trie node that can be referenced by other parts of\nGUAC.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -4267,9 +6778,25 @@
           "possibleTypes": []
         },
         {
-          "description": "SourceNamespace is a namespace for sources.\n\nThis can be represented as the location of the repo (such as github/gitlab/bitbucket)\n\nNamespaces are optional and type specific. Because they are optional, we use\nempty string to denote missing namespaces.",
+          "description": "SourceNamespace is a namespace for sources.\n\nThis is the location of the repository (such as github/gitlab/bitbucket).\n\nThe `namespace` field is mandatory.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -4318,41 +6845,20 @@
           "possibleTypes": []
         },
         {
-          "description": "SourceQualifierInput is the same as SourceQualifier, but usable as query\ninput.",
+          "description": "SourceSpec allows filtering the list of sources to return.\n\nEmpty string at a field means matching with the empty string. Missing field\nmeans retrieving all possible matches.\n\nIt is an error to specify both `tag` and `commit` fields, except it both are\nset as empty string (in which case the returned sources are only those for\nwhich there is no tag/commit information).",
           "enumValues": [],
           "fields": [],
           "inputFields": [
             {
               "defaultValue": null,
               "description": null,
-              "name": "tag",
+              "name": "id",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ID",
                 "ofType": null
               }
             },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "commit",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "SourceQualifierInput",
-          "possibleTypes": []
-        },
-        {
-          "description": "SourceSpec allows filtering the list of sources to return.\n\nEmpty string at a field means matching with the empty string.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
             {
               "defaultValue": null,
               "description": null,
@@ -4386,10 +6892,20 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "qualifier",
+              "name": "tag",
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "SourceQualifierInput",
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "commit",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               }
             }
@@ -4407,6 +6923,315 @@
           "interfaces": [],
           "kind": "SCALAR",
           "name": "String",
+          "possibleTypes": []
+        },
+        {
+          "description": "Define the Time scalar, to be used across GUAC. It follows RFC3339Nano format.\n\nThis is implicit via https://gqlgen.com/reference/scalars/#time\n\nFor GUAC, we assume that all times are stored in UTC format.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "SCALAR",
+          "name": "Time",
+          "possibleTypes": []
+        },
+        {
+          "description": "VexStatementInputSpec is the same as CertifyVEXStatement but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "knownSince",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VexStatementInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": null,
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "timeScanned (property) - timestamp of when the package was last scanned",
+              "isDeprecated": false,
+              "name": "timeScanned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "dbUri (property) - scanner vulnerability database uri",
+              "isDeprecated": false,
+              "name": "dbUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "dbVersion (property) - scanner vulnerability database version",
+              "isDeprecated": false,
+              "name": "dbVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "scannerUri (property) - vulnerability scanner's uri",
+              "isDeprecated": false,
+              "name": "scannerUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "scannerVersion (property) - vulnerability scanner version",
+              "isDeprecated": false,
+              "name": "scannerVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "origin (property) - where this attestation was generated from (based on which document)",
+              "isDeprecated": false,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "collector (property) - the GUAC collector that collected the document that generated this attestation",
+              "isDeprecated": false,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "VulnerabilityMetaData",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityInputSpec is the same as VulnerabilityMetaData but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "timeScanned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "dbUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "dbVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "scannerUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "scannerVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityMetaDataInput",
           "possibleTypes": []
         }
       ]

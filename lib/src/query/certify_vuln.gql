@@ -35,13 +35,14 @@ fragment allCertifyVuln on CertifyVuln {
       }
     }
   }
-  dbUri
-  dbVersion
-  scannerUri
-  scannerVersion
-  timeScanned
-  origin
-  collector
+  metadata {
+    dbUri
+    dbVersion
+    scannerUri
+    scannerVersion
+    origin
+    collector
+  }
 }
 
 query CertifyVuln($package: PkgSpec) {

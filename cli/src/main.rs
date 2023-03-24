@@ -13,6 +13,7 @@ async fn main() -> Result<(), anyhow::Error> {
     //let purl = PackageUrl::from_str("pkg:maven/io.vertx/vertx-web@4.3.7")?;
 
     let pkg = PkgSpec {
+        id: Some(purl.name().to_string()), //TODO use proper id
         type_: Some(purl.ty().to_string()),
         namespace: purl.namespace().map(|s| s.to_string()),
         name: Some(purl.name().to_string()),
