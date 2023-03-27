@@ -1,6 +1,6 @@
 
 
-use guac_rs::client::{GuacClient, certify_vuln::*, vulns2vex};
+use guac_rs::{client::GuacClient, vuln::{certify_vuln::PkgSpec, vulns2vex}};
 use packageurl::PackageUrl;
 use anyhow::*;
 use std::str::FromStr;
