@@ -3,8 +3,10 @@ use std::{sync::atomic::{AtomicU64, Ordering}, collections::HashSet};
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 use openvex::{OpenVex, Metadata, Statement, Status};
+use packageurl::PackageUrl;
+use std::str::FromStr;
 
-use self::certify_vuln::{allCertifyVuln,  AllCertifyVulnVulnerability::OSV};
+use self::certify_vuln::{allCertifyVuln,  AllCertifyVulnVulnerability::OSV, PkgSpec};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -13,6 +15,25 @@ use self::certify_vuln::{allCertifyVuln,  AllCertifyVulnVulnerability::OSV};
     response_derives = "Debug, Serialize, Deserialize"
 )]
 pub struct CertifyVuln;
+
+impl TryFrom<&str> for PkgSpec {
+    type Error = anyhow::Error;
+
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
+        let purl = PackageUrl::from_str(s)?;
+
+        Ok(PkgSpec {
+            id: None,
+            type_: Some(purl.ty().to_string()),
+            namespace: purl.namespace().map(|s| s.to_string()),
+            name: Some(purl.name().to_string()),
+            subpath: purl.subpath().map(|s|s.to_string()),
+            version: purl.version().map(|s|s.to_string()),
+            qualifiers: None, //TODO fix qualifiers
+            match_only_empty_qualifiers: Some(false),
+        })
+    }
+}
 
 static VERSION: AtomicU64 = AtomicU64::new(1);
 fn openvex() -> OpenVex {
