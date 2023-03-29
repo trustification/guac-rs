@@ -1,12 +1,25 @@
 # Guac Rust library
 
+
+## Dev mode
 ### Run Guac server
 
 ```
+git clone git@github.com:guacsec/guac.git
+git clone git@github.com:dejanb/guac-rs.git
+cd guac
+make build
 go run cmd/graphql_playground/main.go --neo4j=false --memory
 ```
 
-### Update schema
+### Ingest data
+
+```
+bin/guacone files ../guac-rs/examples/bom.json
+```
+
+
+## Update schema
 
 ```
 cargo install graphql_client_cli --force
