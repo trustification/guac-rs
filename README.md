@@ -1,7 +1,21 @@
 # Guac Rust library
 
 
-## Dev mode
+## Use
+
+### Run Guac server
+
+```
+docker run -p 8080:8080 ghcr.io/dejanb/local-organic-guac bash -c "/opt/guac/guacone gql-server --gql-debug"
+```
+
+### Ingest data
+
+```
+docker run -v $(pwd)/example:/example --network=host ghcr.io/dejanb/local-organic-guac bash -c "/opt/guac/guacone files /example/seedwing-java-example.bom"
+```
+
+## Contribute
 ### Run Guac server
 
 ```
@@ -19,7 +33,7 @@ bin/guacone files ../guac-rs/examples/bom.json
 ```
 
 
-## Update schema
+### Update schema
 
 ```
 cargo install graphql_client_cli --force
