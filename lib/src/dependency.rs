@@ -1,6 +1,7 @@
 use graphql_client::GraphQLQuery;
 
 use get_dependencies::PkgSpec;
+use is_dependent::PkgNameSpec;
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
@@ -36,6 +37,20 @@ impl TryFrom<&str> for PkgSpec {
             version: purl.version().map(|s|s.to_string()),
             qualifiers: None, //TODO fix qualifiers
             match_only_empty_qualifiers: Some(false),
+        })
+    }
+}
+
+impl TryFrom<&str> for PkgNameSpec {
+    type Error = anyhow::Error;
+
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
+        let purl = PackageUrl::from_str(s)?;
+
+        Ok(PkgNameSpec {
+            type_: Some(purl.ty().to_string()),
+            namespace: purl.namespace().map(|s| s.to_string()),
+            name: Some(purl.name().to_string()),
         })
     }
 }
