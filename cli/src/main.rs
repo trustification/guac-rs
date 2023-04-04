@@ -1,7 +1,5 @@
-
-
-use guac_rs::{client::GuacClient, vuln::vulns2vex};
 use anyhow::*;
+use guac_rs::{client::GuacClient, vuln::vulns2vex};
 
 use colored_json::prelude::*;
 
@@ -21,6 +19,11 @@ async fn main() -> Result<(), anyhow::Error> {
     //is dependent
     let deps = guac.is_dependent(purl).await?;
     let out = serde_json::to_string(&deps)?.to_colored_json_auto()?;
+    println!("{}", out);
+
+    //get packages
+    let pkgs = guac.get_packages("pkg:maven/io.vertx/vertx-web").await?;
+    let out = serde_json::to_string(&pkgs)?.to_colored_json_auto()?;
     println!("{}", out);
 
     //certify vulns
