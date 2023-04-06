@@ -1,12 +1,15 @@
-use std::{sync::atomic::{AtomicU64, Ordering}, collections::HashSet};
+use std::{
+    collections::HashSet,
+    sync::atomic::{AtomicU64, Ordering},
+};
 
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
-use openvex::{OpenVex, Metadata, Statement, Status};
+use openvex::{Metadata, OpenVex, Statement, Status};
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
-use self::certify_vuln::{allCertifyVuln,  AllCertifyVulnVulnerability::OSV, PkgSpec};
+use self::certify_vuln::{allCertifyVuln, AllCertifyVulnVulnerability::OSV, PkgSpec};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -27,8 +30,8 @@ impl TryFrom<&str> for PkgSpec {
             type_: Some(purl.ty().to_string()),
             namespace: purl.namespace().map(|s| s.to_string()),
             name: Some(purl.name().to_string()),
-            subpath: purl.subpath().map(|s|s.to_string()),
-            version: purl.version().map(|s|s.to_string()),
+            subpath: purl.subpath().map(|s| s.to_string()),
+            version: purl.version().map(|s| s.to_string()),
             qualifiers: None, //TODO fix qualifiers
             match_only_empty_qualifiers: Some(false),
         })
@@ -64,19 +67,15 @@ pub fn vulns2vex(vulns: Vec<allCertifyVuln>) -> OpenVex {
         let justification = None;
         products.insert(vuln.package.namespaces[0].names[0].name.clone());
         let id = match vuln.vulnerability {
-            OSV(osv) => {
-                osv.osv_id[0].id.clone()
-            },
-            _ => {
-                String::from("NOT_SET")
-            }
+            OSV(osv) => osv.osv_id[0].id.clone(),
+            _ => String::from("NOT_SET"),
         };
 
         //let now_parsed = DateTime::parse_from_rfc3339(&vuln.time_scanned).unwrap();
         let now_parsed = Utc::now(); //TODO fix time problem
 
         let statement = Statement {
-          vulnerability: Some(id.clone()),
+            vulnerability: Some(id.clone()),
             vuln_description: None,
             timestamp: Some(now_parsed.into()),
             products: products.drain().collect(),

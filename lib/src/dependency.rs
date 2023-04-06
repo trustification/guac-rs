@@ -13,7 +13,6 @@ use std::str::FromStr;
 )]
 pub struct GetDependencies;
 
-
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/schema.json",
@@ -33,8 +32,8 @@ impl TryFrom<&str> for PkgSpec {
             type_: Some(purl.ty().to_string()),
             namespace: purl.namespace().map(|s| s.to_string()),
             name: Some(purl.name().to_string()),
-            subpath: purl.subpath().map(|s|s.to_string()),
-            version: purl.version().map(|s|s.to_string()),
+            subpath: purl.subpath().map(|s| s.to_string()),
+            version: purl.version().map(|s| s.to_string()),
             qualifiers: None, //TODO fix qualifiers
             match_only_empty_qualifiers: Some(false),
         })
