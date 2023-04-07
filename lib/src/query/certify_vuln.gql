@@ -1,11 +1,16 @@
-fragment allCertifyVuln on CertifyVuln {
+fragment allCertifyVulnTree on CertifyVuln {
+  id
   package {
+      id
       type
       namespaces {
+        id
         namespace
         names {
+          id
           name
           versions {
+            id
             version
             qualifiers {
               key
@@ -19,20 +24,20 @@ fragment allCertifyVuln on CertifyVuln {
   vulnerability {
     __typename
     ... on CVE {
-      year
-     cveId{
       id
-    }
+      year
+      cveId
     }
     ... on OSV {
-     osvId{
       id
-    }
+      osvId
     }
     ... on GHSA {
-      ghsaId{
-        id
-      }
+      id
+      ghsaId
+    }
+    ... on NoVuln {
+      id
     }
   }
   metadata {
@@ -47,6 +52,6 @@ fragment allCertifyVuln on CertifyVuln {
 
 query CertifyVuln($package: PkgSpec) {
   CertifyVuln(certifyVulnSpec: {package: $package}) {
-    ...allCertifyVuln
+    ...allCertifyVulnTree
   }
 }

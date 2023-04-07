@@ -9,7 +9,7 @@ use openvex::{Metadata, OpenVex, Statement, Status};
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
-use self::certify_vuln::{allCertifyVuln, AllCertifyVulnVulnerability::OSV, PkgSpec};
+use self::certify_vuln::{allCertifyVulnTree, AllCertifyVulnTreeVulnerability::OSV, PkgSpec};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -58,7 +58,7 @@ fn openvex() -> OpenVex {
     }
 }
 
-pub fn vulns2vex(vulns: Vec<allCertifyVuln>) -> OpenVex {
+pub fn vulns2vex(vulns: Vec<allCertifyVulnTree>) -> OpenVex {
     let mut vex = openvex();
 
     for vuln in vulns {
@@ -67,7 +67,7 @@ pub fn vulns2vex(vulns: Vec<allCertifyVuln>) -> OpenVex {
         let justification = None;
         products.insert(vuln.package.namespaces[0].names[0].name.clone());
         let id = match vuln.vulnerability {
-            OSV(osv) => osv.osv_id[0].id.clone(),
+            OSV(osv) => osv.osv_id.clone(),
             _ => String::from("NOT_SET"),
         };
 

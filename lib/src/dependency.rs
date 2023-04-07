@@ -47,6 +47,7 @@ impl TryFrom<&str> for PkgNameSpec {
         let purl = PackageUrl::from_str(s)?;
 
         Ok(PkgNameSpec {
+            id: None,
             type_: Some(purl.ty().to_string()),
             namespace: purl.namespace().map(|s| s.to_string()),
             name: Some(purl.name().to_string()),

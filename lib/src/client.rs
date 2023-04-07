@@ -12,7 +12,7 @@ use crate::{
     dependency::{is_dependent::PkgNameSpec, GetDependencies, IsDependent},
     packages::{get_packages::allPkgTree, GetPackages},
     vuln::{
-        certify_vuln::{self, allCertifyVuln, PkgSpec as VulnPkgSpec},
+        certify_vuln::{self, allCertifyVulnTree, PkgSpec as VulnPkgSpec},
         CertifyVuln,
     },
 };
@@ -30,7 +30,7 @@ impl GuacClient {
         }
     }
 
-    pub async fn certify_vuln(&self, purl: &str) -> Result<Vec<allCertifyVuln>, anyhow::Error> {
+    pub async fn certify_vuln(&self, purl: &str) -> Result<Vec<allCertifyVulnTree>, anyhow::Error> {
         let pkg = VulnPkgSpec::try_from(purl)?;
         let variables = certify_vuln::Variables { package: Some(pkg) };
         let response_body =

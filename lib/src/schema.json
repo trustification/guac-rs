@@ -115,6 +115,22 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
               "name": "algorithm",
               "type": {
                 "kind": "NON_NULL",
@@ -196,6 +212,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "algorithm",
               "type": {
                 "kind": "SCALAR",
@@ -233,6 +259,22 @@
           "description": "Builder represents the builder such as (FRSCA or github actions).\n\nCurrently builders are identified by the `uri` field, which is mandatory.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -289,6 +331,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "uri",
               "type": {
                 "kind": "SCALAR",
@@ -303,9 +355,25 @@
           "possibleTypes": []
         },
         {
-          "description": "CVE represents common vulnerabilities and exposures. It contains the year along\nwith the CVE ID.\n\nThe year is mandatory.\n\nThis node is a singleton: backends guarantee that there is exactly one node\nwith the same `year` value.",
+          "description": "CVE represents common vulnerabilities and exposures. It contains the year along\nwith the CVE ID.\n\nThe `year` is mandatory.\nThe `cveId` field is mandatory and canonicalized to be lowercase.\n\nThis node can be referred to by other parts of GUAC.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -317,7 +385,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "Int",
                   "ofType": null
                 }
               }
@@ -332,41 +400,6 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "CVEId",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "CVE",
-          "possibleTypes": []
-        },
-        {
-          "description": "CVEId is the actual ID that is given to a specific vulnerability\n\nThe `id` field is mandatory and canonicalized to be lowercase.\n\nThis node can be referred to by other parts of GUAC.",
-          "enumValues": [],
-          "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
                   "ofType": null
@@ -377,7 +410,7 @@
           "inputFields": [],
           "interfaces": [],
           "kind": "OBJECT",
-          "name": "CVEId",
+          "name": "CVE",
           "possibleTypes": []
         },
         {
@@ -394,7 +427,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "Int",
                   "ofType": null
                 }
               }
@@ -427,10 +460,20 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "year",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Int",
                 "ofType": null
               }
             },
@@ -454,6 +497,22 @@
           "description": "CertifyBad is an attestation represents when a package, source or artifact is considered bad\n\nsubject - union type that can be either a package, source or artifact object type\njustification (property) - string value representing why the subject is considered bad\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation\n\nNote: Attestation must occur at the PackageName or the PackageVersion or at the SourceName.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -586,6 +645,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "subject",
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -630,7 +699,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyPkg is an attestation that represents when a package objects are similar\n\npackages (subject) - list of package objects\njustification (property) - string value representing why the packages are similar\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
+          "description": "CertifyGood is an attestation represents when a package, source or artifact is considered good\n\nsubject - union type that can be either a package, source or artifact object type\njustification (property) - string value representing why the subject is considered good\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation\n\nNote: Attestation must occur at the PackageName or the PackageVersion or at the SourceName.",
           "enumValues": [],
           "fields": [
             {
@@ -638,22 +707,30 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "packages",
+              "name": "id",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Package",
-                      "ofType": null
-                    }
-                  }
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "subject",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "PackageSourceOrArtifact",
+                  "ofType": null
                 }
               }
             },
@@ -709,11 +786,11 @@
           "inputFields": [],
           "interfaces": [],
           "kind": "OBJECT",
-          "name": "CertifyPkg",
+          "name": "CertifyGood",
           "possibleTypes": []
         },
         {
-          "description": "CertifyPkgInputSpec is the same as CertifyPkg but for mutation input.\n\nAll fields are required.",
+          "description": "CertifyGoodInputSpec is the same as CertifyGood but for mutation input.\n\nAll fields are required.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -762,26 +839,32 @@
           ],
           "interfaces": [],
           "kind": "INPUT_OBJECT",
-          "name": "CertifyPkgInputSpec",
+          "name": "CertifyGoodInputSpec",
           "possibleTypes": []
         },
         {
-          "description": "CertifyPkgSpec allows filtering the list of CertifyPkg to return.\n\nSpecifying just the package allows to query for all similar packages (if they exist)",
+          "description": "CertifyGoodSpec allows filtering the list of CertifyGood to return.\nNote: Package, Source or artifact must be specified but not at the same time\nFor package - a PackageName or PackageVersion must be specified (name or name, version, qualifiers and subpath)\nFor source - a SourceName must be specified (name, tag or commit)",
           "enumValues": [],
           "fields": [],
           "inputFields": [
             {
               "defaultValue": null,
               "description": null,
-              "name": "packages",
+              "name": "id",
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "PkgSpec",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "subject",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "PackageSourceOrArtifactSpec",
+                "ofType": null
               }
             },
             {
@@ -817,13 +900,29 @@
           ],
           "interfaces": [],
           "kind": "INPUT_OBJECT",
-          "name": "CertifyPkgSpec",
+          "name": "CertifyGoodSpec",
           "possibleTypes": []
         },
         {
           "description": "CertifyScorecard is an attestation which represents the scorecard of a\nparticular source repository.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -868,6 +967,16 @@
           "enumValues": [],
           "fields": [],
           "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             {
               "defaultValue": null,
               "description": null,
@@ -963,13 +1072,29 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVEXStatement is an attestation that represents when a package or artifact has a VEX about a specific vulnerability (CVE or GHSA)\n\nsubject - union type that represents a package or artifact\nvulnerability (object) - union type that consists of cve or ghsa\njustification (property) - justification for VEX\nknownSince (property) - timestamp of the VEX (exact time in RFC 3339 format)\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
+          "description": "CertifyVEXStatement is an attestation that represents when a package or\nartifact has a VEX about a specific vulnerability (CVE, GHSA or OSV).",
           "enumValues": [],
           "fields": [
             {
               "args": [],
               "deprecationReason": null,
               "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Subject of attestation",
               "isDeprecated": false,
               "name": "subject",
               "type": {
@@ -985,7 +1110,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "Attested vulnerability",
               "isDeprecated": false,
               "name": "vulnerability",
               "type": {
@@ -993,7 +1118,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "CveOrGhsa",
+                  "name": "Vulnerability",
                   "ofType": null
                 }
               }
@@ -1001,7 +1126,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "Justification for VEX",
               "isDeprecated": false,
               "name": "justification",
               "type": {
@@ -1017,7 +1142,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "Timestamp (exact time in RFC 3339 format) for the VEX statement",
               "isDeprecated": false,
               "name": "knownSince",
               "type": {
@@ -1033,7 +1158,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "Document from which this attestation is generated from",
               "isDeprecated": false,
               "name": "origin",
               "type": {
@@ -1049,7 +1174,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": null,
+              "description": "GUAC collector for the document",
               "isDeprecated": false,
               "name": "collector",
               "type": {
@@ -1070,10 +1195,20 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVEXStatementSpec allows filtering the list of CertifyVEXStatement to return.\nOnly package or artifact and CVE or GHSA can be specified at once.",
+          "description": "CertifyVEXStatementSpec allows filtering the list of CertifyVEXStatement to\nreturn.\n\nOnly one subject type (package or artifact) and one vulnerability type (CVE,\nGHSA or OSV) may be specified.\n\nNote that setting `noVuln` in VulnerabilitySpec is invalid for VEX statements!",
           "enumValues": [],
           "fields": [],
           "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             {
               "defaultValue": null,
               "description": null,
@@ -1090,7 +1225,7 @@
               "name": "vulnerability",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "CveOrGhsaSpec",
+                "name": "VulnerabilitySpec",
                 "ofType": null
               }
             },
@@ -1141,13 +1276,29 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVuln is an attestation that represents when a package has a vulnerability",
+          "description": "CertifyVuln is an attestation that represents when a package has a\nvulnerability (OSV, CVE, or GHSA) or the special NoVuln value to attest that at\nthe time of scanning no vulnerability was found.",
           "enumValues": [],
           "fields": [
             {
               "args": [],
               "deprecationReason": null,
-              "description": "package (subject) - the package object type that represents the package",
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "The package that is attested",
               "isDeprecated": false,
               "name": "package",
               "type": {
@@ -1163,7 +1314,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "vulnerability (object) - union type that consists of osv, cve or ghsa",
+              "description": "The vulnerability object. Can be an OSV, CVE, or GHSA or the special NoVuln node.",
               "isDeprecated": false,
               "name": "vulnerability",
               "type": {
@@ -1171,7 +1322,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "UNION",
-                  "name": "OsvCveOrGhsa",
+                  "name": "Vulnerability",
                   "ofType": null
                 }
               }
@@ -1179,7 +1330,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "metadata (property) - contains all the vulnerability metadata ",
+              "description": "Metadata attached to the certification",
               "isDeprecated": false,
               "name": "metadata",
               "type": {
@@ -1200,10 +1351,20 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVulnSpec allows filtering the list of CertifyVuln to return.\n\nSpecifying just the package allows to query for all vulnerabilities associated with the package.\nOnly OSV, CVE or GHSA can be specified at once",
+          "description": "CertifyVulnSpec allows filtering the list of CertifyVuln to return.\n\nSpecifying just the package allows to query for all vulnerabilities associated\nwith the package.\n\nOnly one vulnerability type (OSV, CVE, GHSA, or special NoVuln) may be specified.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             {
               "defaultValue": null,
               "description": null,
@@ -1220,7 +1381,7 @@
               "name": "vulnerability",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "OsvCveOrGhsaSpec",
+                "name": "VulnerabilitySpec",
                 "ofType": null
               }
             },
@@ -1394,42 +1555,7 @@
           "possibleTypes": []
         },
         {
-          "description": "GHSA represents GitHub security advisories.\n\nWe create a separate node to allow retrieving all GHSAs.",
-          "enumValues": [],
-          "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "ghsaId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "GHSAId",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "GHSA",
-          "possibleTypes": []
-        },
-        {
-          "description": "GHSAId is the actual ID that is given to a specific vulnerability on GitHub\n\nThe `id` field is mandatory and canonicalized to be lowercase.\n\nThis node can be referred to by other parts of GUAC.",
+          "description": "GHSA represents GitHub security advisories.\n\nThe `id` field is mandatory and canonicalized to be lowercase.\n\nThis node can be referred to by other parts of GUAC.",
           "enumValues": [],
           "fields": [
             {
@@ -1438,6 +1564,22 @@
               "description": null,
               "isDeprecated": false,
               "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ghsaId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1452,7 +1594,7 @@
           "inputFields": [],
           "interfaces": [],
           "kind": "OBJECT",
-          "name": "GHSAId",
+          "name": "GHSA",
           "possibleTypes": []
         },
         {
@@ -1488,6 +1630,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "ghsaId",
               "type": {
                 "kind": "SCALAR",
@@ -1505,6 +1657,22 @@
           "description": "HasSBOM is an attestation represents that a package object or source object has an SBOM associated with a uri\n\nsubject - union type that can be either a package or source object type\nuri (property) - identifier string for the SBOM\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation\n\nNote: Only package object or source object can be defined. Not both.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -1637,6 +1805,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "subject",
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -1687,6 +1865,22 @@
             {
               "args": [],
               "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
               "description": "The subject of SLSA attestation: package, source, or artifact.",
               "isDeprecated": false,
               "name": "subject",
@@ -1694,8 +1888,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "UNION",
-                  "name": "PackageSourceOrArtifact",
+                  "kind": "OBJECT",
+                  "name": "Artifact",
                   "ofType": null
                 }
               }
@@ -1707,9 +1901,13 @@
               "isDeprecated": false,
               "name": "slsa",
               "type": {
-                "kind": "OBJECT",
-                "name": "SLSA",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SLSA",
+                  "ofType": null
+                }
               }
             }
           ],
@@ -1727,10 +1925,20 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "subject",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "PackageSourceOrArtifactSpec",
+                "name": "ArtifactSpec",
                 "ofType": null
               }
             },
@@ -1746,7 +1954,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "PackageSourceOrArtifactSpec",
+                    "name": "ArtifactSpec",
                     "ofType": null
                   }
                 }
@@ -2126,6 +2334,22 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
               "name": "artifacts",
               "type": {
                 "kind": "NON_NULL",
@@ -2261,6 +2485,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "artifacts",
               "type": {
                 "kind": "LIST",
@@ -2332,6 +2566,22 @@
           "description": "IsDependency is an attestation that represents when a package is dependent on another package\n\npackage (subject) - the package object type that represents the package\ndependentPackage (object) - the package object type that represents the packageName (cannot be to the packageVersion)\nversionRange (property) - string value for version range that applies to the dependent package\njustification (property) - string value representing why the artifacts are the equal\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -2510,6 +2760,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "package",
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2577,6 +2837,22 @@
           "description": "IsOccurrence is an attestation represents when either a package or source is represented by an artifact\n\nNote: Package or Source must be specified but not both at the same time.\nAttestation must occur at the PackageVersion or at the SourceName.",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -2725,6 +3001,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "subject",
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2782,6 +3068,22 @@
           "description": "IsVulnerability is an attestation that represents when an OSV ID represents a CVE or GHSA\n\nosv (subject) - the osv object type that represents OSV and its ID\nvulnerability (object) - union type that consists of cve or ghsa\njustification (property) - the reason why the osv ID represents the cve or ghsa\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
           "enumValues": [],
           "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
             {
               "args": [],
               "deprecationReason": null,
@@ -2927,6 +3229,16 @@
           "enumValues": [],
           "fields": [],
           "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             {
               "defaultValue": null,
               "description": null,
@@ -3108,7 +3420,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that two packages are similar",
+              "description": "Adds a certification that a package, source or artifact is considered bad",
               "isDeprecated": false,
               "name": "ingestCertifyBad",
               "type": {
@@ -3126,13 +3438,13 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "pkg",
+                  "name": "subject",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "PkgInputSpec",
+                      "name": "PackageSourceOrArtifactInput",
                       "ofType": null
                     }
                   }
@@ -3140,42 +3452,38 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "depPkg",
+                  "name": "pkgMatchType",
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "PkgInputSpec",
-                      "ofType": null
-                    }
+                    "kind": "INPUT_OBJECT",
+                    "name": "MatchFlags",
+                    "ofType": null
                   }
                 },
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "certifyPkg",
+                  "name": "certifyGood",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "CertifyPkgInputSpec",
+                      "name": "CertifyGoodInputSpec",
                       "ofType": null
                     }
                   }
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that two packages are similar",
+              "description": "Adds a certification that a package, source or artifact is considered good",
               "isDeprecated": false,
-              "name": "ingestCertifyPkg",
+              "name": "ingestCertifyGood",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "CertifyPkg",
+                  "name": "CertifyGood",
                   "ofType": null
                 }
               }
@@ -3250,7 +3558,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "CveOrGhsaInput",
+                      "name": "VulnerabilityInput",
                       "ofType": null
                     }
                   }
@@ -3271,7 +3579,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "certify that an either a package or artifact has an associated VEX for a CVE or GHSA",
+              "description": "Certify that a package or an artifact has an associated VEX for a vulnerability.\n\nNote that setting `noVuln` in VulnerabilityInput is invalid for VEX statements!",
               "isDeprecated": false,
               "name": "ingestVEXStatement",
               "type": {
@@ -3309,7 +3617,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "OsvCveOrGhsaInput",
+                      "name": "VulnerabilityInput",
                       "ofType": null
                     }
                   }
@@ -3330,7 +3638,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "certify that a package is vulnerable to a vulnerability (OSV, CVE or GHSA)",
+              "description": "Certify that a package is vulnerable to a vulnerability (OSV, CVE or GHSA) or no vulnerability has been detected.",
               "isDeprecated": false,
               "name": "ingestVulnerability",
               "type": {
@@ -3453,7 +3761,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "PackageSourceOrArtifactInput",
+                      "name": "ArtifactInputSpec",
                       "ofType": null
                     }
                   }
@@ -3473,7 +3781,7 @@
                         "name": null,
                         "ofType": {
                           "kind": "INPUT_OBJECT",
-                          "name": "PackageSourceOrArtifactInput",
+                          "name": "ArtifactInputSpec",
                           "ofType": null
                         }
                       }
@@ -3540,7 +3848,7 @@
                         "name": null,
                         "ofType": {
                           "kind": "INPUT_OBJECT",
-                          "name": "PackageSourceOrArtifactInput",
+                          "name": "ArtifactInputSpec",
                           "ofType": null
                         }
                       }
@@ -3562,8 +3870,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "UNION",
-                      "name": "PackageSourceOrArtifact",
+                      "kind": "OBJECT",
+                      "name": "Artifact",
                       "ofType": null
                     }
                   }
@@ -3942,6 +4250,65 @@
                 {
                   "defaultValue": null,
                   "description": null,
+                  "name": "pkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "depPkg",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkgEqual",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "PkgEqualInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Adds a certification that two packages are similar",
+              "isDeprecated": false,
+              "name": "ingestPkgEqual",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PkgEqual",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
                   "name": "source",
                   "type": {
                     "kind": "NON_NULL",
@@ -3976,42 +4343,7 @@
           "possibleTypes": []
         },
         {
-          "description": "OSV represents an Open Source Vulnerability.\n\nWe create a separate node to allow retrieving all OSVs.",
-          "enumValues": [],
-          "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "osvId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "OSVId",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "OSV",
-          "possibleTypes": []
-        },
-        {
-          "description": "OSVId is the actual ID that is given to a specific vulnerability.\n\nThe `id` field is mandatory and canonicalized to be lowercase.\n\nThis maps to a vulnerability ID specific to the environment (e.g., GHSA ID or\nCVE ID).\n\nThis node can be referred to by other parts of GUAC.",
+          "description": "NoVuln is a special vulnerability node to attest that no vulnerability has been\nfound during a vulnerability scan.\n\nBackends guarantee that this is a singleton node.\n\nWe define an ID field due to GraphQL restrictions.",
           "enumValues": [],
           "fields": [
             {
@@ -4020,6 +4352,165 @@
               "description": null,
               "isDeprecated": false,
               "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "NoVuln",
+          "possibleTypes": []
+        },
+        {
+          "description": "Node is a union type of all the possible nodes.\n\nIt encapsulates the software tree nodes along with the evidence nodes. In a\npath query, all connecting evidence nodes along with their intermediate subject\nnodes need to be returned in order to create a complete graph.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "UNION",
+          "name": "Node",
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "Package",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Source",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Artifact",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "Builder",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "OSV",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CVE",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "GHSA",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "NoVuln",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "IsOccurrence",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "IsDependency",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "IsVulnerability",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CertifyVEXStatement",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "HashEqual",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CertifyBad",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CertifyGood",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "PkgEqual",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CertifyScorecard",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CertifyVuln",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "HasSourceAt",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "HasSBOM",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "HasSLSA",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "description": "OSV represents an Open Source Vulnerability.\n\nThe `osvId` field is mandatory and canonicalized to be lowercase.\n\nThis maps to a vulnerability ID specific to the environment (e.g., GHSA ID or\nCVE ID).\n\nThis node can be referred to by other parts of GUAC.",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "osvId",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -4034,7 +4525,7 @@
           "inputFields": [],
           "interfaces": [],
           "kind": "OBJECT",
-          "name": "OSVId",
+          "name": "OSV",
           "possibleTypes": []
         },
         {
@@ -4070,6 +4561,16 @@
             {
               "defaultValue": null,
               "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
               "name": "osvId",
               "type": {
                 "kind": "SCALAR",
@@ -4081,114 +4582,6 @@
           "interfaces": [],
           "kind": "INPUT_OBJECT",
           "name": "OSVSpec",
-          "possibleTypes": []
-        },
-        {
-          "description": "OsvCveGhsaObject is a union of OSV, CVE and GHSA. Any of these objects can be specified for vulnerability",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "UNION",
-          "name": "OsvCveOrGhsa",
-          "possibleTypes": [
-            {
-              "kind": "OBJECT",
-              "name": "OSV",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "CVE",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "GHSA",
-              "ofType": null
-            }
-          ]
-        },
-        {
-          "description": "OsvCveOrGhsaInput allows using OsvCveOrGhsa union as\ninput type to be used in mutations.\nExactly one of the value must be set to non-nil.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "osv",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "OSVInputSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cve",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CVEInputSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsa",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "GHSAInputSpec",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "OsvCveOrGhsaInput",
-          "possibleTypes": []
-        },
-        {
-          "description": "OsvCveOrGhsaSpec allows using OsvCveOrGhsa union as\ninput type to be used in read queries.\nExactly one of the value must be set to non-nil.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "osv",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "OSVSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cve",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CVESpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsa",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "GHSASpec",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "OsvCveOrGhsaSpec",
           "possibleTypes": []
         },
         {
@@ -4393,7 +4786,7 @@
           "possibleTypes": []
         },
         {
-          "description": "PackageOrArtifact is a union of Package and Artifact. Any of these objects can be specified",
+          "description": "PackageOrArtifact is a union of Package and Artifact.",
           "enumValues": [],
           "fields": [],
           "inputFields": [],
@@ -4414,7 +4807,7 @@
           ]
         },
         {
-          "description": "PackageOrArtifactInput allows using PackageOrArtifact union as\ninput type to be used in mutations.\nExactly one of the value must be set to non-nil.",
+          "description": "PackageOrArtifactInput allows using PackageOrArtifact union as\ninput type to be used in mutations.\n\nExactly one of the value must be set to non-nil.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -4445,7 +4838,7 @@
           "possibleTypes": []
         },
         {
-          "description": "PackageOrArtifactSpec allows using PackageOrArtifact union as\ninput type to be used in read queries.\nExactly one of the value must be set to non-nil.",
+          "description": "PackageOrArtifactSpec allows using PackageOrArtifact union as\ninput type to be used in read queries.\n\nExactly one of the value must be set to non-nil.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -4867,6 +5260,223 @@
           "possibleTypes": []
         },
         {
+          "description": "PkgEqual is an attestation that represents when a package objects are similar\n\npackages (subject) - list of package objects\njustification (property) - string value representing why the packages are similar\norigin (property) - where this attestation was generated from (based on which document)\ncollector (property) - the GUAC collector that collected the document that generated this attestation",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "packages",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Package",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "PkgEqual",
+          "possibleTypes": []
+        },
+        {
+          "description": "PkgEqualInputSpec is the same as PkgEqual but for mutation input.\n\nAll fields are required.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PkgEqualInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "PkgEqualSpec allows filtering the list of PkgEqual to return.\n\nSpecifying just the package allows to query for all similar packages (if they exist)",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "packages",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "PkgSpec",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "PkgEqualSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "PkgInputSpec specifies a package for a mutation.\n\nThis is different than PkgSpec because we want to encode mandatory fields:\n`type` and `name`. All optional fields are given empty default values.",
           "enumValues": [],
           "fields": [],
@@ -4981,6 +5591,16 @@
           "enumValues": [],
           "fields": [],
           "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
             {
               "defaultValue": null,
               "description": null,
@@ -5230,18 +5850,18 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "certifyPkgSpec",
+                  "name": "certifyGoodSpec",
                   "type": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CertifyPkgSpec",
+                    "name": "CertifyGoodSpec",
                     "ofType": null
                   }
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all CertifyPkg",
+              "description": "Returns all CertifyGood",
               "isDeprecated": false,
-              "name": "CertifyPkg",
+              "name": "CertifyGood",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5253,7 +5873,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "OBJECT",
-                      "name": "CertifyPkg",
+                      "name": "CertifyGood",
                       "ofType": null
                     }
                   }
@@ -5309,7 +5929,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all CertifyVEXStatement",
+              "description": "Returns all CertifyVEXStatement.",
               "isDeprecated": false,
               "name": "CertifyVEXStatement",
               "type": {
@@ -5344,7 +5964,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Returns all CertifyVuln",
+              "description": "Returns all vulnerability certifications matching the input filter.",
               "isDeprecated": false,
               "name": "CertifyVuln",
               "type": {
@@ -5755,6 +6375,178 @@
                 {
                   "defaultValue": null,
                   "description": null,
+                  "name": "subject",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "target",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "maxPathLength",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "path query returns a path between subject and target, of a maximum length\n\nSince we want to uniquely identify endpoints, nodes must be specified by\nvalid IDs only (instead of using filters/input spec structs).",
+              "isDeprecated": false,
+              "name": "path",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "Node",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "node",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "neighbors returns all the direct neighbors of a node\n\nSimilarly, the input is only specified by its ID.",
+              "isDeprecated": false,
+              "name": "neighbors",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "Node",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "node",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "node returns a single node, regardless of type\n\nThe input is only specified by its ID.",
+              "isDeprecated": false,
+              "name": "node",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "UNION",
+                  "name": "Node",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkgEqualSpec",
+                  "type": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PkgEqualSpec",
+                    "ofType": null
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all PkgEqual",
+              "isDeprecated": false,
+              "name": "PkgEqual",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "PkgEqual",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
                   "name": "sourceSpec",
                   "type": {
                     "kind": "INPUT_OBJECT",
@@ -5812,8 +6604,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "UNION",
-                      "name": "PackageSourceOrArtifact",
+                      "kind": "OBJECT",
+                      "name": "Artifact",
                       "ofType": null
                     }
                   }
@@ -7003,13 +7795,95 @@
           "possibleTypes": []
         },
         {
-          "description": null,
+          "description": "Vulnerability is a union of OSV, CVE, GHSA or the NoVuln node.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "UNION",
+          "name": "Vulnerability",
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "OSV",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CVE",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "GHSA",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "NoVuln",
+              "ofType": null
+            }
+          ]
+        },
+        {
+          "description": "VulnerabilityInput allows using Vulnerability union as\ninput type to be used in mutations.\n\nEither `noVuln` must be set to true or one of `osv`, `cve`, or `ghsa` must be\nset to non-nil. If `noVuln` is set then this is an ingestion of a known lack of\nvulnerabilities, so the special NoVuln node will be used by the backend.\nOtherwise, the specific vulnerability type will be linked to this attestation.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "osv",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "OSVInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "cve",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CVEInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "ghsa",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GHSAInputSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "noVuln",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityInput",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityMetaData is the metadata attached to vulnerability certification.\n\nIt contains metadata about the scanner process that created the certification.",
           "enumValues": [],
           "fields": [
             {
               "args": [],
               "deprecationReason": null,
-              "description": "timeScanned (property) - timestamp of when the package was last scanned",
+              "description": "Time of scan (in RFC 3339 format)",
               "isDeprecated": false,
               "name": "timeScanned",
               "type": {
@@ -7025,7 +7899,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "dbUri (property) - scanner vulnerability database uri",
+              "description": "URI of the vulnerability database used by the scanner",
               "isDeprecated": false,
               "name": "dbUri",
               "type": {
@@ -7041,7 +7915,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "dbVersion (property) - scanner vulnerability database version",
+              "description": "Version of the vulnerability database used by the scanner",
               "isDeprecated": false,
               "name": "dbVersion",
               "type": {
@@ -7057,7 +7931,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "scannerUri (property) - vulnerability scanner's uri",
+              "description": "URI of the scanner",
               "isDeprecated": false,
               "name": "scannerUri",
               "type": {
@@ -7073,7 +7947,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "scannerVersion (property) - vulnerability scanner version",
+              "description": "Version of the scanner",
               "isDeprecated": false,
               "name": "scannerVersion",
               "type": {
@@ -7089,7 +7963,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "origin (property) - where this attestation was generated from (based on which document)",
+              "description": "Document from which this attestation is generated from",
               "isDeprecated": false,
               "name": "origin",
               "type": {
@@ -7105,7 +7979,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "collector (property) - the GUAC collector that collected the document that generated this attestation",
+              "description": "GUAC collector for the document",
               "isDeprecated": false,
               "name": "collector",
               "type": {
@@ -7232,6 +8106,57 @@
           "interfaces": [],
           "kind": "INPUT_OBJECT",
           "name": "VulnerabilityMetaDataInput",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilitySpec allows using Vulnerability union as input type to be used in\nread queries.\n\nEither `noVuln` must be set to true or exactly one of `osv`, `cve` or `ghsa`\nmust be set to non-nil. Setting `noVuln` to true means retrieving nodes where\nthere is no vulnerability attached (thus, the special NoVuln node). Setting one\nof the other fields means retrieving certifications for the corresponding\nvulnerability types.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "osv",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "OSVSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "cve",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "CVESpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "ghsa",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "GHSASpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "noVuln",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilitySpec",
           "possibleTypes": []
         }
       ]
