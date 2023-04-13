@@ -67,6 +67,18 @@ impl GuacClient {
         Ok(response_data?.is_dependency)
     }
 
+    pub async fn get_all_packages(&self) -> Result<Vec<allPkgTree>, anyhow::Error> {
+        let variables = PkgVariables {
+            package: None
+        };
+        let response_body =
+            post_graphql::<GetPackages, _>(&self.client, self.url.to_owned(), variables).await?;
+        let response_data = response_body
+            .data
+            .with_context(|| "No data found in response");
+        Ok(response_data?.packages)
+    }
+
     pub async fn get_packages(&self, purl: &str) -> Result<Vec<allPkgTree>, anyhow::Error> {
         let pkg = PkgPkgSpec::try_from(purl)?;
         let variables = PkgVariables { package: Some(pkg) };
