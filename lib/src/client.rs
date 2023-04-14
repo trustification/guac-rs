@@ -21,6 +21,7 @@ use crate::{
     }
 };
 
+#[derive(Clone)]
 pub struct GuacClient {
     client: reqwest::Client,
     url: String,
