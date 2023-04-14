@@ -50,8 +50,14 @@ fragment allCertifyVulnTree on CertifyVuln {
   }
 }
 
-query CertifyVuln($package: PkgSpec) {
+query CertifyVulnQ1($package: PkgSpec) {
   CertifyVuln(certifyVulnSpec: {package: $package}) {
+    ...allCertifyVulnTree
+  }
+}
+
+query CertifyVulnQ2($cve: CVESpec) {
+  CertifyVuln(certifyVulnSpec: {vulnerability: {cve: $cve}}) {
     ...allCertifyVulnTree
   }
 }

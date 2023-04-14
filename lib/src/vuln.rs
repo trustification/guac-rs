@@ -9,7 +9,7 @@ use openvex::{Metadata, OpenVex, Statement, Status};
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
-use self::certify_vuln::{allCertifyVulnTree, AllCertifyVulnTreeVulnerability::OSV, PkgSpec};
+use self::certify_vuln_q1::{allCertifyVulnTree, AllCertifyVulnTreeVulnerability::OSV, PkgSpec};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -17,7 +17,7 @@ use self::certify_vuln::{allCertifyVulnTree, AllCertifyVulnTreeVulnerability::OS
     query_path = "src/query/certify_vuln.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct CertifyVuln;
+pub struct CertifyVulnQ1;
 
 impl TryFrom<&str> for PkgSpec {
     type Error = anyhow::Error;
