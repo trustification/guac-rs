@@ -1126,9 +1126,57 @@
             {
               "args": [],
               "deprecationReason": null,
+              "description": "status of the vulnerabilities with respect to the products and components listed in the statement",
+              "isDeprecated": false,
+              "name": "status",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VexStatus",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
               "description": "Justification for VEX",
               "isDeprecated": false,
-              "name": "justification",
+              "name": "vexJustification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VexJustification",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "impact_statement or action_statement depending on the status filed",
+              "isDeprecated": false,
+              "name": "statement",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "statusNotes may convey information about how status was determined",
+              "isDeprecated": false,
+              "name": "statusNotes",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1232,7 +1280,37 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "justification",
+              "name": "status",
+              "type": {
+                "kind": "ENUM",
+                "name": "VexStatus",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "vexJustification",
+              "type": {
+                "kind": "ENUM",
+                "name": "VexJustification",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "statement",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "statusNotes",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -1545,6 +1623,407 @@
           "possibleTypes": []
         },
         {
+          "description": "Edge allows filtering path/neighbors output to only contain a subset of all\npossible GUAC links.\n\nEach member of the enum is formed by merging two Node names with _. Each name\nis converted from CamelCase to CAPITALS_WITH_UNDERSCORES. Only valid edges\n(pairs from Node to Node) are included.\n\nThe only exception to the above rule is for links out of HasSLSA. The names are\nHAS_SLSA_SUBJECT, HAS_SLSA_BUILT_BY, and HAS_SLSA_MATERIALS. This is because\nARTIFACT_HAS_SLSA is only from subject Artifact to HasSLSA.",
+          "enumValues": [
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ARTIFACT_CERTIFY_BAD"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ARTIFACT_CERTIFY_GOOD"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ARTIFACT_CERTIFY_VEX_STATEMENT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ARTIFACT_HASH_EQUAL"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ARTIFACT_HAS_SLSA"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "ARTIFACT_IS_OCCURRENCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "BUILDER_HAS_SLSA"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CVE_CERTIFY_VEX_STATEMENT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CVE_CERTIFY_VULN"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CVE_IS_VULNERABILITY"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "GHSA_CERTIFY_VEX_STATEMENT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "GHSA_CERTIFY_VULN"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "GHSA_IS_VULNERABILITY"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "NO_VULN_CERTIFY_VULN"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "OSV_CERTIFY_VEX_STATEMENT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "OSV_CERTIFY_VULN"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "OSV_IS_VULNERABILITY"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_CERTIFY_BAD"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_CERTIFY_GOOD"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_CERTIFY_VEX_STATEMENT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_CERTIFY_VULN"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_HAS_SBOM"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_HAS_SOURCE_AT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_IS_DEPENDENCY"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_IS_OCCURRENCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PACKAGE_PKG_EQUAL"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "SOURCE_CERTIFY_BAD"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "SOURCE_CERTIFY_GOOD"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "SOURCE_CERTIFY_SCORECARD"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "SOURCE_HAS_SBOM"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "SOURCE_HAS_SOURCE_AT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "SOURCE_IS_OCCURRENCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_BAD_ARTIFACT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_BAD_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_BAD_SOURCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_GOOD_ARTIFACT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_GOOD_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_GOOD_SOURCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_SCORECARD_SOURCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VEX_STATEMENT_ARTIFACT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VEX_STATEMENT_CVE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VEX_STATEMENT_GHSA"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VEX_STATEMENT_OSV"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VEX_STATEMENT_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VULN_CVE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VULN_GHSA"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VULN_NO_VULN"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VULN_OSV"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CERTIFY_VULN_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HASH_EQUAL_ARTIFACT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HAS_SBOM_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HAS_SBOM_SOURCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HAS_SLSA_BUILT_BY"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HAS_SLSA_MATERIALS"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HAS_SLSA_SUBJECT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HAS_SOURCE_AT_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "HAS_SOURCE_AT_SOURCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "IS_DEPENDENCY_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "IS_OCCURRENCE_ARTIFACT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "IS_OCCURRENCE_PACKAGE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "IS_OCCURRENCE_SOURCE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "IS_VULNERABILITY_CVE"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "IS_VULNERABILITY_GHSA"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "IS_VULNERABILITY_OSV"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "PKG_EQUAL_PACKAGE"
+            }
+          ],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "ENUM",
+          "name": "Edge",
+          "possibleTypes": []
+        },
+        {
           "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).",
           "enumValues": [],
           "fields": [],
@@ -1710,6 +2189,22 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
+              "name": "annotation",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
               "name": "origin",
               "type": {
                 "kind": "NON_NULL",
@@ -1753,6 +2248,20 @@
               "defaultValue": null,
               "description": null,
               "name": "uri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "annotation",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1826,6 +2335,16 @@
               "defaultValue": null,
               "description": null,
               "name": "uri",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "annotation",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -6413,10 +6932,32 @@
                       "ofType": null
                     }
                   }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "usingOnly",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "ENUM",
+                          "name": "Edge",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
                 }
               ],
               "deprecationReason": null,
-              "description": "path query returns a path between subject and target, of a maximum length\n\nSince we want to uniquely identify endpoints, nodes must be specified by\nvalid IDs only (instead of using filters/input spec structs).",
+              "description": "path query returns a path between subject and target, of a maximum length\n\nSince we want to uniquely identify endpoints, nodes must be specified by\nvalid IDs only (instead of using filters/input spec structs).\n\nSpecifying any Edge value in `usingOnly` will make the path only contain the\ncorresponding GUAC evidence trees (GUAC verbs).",
               "isDeprecated": false,
               "name": "path",
               "type": {
@@ -6452,10 +6993,32 @@
                       "ofType": null
                     }
                   }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "usingOnly",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "ENUM",
+                          "name": "Edge",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
                 }
               ],
               "deprecationReason": null,
-              "description": "neighbors returns all the direct neighbors of a node\n\nSimilarly, the input is only specified by its ID.",
+              "description": "neighbors returns all the direct neighbors of a node\n\nSimilarly, the input is only specified by its ID.\n\nSpecifying any Edge value in `usingOnly` will make the neighbors list only\ncontain the corresponding GUAC evidence trees (GUAC verbs).",
               "isDeprecated": false,
               "name": "neighbors",
               "type": {
@@ -7728,6 +8291,53 @@
           "possibleTypes": []
         },
         {
+          "description": null,
+          "enumValues": [
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "COMPONENT_NOT_PRESENT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "VULNERABLE_CODE_NOT_PRESENT"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "VULNERABLE_CODE_NOT_IN_EXECUTE_PATH"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "INLINE_MITIGATIONS_ALREADY_EXIST"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "NOT_PROVIDED"
+            }
+          ],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "ENUM",
+          "name": "VexJustification",
+          "possibleTypes": []
+        },
+        {
           "description": "VexStatementInputSpec is the same as CertifyVEXStatement but for mutation input.\n\nAll fields are required.",
           "enumValues": [],
           "fields": [],
@@ -7735,7 +8345,49 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "justification",
+              "name": "status",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VexStatus",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "vexJustification",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VexJustification",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "statement",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "statusNotes",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -7792,6 +8444,41 @@
           "interfaces": [],
           "kind": "INPUT_OBJECT",
           "name": "VexStatementInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": null,
+          "enumValues": [
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "NOT_AFFECTED"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "AFFECTED"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "FIXED"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "UNDER_INVESTIGATION"
+            }
+          ],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "ENUM",
+          "name": "VexStatus",
           "possibleTypes": []
         },
         {
