@@ -1,5 +1,6 @@
 use graphql_client::GraphQLQuery;
 
+use get_dependencies::PackageQualifierSpec;
 use get_dependencies::PkgSpec;
 use is_dependent::PkgNameSpec;
 use packageurl::PackageUrl;
@@ -26,6 +27,13 @@ impl TryFrom<&str> for PkgSpec {
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         let purl = PackageUrl::from_str(s)?;
+        let mut qualifiers = Vec::new();
+        for (key, value) in purl.qualifiers().iter() {
+            qualifiers.push(PackageQualifierSpec {
+                key: key.to_string(),
+                value: Some(value.to_string()),
+            })
+        }
 
         Ok(PkgSpec {
             id: None,
@@ -34,7 +42,11 @@ impl TryFrom<&str> for PkgSpec {
             name: Some(purl.name().to_string()),
             subpath: purl.subpath().map(|s| s.to_string()),
             version: purl.version().map(|s| s.to_string()),
-            qualifiers: None, //TODO fix qualifiers
+            qualifiers: if qualifiers.is_empty() {
+                None
+            } else {
+                Some(qualifiers)
+            },
             match_only_empty_qualifiers: Some(false),
         })
     }
