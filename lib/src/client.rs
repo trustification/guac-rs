@@ -9,7 +9,7 @@ use crate::dependency::is_dependent::Variables as IsDepVariables;
 use crate::packages::get_packages::PkgSpec as PkgPkgSpec;
 use crate::packages::get_packages::Variables as PkgVariables;
 use crate::{
-    dependency::{is_dependent::PkgNameSpec, GetDependencies, IsDependent},
+    dependency::{GetDependencies, IsDependent},
     packages::{get_packages::allPkgTree, GetPackages},
     vuln::{
         certify_vuln_q1,
@@ -76,8 +76,7 @@ impl GuacClient {
     }
 
     pub async fn is_dependent(&self, purl: &str) -> Result<Vec<IsDependentDeps>, anyhow::Error> {
-        let pkg = PkgNameSpec::try_from(purl)?;
-        let variables = IsDepVariables { package: Some(pkg) };
+        let variables = IsDepVariables::try_from(purl)?;
         let response_body =
             post_graphql::<IsDependent, _>(&self.client, self.url.to_owned(), variables).await?;
         let response_data = response_body
@@ -100,6 +99,7 @@ impl GuacClient {
 
     pub async fn get_packages(&self, purl: &str) -> Result<Vec<allPkgTree>, anyhow::Error> {
         let pkg = PkgPkgSpec::try_from(purl)?;
+
         let variables = PkgVariables { package: Some(pkg) };
         let response_body =
             post_graphql::<GetPackages, _>(&self.client, self.url.to_owned(), variables).await?;

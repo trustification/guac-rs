@@ -3,6 +3,7 @@ use graphql_client::GraphQLQuery;
 use get_dependencies::PackageQualifierSpec;
 use get_dependencies::PkgSpec;
 use is_dependent::PkgNameSpec;
+use is_dependent::Variables as IsDepVariables;
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
@@ -63,6 +64,19 @@ impl TryFrom<&str> for PkgNameSpec {
             type_: Some(purl.ty().to_string()),
             namespace: purl.namespace().map(|s| s.to_string()),
             name: Some(purl.name().to_string()),
+        })
+    }
+}
+
+impl TryFrom<&str> for IsDepVariables {
+    type Error = anyhow::Error;
+
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
+        let purl = PackageUrl::from_str(s)?;
+        let pkg = PkgNameSpec::try_from(s)?;
+        Ok(IsDepVariables {
+            package: Some(pkg),
+            version: purl.version().map(|s| s.to_string()),
         })
     }
 }

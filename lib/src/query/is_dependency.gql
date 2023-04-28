@@ -45,8 +45,8 @@ query GetDependencies($package: PkgSpec) {
   }
 }
 
-query IsDependent($package: PkgNameSpec) {
-  IsDependency(isDependencySpec: {dependentPackage: $package}) {
+query IsDependent($package: PkgNameSpec, $version: String) {
+  IsDependency(isDependencySpec: {dependentPackage: $package, versionRange: $version}) {
     ...allIsDependencyTree
   }
 }
