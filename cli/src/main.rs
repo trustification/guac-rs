@@ -1,5 +1,5 @@
 use anyhow::*;
-use guac_rs::{client::GuacClient, vuln::vulns2vex};
+use guac::{client::GuacClient, vuln::vulns2vex};
 
 use colored_json::prelude::*;
 

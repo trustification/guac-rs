@@ -5,6 +5,7 @@ use std::str::FromStr;
 use self::get_packages::PackageQualifierSpec;
 
 use self::get_packages::PkgSpec;
+use self::get_packages::allPkgTree;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -43,4 +44,35 @@ impl TryFrom<&str> for PkgSpec {
             match_only_empty_qualifiers: Some(false),
         })
     }
+}
+
+pub fn pkg2purls(pkg: &allPkgTree) -> Vec<String> {
+    let mut purls = Vec::new();
+    let t = &pkg.type_;
+    for namespace in pkg.namespaces.iter() {
+        for name in namespace.names.iter() {
+            for version in name.versions.iter() {
+                let qualifiers = if version.qualifiers.is_empty() {
+                    String::new()
+                } else {
+                    let mut data: Vec<String> = Vec::new();
+                    for entry in version.qualifiers.iter() {
+                        data.push(format!(
+                            "{}={}",
+                            entry.key,
+                            entry.value
+                        ));
+                    }
+                    let data = data.join("&");
+                    format!("?{}", data)
+                };
+                let purl = format!(
+                    "pkg:{}/{}/{}@{}{}",
+                    t, namespace.namespace, name.name, version.version, qualifiers
+                );
+                purls.push(purl);
+            }
+        }
+    }
+    purls
 }

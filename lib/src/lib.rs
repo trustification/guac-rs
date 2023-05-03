@@ -1,5 +1,8 @@
 pub mod client;
-pub mod dependency;
-pub mod packages;
-pub mod vuln;
-pub mod cve;
+pub use client::*;
+
+mod dependency;
+mod dependent;
+mod packages;
+mod vuln;
+mod cve;
