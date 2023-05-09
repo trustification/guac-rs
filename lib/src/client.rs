@@ -1,5 +1,6 @@
 use anyhow::*;
 use graphql_client::reqwest::post_graphql;
+use serde::Serialize;
 
 use crate::dependency::get_dependencies::PkgSpec as DepPkgSpec;
 use crate::dependency::get_dependencies::Variables as DepVariables;
@@ -28,7 +29,7 @@ pub struct GuacClient {
     url: String,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Vulnerability {
     pub cve: Option<String>,
     pub osv: Option<String>,

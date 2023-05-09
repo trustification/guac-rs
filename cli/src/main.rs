@@ -1,5 +1,5 @@
 use anyhow::*;
-use guac::{client::GuacClient, vuln::vulns2vex};
+use guac::{client::GuacClient};
 
 use colored_json::prelude::*;
 
@@ -8,6 +8,8 @@ async fn main() -> Result<(), anyhow::Error> {
     let purl = "pkg:maven/io.vertx/vertx-web@4.3.7";
     //let purl = "pkg:deb/debian";
     //let purl = "pkg:pypi/django";
+    //let purl = "pkg:rpm/redhat/openssl@1.1.1k-7.el8_6";
+
 
     let guac = GuacClient::new("http://localhost:8080/query".to_string());
 
@@ -28,8 +30,9 @@ async fn main() -> Result<(), anyhow::Error> {
 
     //certify vulns
     let vulns = guac.certify_vuln(purl).await?;
-    let vex = vulns2vex(vulns);
-    let out = serde_json::to_string(&vex)?.to_colored_json_auto()?;
+    //let vex = vulns2vex(vulns);
+    //let out = serde_json::to_string(&vex)?.to_colored_json_auto()?;
+    let out = serde_json::to_string(&vulns)?.to_colored_json_auto()?;
     println!("{}", out);
 
     Ok(())
