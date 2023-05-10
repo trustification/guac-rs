@@ -1,11 +1,13 @@
 use anyhow::*;
 use graphql_client::reqwest::post_graphql;
+use openvex::OpenVex;
 use serde::Serialize;
 
 use crate::dependency::get_dependencies::PkgSpec as DepPkgSpec;
 use crate::dependency::get_dependencies::Variables as DepVariables;
 use crate::packages::get_packages::PkgSpec as PkgPkgSpec;
 use crate::packages::get_packages::Variables as PkgVariables;
+use crate::vuln::vulns2vex;
 use crate::{
     dependency::{self, GetDependencies},
     packages::{self, GetPackages},
@@ -65,6 +67,17 @@ impl GuacClient {
             let packages = vuln::vuln2purls(&entry.package);
             Vulnerability { cve, osv, ghsa, no_vuln, packages }
         }).collect())
+    }
+
+    pub async fn certify_vuln_as_vex(&self, purl: &str) -> Result<OpenVex, anyhow::Error> {
+        let pkg = certify_vuln_q1::PkgSpec::try_from(purl)?;
+        let variables = certify_vuln_q1::Variables { package: Some(pkg) };
+        let response_body =
+            post_graphql::<CertifyVulnQ1, _>(&self.client, self.url.to_owned(), variables).await?;
+        let response_data = response_body
+            .data
+            .with_context(|| "No data found in response");
+        Ok(vulns2vex(response_data?.certify_vuln))
     }
 
     pub async fn get_vulnerabilities(&self, cve: &str) -> Result<Vec<Vulnerability>, anyhow::Error> {

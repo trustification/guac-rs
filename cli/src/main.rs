@@ -29,10 +29,8 @@ async fn main() -> Result<(), anyhow::Error> {
     println!("{}", out);
 
     //certify vulns
-    let vulns = guac.certify_vuln(purl).await?;
-    //let vex = vulns2vex(vulns);
-    //let out = serde_json::to_string(&vex)?.to_colored_json_auto()?;
-    let out = serde_json::to_string(&vulns)?.to_colored_json_auto()?;
+    let vex = guac.certify_vuln_as_vex(purl).await?;
+    let out = serde_json::to_string(&vex)?.to_colored_json_auto()?;
     println!("{}", out);
 
     Ok(())
