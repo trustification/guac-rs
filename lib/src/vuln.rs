@@ -10,8 +10,8 @@ use packageurl::PackageUrl;
 use std::str::FromStr;
 
 use self::certify_vuln_q1::{
-    allCertifyVulnTree, AllCertifyVulnTreeVulnerability::OSV, PackageQualifierSpec, PkgSpec,
-    AllCertifyVulnTreePackage,
+    allCertifyVulnTree, AllCertifyVulnTreePackage, AllCertifyVulnTreeVulnerability::OSV,
+    PackageQualifierSpec, PkgSpec,
 };
 
 #[derive(GraphQLQuery)]
@@ -83,11 +83,7 @@ pub fn vuln2purls(pkg: &AllCertifyVulnTreePackage) -> Vec<String> {
                 } else {
                     let mut data: Vec<String> = Vec::new();
                     for entry in version.qualifiers.iter() {
-                        data.push(format!(
-                            "{}={}",
-                            entry.key,
-                            entry.value
-                        ));
+                        data.push(format!("{}={}", entry.key, entry.value));
                     }
                     let data = data.join("&");
                     format!("?{}", data)

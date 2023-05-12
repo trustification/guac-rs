@@ -4,8 +4,8 @@ use std::str::FromStr;
 
 use self::get_packages::PackageQualifierSpec;
 
-use self::get_packages::PkgSpec;
 use self::get_packages::allPkgTree;
+use self::get_packages::PkgSpec;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -57,11 +57,7 @@ pub fn pkg2purls(pkg: &allPkgTree) -> Vec<String> {
                 } else {
                     let mut data: Vec<String> = Vec::new();
                     for entry in version.qualifiers.iter() {
-                        data.push(format!(
-                            "{}={}",
-                            entry.key,
-                            entry.value
-                        ));
+                        data.push(format!("{}={}", entry.key, entry.value));
                     }
                     let data = data.join("&");
                     format!("?{}", data)

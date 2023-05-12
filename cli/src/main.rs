@@ -1,8 +1,8 @@
 use std::str::FromStr;
 
 use anyhow::*;
-use clap::{Parser, Subcommand, ColorChoice};
-use guac::{client::GuacClient};
+use clap::{ColorChoice, Parser, Subcommand};
+use guac::client::GuacClient;
 
 use colored_json::{prelude::*, Output};
 
@@ -14,7 +14,6 @@ use colored_json::{prelude::*, Output};
     long_about = None
 )]
 pub struct Cli {
-
     #[arg(
         short = 'g',
         long = "guac",
@@ -22,11 +21,7 @@ pub struct Cli {
     )]
     pub(crate) guac_url: String,
 
-    #[arg(
-        short = 'c',
-        long = "color",
-        default_value = "auto",
-    )]
+    #[arg(short = 'c', long = "color", default_value = "auto")]
     color: ColorChoice,
 
     #[command(subcommand)]
@@ -45,12 +40,12 @@ enum Commands {
         /// Artifact purl
         purl: String,
     },
-    /// get related packages 
+    /// get related packages
     Packages {
         /// Artifact purl
         purl: String,
     },
-    /// get all certified 
+    /// get all certified
     Vulnerabilities {
         /// Artifact purl
         purl: String,
@@ -68,24 +63,22 @@ async fn main() -> Result<(), anyhow::Error> {
     let guac = GuacClient::new(cli.guac_url);
 
     match cli.command {
-        Commands::Dependencies{
-            purl
-        } => {
+        Commands::Dependencies { purl } => {
             let deps = guac.get_dependencies(&purl).await?;
             let out = serde_json::to_string(&deps)?.to_colored_json(color_mode(cli.color))?;
             println!("{}", out);
-        },
+        }
         Commands::Dependents { purl } => {
             let deps = guac.is_dependent(&purl).await?;
             let out = serde_json::to_string(&deps)?.to_colored_json(color_mode(cli.color))?;
             println!("{}", out);
-        },
+        }
         Commands::Packages { purl } => {
             // e.g. "pkg:maven/io.vertx/vertx-web"
             let pkgs = guac.get_packages(&purl).await?;
             let out = serde_json::to_string(&pkgs)?.to_colored_json(color_mode(cli.color))?;
             println!("{}", out);
-        },
+        }
         Commands::Vulnerabilities { purl } => {
             let vex = guac.certify_vuln_as_vex(&purl).await?;
             let out = serde_json::to_string(&vex)?.to_colored_json(color_mode(cli.color))?;
@@ -95,7 +88,6 @@ async fn main() -> Result<(), anyhow::Error> {
 
     Ok(())
 }
-
 
 fn color_mode(choice: ColorChoice) -> ColorMode {
     match choice {

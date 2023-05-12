@@ -1,5 +1,5 @@
-use graphql_client::GraphQLQuery;
 use self::certify_vuln_q2::AllCertifyVulnTreePackage;
+use graphql_client::GraphQLQuery;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -20,11 +20,7 @@ pub fn vuln2purls(pkg: &AllCertifyVulnTreePackage) -> Vec<String> {
                 } else {
                     let mut data: Vec<String> = Vec::new();
                     for entry in version.qualifiers.iter() {
-                        data.push(format!(
-                            "{}={}",
-                            entry.key,
-                            entry.value
-                        ));
+                        data.push(format!("{}={}", entry.key, entry.value));
                     }
                     let data = data.join("&");
                     format!("?{}", data)

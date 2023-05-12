@@ -56,11 +56,7 @@ pub fn deps2purls(pkg: &AllIsDependencyTreePackage) -> Vec<String> {
                 } else {
                     let mut data: Vec<String> = Vec::new();
                     for entry in version.qualifiers.iter() {
-                        data.push(format!(
-                            "{}={}",
-                            entry.key,
-                            entry.value,
-                        ));
+                        data.push(format!("{}={}", entry.key, entry.value,));
                     }
                     let data = data.join("&");
                     format!("?{}", data)

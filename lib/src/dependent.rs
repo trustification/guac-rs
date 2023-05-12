@@ -1,10 +1,10 @@
 use graphql_client::GraphQLQuery;
 
+use self::is_dependent::AllIsDependencyTreePackage;
 use is_dependent::PkgNameSpec;
 use is_dependent::Variables as IsDepVariables;
 use packageurl::PackageUrl;
 use std::str::FromStr;
-use self::is_dependent::AllIsDependencyTreePackage;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -53,11 +53,7 @@ pub fn deps2purls(pkg: &AllIsDependencyTreePackage) -> Vec<String> {
                 } else {
                     let mut data: Vec<String> = Vec::new();
                     for entry in version.qualifiers.iter() {
-                        data.push(format!(
-                            "{}={}",
-                            entry.key,
-                            entry.value,
-                        ));
+                        data.push(format!("{}={}", entry.key, entry.value,));
                     }
                     let data = data.join("&");
                     format!("?{}", data)
