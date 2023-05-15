@@ -26,24 +26,25 @@ pub struct Cli {
     pub(crate) command: Commands,
 }
 
+// TODO: group arguments for guac related commands (url, purl, color, ...)
 #[derive(Subcommand, Debug)]
 enum Commands {
-    /// get all dependencies for the artifact
+    /// get all dependencies for the provided purl.
     Dependencies {
         /// Artifact purl
         purl: String,
     },
-    /// get all artifact that depend on this one
+    /// get all dependents on the provided purl.
     Dependents {
         /// Artifact purl
         purl: String,
     },
-    /// get related packages
+    /// get all versions for the provided package purl.
     Packages {
         /// Artifact purl
         purl: String,
     },
-    /// get all certified
+    /// get all known vulnerabilities for the provided purl.
     Vulnerabilities {
         /// Artifact purl
         purl: String,
@@ -78,8 +79,11 @@ async fn main() -> Result<(), anyhow::Error> {
             println!("{}", out);
         }
         Commands::Vulnerabilities { purl } => {
-            let vex = guac.certify_vuln_as_vex(&purl).await?;
-            let out = serde_json::to_string(&vex)?.to_colored_json(color_mode(cli.color))?;
+            // TODO fix vex and make it optional
+            //let vex = guac.certify_vuln_as_vex(&purl).await?;
+            //let out = serde_json::to_string(&vex)?.to_colored_json(color_mode(cli.color))?;
+            let vulns = guac.certify_vuln(&purl).await?;
+            let out = serde_json::to_string(&vulns)?.to_colored_json(color_mode(cli.color))?;
             println!("{}", out);
         }
     }

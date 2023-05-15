@@ -1,37 +1,89 @@
 # Guac Rust library
 
+This library provides for Guac GraphQL API and a command-line interface (CLI)  that uses this this library to query Guac.
+
+
+## Prerequisites
+
+In order to use this library and CLI, you need to have a running Guac instance (and preferably ingest some data into it).
+Following [Guac Docker Compose guide](https://github.com/guacsec/guac/blob/main/docs/Compose.md) might be the easiest way to 
+get you started.
+
+## Install
+
+To install CLI, run
+
+```
+cargo install --path=cli
+```
+
+from the root directory.
 
 ## Use
 
-### Run Guac server
+The following are examples of commands that CLI (and thus the library as well) are supporting.
+
+### Get dependencies
+
+Returns purls of all known dependencies of the provided purl.
 
 ```
-docker run -p 8080:8080 ghcr.io/dejanb/local-organic-guac bash -c "/opt/guac/guacone gql-server --gql-debug"
+$ guac dependencies pkg:maven/io.vertx/vertx-web@4.3.7
+[
+  "pkg:maven/io.vertx/vertx-web-common@4.3.7",
+  "pkg:maven/io.vertx/vertx-auth-common@4.3.7",
+  "pkg:maven/io.vertx/vertx-bridge-common@4.3.7",
+  "pkg:maven/io.vertx/vertx-core@4.3.7"
+]
 ```
 
-### Ingest data
+### Get dependents
+
+Returns purls of all known dependents for the provided purl.
 
 ```
-docker run -v $(pwd)/example:/example --network=host ghcr.io/dejanb/local-organic-guac bash -c "/opt/guac/guacone files /example/seedwing-java-example.bom"
+$ guac dependents pkg:maven/io.vertx/vertx-web@4.3.7
+[
+  "pkg:maven/io.seedwing/seedwing-java-example@1.0.0-SNAPSHOT?type=jar",
+  "pkg:maven/io.quarkus.resteasy.reactive/resteasy-reactive-vertx@2.16.2.Final?type=jar",
+  "pkg:maven/io.quarkus/quarkus-vertx-http@2.16.2.Final?type=jar",
+  "pkg:maven/io.quarkus/quarkus-vertx-http-dev-console-runtime-spi@2.16.2.Final?type=jar",
+  "pkg:maven/io.smallrye.reactive/smallrye-mutiny-vertx-web@2.30.1?type=jar"
+]
+```
+
+### Get Vulnerabilities
+
+Returns list of all known vulnerabilities for the provided purl
+
+```
+$ guac vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
+[
+  {
+    "cve": "cve-2023-0286",
+    "ghsa": null,
+    "no_vuln": null,
+    "osv": null,
+    "packages": [
+      "pkg:rpm/redhat/openssl@1.1.1k-7.el8_6?arch=x86_64&epoch=1"
+    ]
+  }
+]
+```
+
+### Get Packages
+
+Returns list of all versions for the given package
+
+```
+$ guac packages pkg:maven/io.vertx/vertx-web
+[
+  "pkg:maven/io.vertx/vertx-web@4.3.7?type=jar",
+  "pkg:maven/io.vertx/vertx-web@4.3.4.redhat-00007?type=jar"
+]
 ```
 
 ## Contribute
-### Run Guac server
-
-```
-git clone git@github.com:guacsec/guac.git
-git clone git@github.com:dejanb/guac-rs.git
-cd guac
-make build
-go run cmd/graphql_playground/main.go --neo4j=false --memory
-```
-
-### Ingest data
-
-```
-bin/guacone files ../guac-rs/examples/bom.json
-```
-
 
 ### Update schema
 
