@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use anyhow::*;
 use clap::{ColorChoice, Parser, Subcommand};
 use guac::client::GuacClient;

@@ -148,7 +148,7 @@ impl GuacClient {
         Ok(response_data?
             .is_dependency
             .iter()
-            .flat_map(|entry| dependency::deps2purls(&entry.package))
+            .flat_map(|entry| dependency::deps2purls(&entry.dependent_package, &entry.version_range))
             .collect())
     }
 
