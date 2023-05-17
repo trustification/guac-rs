@@ -1,6 +1,6 @@
 use anyhow::*;
 use clap::{ColorChoice, Parser, Subcommand};
-use guac::client::GuacClient;
+use guac::{client::GuacClient, vulns2vex};
 
 use colored_json::{prelude::*, Output};
 
@@ -48,6 +48,9 @@ enum Commands {
     Vulnerabilities {
         /// Artifact purl
         purl: String,
+        /// Return VEX document
+        #[arg(short = 'v', long = "vex", default_value = "false")]
+        vex: bool,
     },
 }
 
@@ -78,12 +81,14 @@ async fn main() -> Result<(), anyhow::Error> {
             let out = serde_json::to_string(&pkgs)?.to_colored_json(color_mode(cli.color))?;
             println!("{}", out);
         }
-        Commands::Vulnerabilities { purl } => {
-            // TODO fix vex and make it optional
-            //let vex = guac.certify_vuln_as_vex(&purl).await?;
-            //let out = serde_json::to_string(&vex)?.to_colored_json(color_mode(cli.color))?;
+        Commands::Vulnerabilities { purl, vex } => {
             let vulns = guac.certify_vuln(&purl).await?;
-            let out = serde_json::to_string(&vulns)?.to_colored_json(color_mode(cli.color))?;
+            let out = if vex {
+                let vex = vulns2vex(vulns);
+                serde_json::to_string(&vex)?.to_colored_json(color_mode(cli.color))?
+            } else {
+                serde_json::to_string(&vulns)?.to_colored_json(color_mode(cli.color))?
+            };
             println!("{}", out);
         }
     }
