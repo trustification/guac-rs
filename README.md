@@ -73,7 +73,7 @@ $ guac vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
 
 ### Get Packages
 
-Returns list of all versions for the given package
+Returns list of all versions for the given package purl
 
 ```
 $ guac packages pkg:maven/io.vertx/vertx-web
