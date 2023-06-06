@@ -1,14 +1,15 @@
 use std::fs;
 
 use anyhow::*;
-use guac::collector::{Document, DocumentType, FormatType, SourceInformation};
+use guac::collector::{Document, DocumentType, FormatType, SourceInformation, emitter::Emitter, emitter::NatsEmitter};
 use serde_json::json;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
     println!("Collecting");
 
-    let nc = nats::connect("127.0.0.1:4222")?;
+    //let nc = nats::connect("127.0.0.1:4222")?;
+    let emitter = NatsEmitter::new("127.0.0.1:4222").await?;
 
     let path = "example/seedwing-java-example.bom";
     let content = fs::read(path)?;
@@ -28,7 +29,8 @@ async fn main() -> Result<(), anyhow::Error> {
     //println!("{}", payload);
     let bytes = serde_json::to_vec(&json!(document))?;
 
-    nc.publish("DOCUMENTS.collected", bytes)?;
+    //nc.publish("DOCUMENTS.collected", bytes)?;
+    emitter.send("DOCUMENTS.collected", bytes).await?;
 
     Ok(())
 }

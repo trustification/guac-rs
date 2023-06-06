@@ -1,5 +1,7 @@
 use serde::{Serialize, Deserialize};
 
+pub mod emitter;
+
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Document {
