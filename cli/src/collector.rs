@@ -1,7 +1,7 @@
 use std::fs;
 
 use anyhow::*;
-use serde::{Deserialize, Serialize};
+use guac::collector::{Document, DocumentType, FormatType, SourceInformation};
 use serde_json::json;
 
 #[tokio::main]
@@ -31,41 +31,4 @@ async fn main() -> Result<(), anyhow::Error> {
     nc.publish("DOCUMENTS.collected", bytes)?;
 
     Ok(())
-}
-
-#[derive(Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Document {
-    blob: Vec<u8>,
-    r#type: DocumentType,
-    format: FormatType,
-    source_information: SourceInformation,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum DocumentType {
-    SLSA,
-    ITE6,
-    ITE6VUL,
-    DSSE,
-    SPDX,
-    JsonLines,
-    SCORECARD,
-    CyclonDX,
-    DepsDev,
-    UNKNOWN,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum FormatType {
-    JSON,
-    JsonLines,
-    XML,
-    UNKNOWN,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct SourceInformation {
-    collector: String,
-    source: String,
 }
