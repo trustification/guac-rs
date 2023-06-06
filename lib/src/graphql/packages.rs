@@ -9,8 +9,8 @@ use self::get_packages::PkgSpec;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "src/schema.json",
-    query_path = "src/query/packages.gql",
+    schema_path = "src/graphql/schema.json",
+    query_path = "src/graphql/query/packages.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
 pub struct GetPackages;

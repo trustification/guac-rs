@@ -89,5 +89,5 @@ $ guac packages pkg:maven/io.vertx/vertx-web
 
 ```
 cargo install graphql_client_cli --force
-graphql-client introspect-schema http://localhost:8080/query > schema.json
+graphql-client introspect-schema http://localhost:8080/query > lib/src/graphql/schema.json
 ```

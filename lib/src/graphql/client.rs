@@ -12,11 +12,11 @@ use openvex::Status;
 use serde::Deserialize;
 use serde::Serialize;
 
-use crate::dependency::get_dependencies::PkgSpec as DepPkgSpec;
-use crate::dependency::get_dependencies::Variables as DepVariables;
-use crate::packages::get_packages::PkgSpec as PkgPkgSpec;
-use crate::packages::get_packages::Variables as PkgVariables;
-use crate::{
+use crate::graphql::dependency::get_dependencies::PkgSpec as DepPkgSpec;
+use crate::graphql::dependency::get_dependencies::Variables as DepVariables;
+use crate::graphql::packages::get_packages::PkgSpec as PkgPkgSpec;
+use crate::graphql::packages::get_packages::Variables as PkgVariables;
+use crate::graphql::{
     cve::{self, certify_vuln_q2, CertifyVulnQ2},
     dependency::{self, GetDependencies},
     dependent::{self, is_dependent::Variables as IsDepVariables, IsDependent},

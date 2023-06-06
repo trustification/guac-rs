@@ -1,6 +1,6 @@
 use anyhow::*;
 use clap::{ColorChoice, Parser, Subcommand};
-use guac::{client::GuacClient, vulns2vex};
+use guac::graphql::{client::GuacClient, vulns2vex};
 
 use colored_json::{prelude::*, Output};
 
