@@ -1,6 +1,7 @@
 use serde::{Serialize, Deserialize};
 
 pub mod emitter;
+pub mod collector;
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
