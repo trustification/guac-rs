@@ -4,7 +4,6 @@ use serde_json::json;
 
 use super::Document;
 
-
 const SUBJECT_COLLECTED: &str = "DOCUMENTS.collected";
 
 #[async_trait]
@@ -24,7 +23,10 @@ pub struct NatsEmitter {
 
 impl NatsEmitter {
     pub async fn new(url: &str) -> Result<Self, anyhow::Error> {
-        let client = async_nats::ConnectOptions::new().retry_on_initial_connect().connect(url).await?;
+        let client = async_nats::ConnectOptions::new()
+            .retry_on_initial_connect()
+            .connect(url)
+            .await?;
         Ok(Self { client })
     }
 }

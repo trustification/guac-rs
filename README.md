@@ -28,7 +28,7 @@ The following are examples of commands that CLI (and thus the library as well) a
 Returns purls of all known dependencies of the provided purl.
 
 ```
-$ guac dependencies pkg:maven/io.vertx/vertx-web@4.3.7
+$ guac query dependencies pkg:maven/io.vertx/vertx-web@4.3.7
 [
   "pkg:maven/io.vertx/vertx-web-common@4.3.7",
   "pkg:maven/io.vertx/vertx-auth-common@4.3.7",
@@ -42,7 +42,7 @@ $ guac dependencies pkg:maven/io.vertx/vertx-web@4.3.7
 Returns purls of all known dependents for the provided purl.
 
 ```
-$ guac dependents pkg:maven/io.vertx/vertx-web@4.3.7
+$ guac query dependents pkg:maven/io.vertx/vertx-web@4.3.7
 [
   "pkg:maven/io.seedwing/seedwing-java-example@1.0.0-SNAPSHOT?type=jar",
   "pkg:maven/io.quarkus.resteasy.reactive/resteasy-reactive-vertx@2.16.2.Final?type=jar",
@@ -57,7 +57,7 @@ $ guac dependents pkg:maven/io.vertx/vertx-web@4.3.7
 Returns list of all known vulnerabilities for the provided purl
 
 ```
-$ guac vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
+$ guac query vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
 [
   {
     "cve": "cve-2023-0286",
@@ -76,7 +76,7 @@ $ guac vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
 Returns list of all versions for the given package purl
 
 ```
-$ guac packages pkg:maven/io.vertx/vertx-web
+$ guac query packages pkg:maven/io.vertx/vertx-web
 [
   "pkg:maven/io.vertx/vertx-web@4.3.7?type=jar",
   "pkg:maven/io.vertx/vertx-web@4.3.4.redhat-00007?type=jar"

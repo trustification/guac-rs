@@ -1,7 +1,7 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-pub mod emitter;
 pub mod collector;
+pub mod emitter;
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

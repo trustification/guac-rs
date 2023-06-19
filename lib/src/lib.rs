@@ -1,2 +1,2 @@
-pub mod graphql;
 pub mod collector;
+pub mod graphql;

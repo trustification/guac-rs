@@ -2,13 +2,12 @@ use std::fs;
 
 use async_trait::async_trait;
 
-use super::{Document, DocumentType, FormatType, SourceInformation, emitter::Emitter};
+use super::{emitter::Emitter, Document, DocumentType, FormatType, SourceInformation};
 
 #[async_trait]
 pub trait Collector {
     async fn run<E: Emitter + Send + Sync>(&self, emitter: E) -> Result<(), anyhow::Error>;
 }
-
 
 pub struct FileCollector {
     pub path: String,
