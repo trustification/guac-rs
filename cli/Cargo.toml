@@ -20,7 +20,3 @@ exporter = { git = "https://github.com/trustification/trustification.git" }
 [[bin]]
 name = "guac"
 path = "src/main.rs"
-
-[[bin]]
-name = "collector"
-path = "src/collector.rs"
