@@ -58,5 +58,6 @@ async fn main() -> impl Termination {
     //let purl = "pkg:pypi/django";
     //let purl = "pkg:rpm/redhat/openssl@1.1.1k-7.el8_6";
 
+    env_logger::init();
     Cli::parse().run().await
 }

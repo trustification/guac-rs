@@ -11,12 +11,14 @@ use clap::Subcommand;
 #[derive(Subcommand, Debug)]
 pub enum CollectCommand {
     File(FileCommand),
+    S3(exporter::Run),
 }
 
 impl CollectCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
         match self {
             Self::File(command) => command.run().await,
+            Self::S3(command) => command.run().await,
         }
     }
 }
