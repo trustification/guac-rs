@@ -9,6 +9,7 @@ use openvex::Metadata;
 use openvex::OpenVex;
 use openvex::Statement;
 use openvex::Status;
+use packageurl::PackageUrl;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -20,6 +21,7 @@ use crate::graphql::{
     cve::{self, certify_vuln_q2, CertifyVulnQ2},
     dependency::{self, GetDependencies},
     dependent::{self, is_dependent::Variables as IsDepVariables, IsDependent},
+    good::{certify_good_q1, certify_good_q1::AllCertifyGoodTreeSubject, CertifyGoodQ1},
     packages::{self, GetPackages},
     vuln::{self, certify_vuln_q1, CertifyVulnQ1},
 };
@@ -84,6 +86,51 @@ impl GuacClient {
                 }
             })
             .collect())
+    }
+
+    pub async fn certify_good(&self, purl: &str) -> Result<Vec<PackageUrl>, anyhow::Error> {
+        let pkg = certify_good_q1::PkgSpec::try_from(purl)?;
+        let variables = certify_good_q1::Variables { package: Some(pkg) };
+        let response_body =
+            post_graphql::<CertifyGoodQ1, _>(&self.client, self.url.to_owned(), variables).await?;
+        let response_data = response_body
+            .data
+            .with_context(|| "No data found in response");
+
+        let mut purls = Vec::new();
+
+        for entry in response_data?.certify_good {
+            match &entry.subject {
+                AllCertifyGoodTreeSubject::Package(package) => {
+                    for namespace in &package.namespaces {
+                        for name in &namespace.names {
+                            for version in &name.versions {
+                                let mut purl =
+                                    PackageUrl::new(package.type_.clone(), name.name.clone())?;
+                                purl.with_namespace(namespace.namespace.clone());
+                                purl.with_version(version.version.clone());
+                                purl.with_subpath(version.subpath.clone())?;
+                                for qualifier in &version.qualifiers {
+                                    purl.add_qualifier(
+                                        qualifier.key.clone(),
+                                        qualifier.value.clone(),
+                                    )?;
+                                }
+                                purls.push(purl);
+                            }
+                        }
+                    }
+                }
+                AllCertifyGoodTreeSubject::Artifact(_artifact) => {
+                    todo!()
+                }
+                AllCertifyGoodTreeSubject::Source(_source) => {
+                    todo!()
+                }
+            }
+        }
+
+        Ok(purls)
     }
 
     pub async fn get_vulnerabilities(

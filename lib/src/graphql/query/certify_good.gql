@@ -1,0 +1,47 @@
+fragment allCertifyGoodTree on CertifyGood {
+  justification
+  subject {
+    __typename
+    ... on Package {
+      type
+      namespaces {
+        namespace
+        names {
+          name
+          versions {
+            version
+            qualifiers {
+              key
+              value
+            }
+            subpath
+          }
+        }
+      }
+    }
+    ... on Source {
+      type
+      namespaces {
+        namespace
+        names {
+          name
+          tag
+          commit
+        }
+      }
+    }
+    ... on Artifact {
+      algorithm
+      digest
+    }
+  }
+  origin
+  collector
+}
+
+query CertifyGoodQ1($package: PkgSpec) {
+  CertifyGood(certifyGoodSpec: { subject: {package: $package}}) {
+    ...allCertifyGoodTree
+  }
+}
+
