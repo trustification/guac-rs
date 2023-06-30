@@ -1,9 +1,9 @@
 use std::process::ExitCode;
 
 use clap::{ColorChoice, Subcommand};
-use guac::graphql::{client::GuacClient, vulns2vex};
-
 use colored_json::{prelude::*, Output};
+
+use guac::graphql::{client::GuacClient, vulns2vex};
 
 #[derive(Subcommand, Debug)]
 pub enum QueryCommand {
@@ -11,6 +11,7 @@ pub enum QueryCommand {
     Dependents(DependentsCommand),
     Packages(PackagesCommand),
     Vulnerabilities(VulnerabilitiesCommand),
+    Good(GoodCommand),
 }
 
 #[derive(Clone, Debug, clap::Parser)]
@@ -36,6 +37,7 @@ impl QueryCommand {
             Self::Dependents(command) => command.run().await,
             Self::Packages(command) => command.run().await,
             Self::Vulnerabilities(command) => command.run().await,
+            Self::Good(command) => command.run().await,
         }
     }
 }
@@ -139,6 +141,42 @@ impl VulnerabilitiesCommand {
         } else {
             serde_json::to_string(&vulns)?.to_colored_json(color_mode(self.config.color))?
         };
+        println!("{}", out);
+        Ok(ExitCode::SUCCESS)
+    }
+}
+
+#[derive(Clone, Debug, clap::Parser)]
+#[command(rename_all_env = "SCREAMING_SNAKE_CASE")]
+pub struct GoodConfig {
+    #[arg(
+        short = 'g',
+        long = "guac",
+        default_value = "http://localhost:8080/query"
+    )]
+    pub(crate) guac_url: String,
+
+    #[arg(short = 'c', long = "color", default_value = "auto")]
+    color: ColorChoice,
+
+    purl: String,
+}
+
+#[derive(clap::Args, Debug)]
+#[command(
+    about = "Run the query to find all certified-good packages of the package (purl)",
+    args_conflicts_with_subcommands = true
+)]
+pub struct GoodCommand {
+    #[command(flatten)]
+    pub(crate) config: GoodConfig,
+}
+
+impl GoodCommand {
+    pub async fn run(self) -> anyhow::Result<ExitCode> {
+        let guac = GuacClient::new(self.config.guac_url);
+        let good = guac.certify_good(&self.config.purl).await?;
+        let out = serde_json::to_string(&good)?.to_colored_json(color_mode(self.config.color))?;
         println!("{}", out);
         Ok(ExitCode::SUCCESS)
     }
