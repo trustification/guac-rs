@@ -1,0 +1,16 @@
+version: '3'
+services:
+  vexination-api:
+    image: $TRUST_IMAGE
+    expose:
+      - "$VEXINATION_API_PORT"
+    ports:
+      - "$VEXINATION_API_PORT:8080"
+    command: vexination api --devmode --storage-endpoint http://minio:9000
+  bombastic-api:
+    image: $TRUST_IMAGE
+    expose:
+      - "$BOMBASTIC_API_PORT"
+    ports:
+      - "$BOMBASTIC_API_PORT:8080"
+    command: bombastic api --devmode --storage-endpoint http://minio:9000

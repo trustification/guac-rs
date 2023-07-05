@@ -1,7 +1,6 @@
 # Guac Rust library
 
-This library provides for Guac GraphQL API and a command-line interface (CLI)  that uses this this library to query Guac.
-
+This library provides toolkit for working with [Guac](https://guac.sh) from Rust. It can be used for querying data using GraphQL API and ingesting data with collectors. It also contains a command-line interface (CLI) that exposes query API and collectors.
 
 ## Prerequisites
 
@@ -21,9 +20,13 @@ from the root directory.
 
 ## Use
 
-The following are examples of commands that CLI (and thus the library as well) are supporting.
+Once the CLI is installed, you can use it to query and ingest Guac data.
 
-### Get dependencies
+### Queries
+
+The following are examples of query commands that CLI (and thus the library as well) are supporting.
+
+#### Get dependencies
 
 Returns purls of all known dependencies of the provided purl.
 
@@ -37,7 +40,7 @@ $ guac query dependencies pkg:maven/io.vertx/vertx-web@4.3.7
 ]
 ```
 
-### Get dependents
+#### Get dependents
 
 Returns purls of all known dependents for the provided purl.
 
@@ -52,7 +55,7 @@ $ guac query dependents pkg:maven/io.vertx/vertx-web@4.3.7
 ]
 ```
 
-### Get Vulnerabilities
+#### Get Vulnerabilities
 
 Returns list of all known vulnerabilities for the provided purl
 
@@ -71,7 +74,7 @@ $ guac query vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
 ]
 ```
 
-### Get Packages
+#### Get Packages
 
 Returns list of all versions for the given package purl
 
@@ -81,6 +84,46 @@ $ guac query packages pkg:maven/io.vertx/vertx-web
   "pkg:maven/io.vertx/vertx-web@4.3.7?type=jar",
   "pkg:maven/io.vertx/vertx-web@4.3.4.redhat-00007?type=jar"
 ]
+```
+
+### Collectors
+
+#### S3
+
+The S3 collector is implemented as part of the [Trustification](https://docs.trustification.dev/) project. For more
+documentation take a look at [https://github.com/trustification/trustification/tree/main/exporter].
+
+If you wish to run it locally with just Bombastic/Vexination APIs in combination with Minio and Kafka, run
+
+``` shell
+cd example/compose
+docker-compose -f compose.yaml -f compose-trustification.yaml -f compose-guac.yaml up
+```
+
+Then you can run the collector like
+
+```shell
+RUST_LOG=debug cargo run --bin guac collect s3 --storage-bucket bombastic  --devmode
+```
+
+Now, you can ingest your SBOMs, like
+
+```shell
+curl -X POST --json @example/seedwing-java-example.bom "http://localhost:8082/api/v1/sbom?id=my-sbom"
+```
+
+And use Guac to explore data
+
+```shell
+open http://localhost:8084
+```
+
+#### File
+
+The file collector can at the moment ingest only individual files, like
+
+```shell
+cargo run --bin guac collect file example/seedwing-java-example.bom
 ```
 
 ## Contribute
