@@ -15,14 +15,20 @@ use serde::Serialize;
 
 use crate::graphql::dependency::get_dependencies::PkgSpec as DepPkgSpec;
 use crate::graphql::dependency::get_dependencies::Variables as DepVariables;
+use crate::graphql::mutation::certify_bad::CertifyBadM1;
+use crate::graphql::mutation::certify_good::CertifyGoodM1;
 use crate::graphql::packages::get_packages::PkgSpec as PkgPkgSpec;
 use crate::graphql::packages::get_packages::Variables as PkgVariables;
 use crate::graphql::{
     cve::{self, certify_vuln_q2, CertifyVulnQ2},
     dependency::{self, GetDependencies},
     dependent::{self, is_dependent::Variables as IsDepVariables, IsDependent},
-    good::{certify_good_q1, certify_good_q1::AllCertifyGoodTreeSubject, CertifyGoodQ1},
+    mutation::certify_bad::certify_bad_m1,
+    mutation::certify_good::certify_good_m1,
     packages::{self, GetPackages},
+    query::certify_good::{
+        certify_good_q1, certify_good_q1::AllCertifyGoodTreeSubject, CertifyGoodQ1,
+    },
     vuln::{self, certify_vuln_q1, CertifyVulnQ1},
 };
 
@@ -109,7 +115,9 @@ impl GuacClient {
                                     PackageUrl::new(package.type_.clone(), name.name.clone())?;
                                 purl.with_namespace(namespace.namespace.clone());
                                 purl.with_version(version.version.clone());
-                                purl.with_subpath(version.subpath.clone())?;
+                                if !version.subpath.is_empty() {
+                                    purl.with_subpath(version.subpath.clone())?;
+                                }
                                 for qualifier in &version.qualifiers {
                                     purl.add_qualifier(
                                         qualifier.key.clone(),
@@ -131,6 +139,54 @@ impl GuacClient {
         }
 
         Ok(purls)
+    }
+
+    pub async fn ingest_certify_good(
+        &self,
+        purl: &str,
+        origin: String,
+        collector: String,
+        justification: String,
+    ) -> Result<(), anyhow::Error> {
+        let pkg = certify_good_m1::PkgInputSpec::try_from(purl)?;
+        let variables = certify_good_m1::Variables {
+            package: pkg,
+            justification,
+            collector,
+            origin,
+        };
+        let response_body =
+            post_graphql::<CertifyGoodM1, _>(&self.client, self.url.to_owned(), variables).await?;
+
+        let _ = response_body
+            .data
+            .with_context(|| "No data found in response")?;
+
+        Ok(())
+    }
+
+    pub async fn ingest_certify_bad(
+        &self,
+        purl: &str,
+        origin: String,
+        collector: String,
+        justification: String,
+    ) -> Result<(), anyhow::Error> {
+        let pkg = certify_bad_m1::PkgInputSpec::try_from(purl)?;
+        let variables = certify_bad_m1::Variables {
+            package: pkg,
+            justification,
+            collector,
+            origin,
+        };
+        let response_body =
+            post_graphql::<CertifyBadM1, _>(&self.client, self.url.to_owned(), variables).await?;
+
+        let _ = response_body
+            .data
+            .with_context(|| "No data found in response")?;
+
+        Ok(())
     }
 
     pub async fn get_vulnerabilities(

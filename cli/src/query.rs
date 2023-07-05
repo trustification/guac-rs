@@ -1,7 +1,7 @@
 use std::process::ExitCode;
 
 use clap::{ColorChoice, Subcommand};
-use colored_json::{prelude::*, Output};
+use colored_json::prelude::*;
 
 use guac::graphql::{client::GuacClient, vulns2vex};
 
@@ -56,7 +56,8 @@ impl DependenciesCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
         let guac = GuacClient::new(self.config.guac_url);
         let deps = guac.get_dependencies(&self.config.purl).await?;
-        let out = serde_json::to_string(&deps)?.to_colored_json(color_mode(self.config.color))?;
+        let out =
+            serde_json::to_string(&deps)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
         Ok(ExitCode::SUCCESS)
     }
@@ -76,7 +77,8 @@ impl DependentsCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
         let guac = GuacClient::new(self.config.guac_url);
         let deps = guac.is_dependent(&self.config.purl).await?;
-        let out = serde_json::to_string(&deps)?.to_colored_json(color_mode(self.config.color))?;
+        let out =
+            serde_json::to_string(&deps)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
         Ok(ExitCode::SUCCESS)
     }
@@ -96,7 +98,8 @@ impl PackagesCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
         let guac = GuacClient::new(self.config.guac_url);
         let pkgs = guac.get_packages(&self.config.purl).await?;
-        let out = serde_json::to_string(&pkgs)?.to_colored_json(color_mode(self.config.color))?;
+        let out =
+            serde_json::to_string(&pkgs)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
         Ok(ExitCode::SUCCESS)
     }
@@ -137,9 +140,9 @@ impl VulnerabilitiesCommand {
         let vulns = guac.certify_vuln(&self.config.purl).await?;
         let out = if self.config.vex {
             let vex = vulns2vex(vulns);
-            serde_json::to_string(&vex)?.to_colored_json(color_mode(self.config.color))?
+            serde_json::to_string(&vex)?.to_colored_json(crate::color_mode(self.config.color))?
         } else {
-            serde_json::to_string(&vulns)?.to_colored_json(color_mode(self.config.color))?
+            serde_json::to_string(&vulns)?.to_colored_json(crate::color_mode(self.config.color))?
         };
         println!("{}", out);
         Ok(ExitCode::SUCCESS)
@@ -176,16 +179,9 @@ impl GoodCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
         let guac = GuacClient::new(self.config.guac_url);
         let good = guac.certify_good(&self.config.purl).await?;
-        let out = serde_json::to_string(&good)?.to_colored_json(color_mode(self.config.color))?;
+        let out =
+            serde_json::to_string(&good)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
         Ok(ExitCode::SUCCESS)
-    }
-}
-
-fn color_mode(choice: ColorChoice) -> ColorMode {
-    match choice {
-        ColorChoice::Auto => ColorMode::Auto(Output::StdOut),
-        ColorChoice::Always => ColorMode::On,
-        ColorChoice::Never => ColorMode::Off,
     }
 }

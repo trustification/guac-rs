@@ -1,7 +1,9 @@
 use std::process::{ExitCode, Termination};
 
-use clap::Parser;
+use clap::{ColorChoice, Parser};
+use colored_json::{ColorMode, Output};
 
+pub mod certify;
 pub mod collect;
 pub mod query;
 
@@ -9,6 +11,8 @@ pub mod query;
 pub enum Command {
     #[command(subcommand)]
     Query(query::QueryCommand),
+    #[command(subcommand)]
+    Certify(certify::CertifyCommand),
     #[command(subcommand)]
     Collect(collect::CollectCommand),
 }
@@ -47,6 +51,7 @@ impl Cli {
         match self.command {
             Command::Query(run) => run.run().await,
             Command::Collect(run) => run.run().await,
+            Command::Certify(run) => run.run().await,
         }
     }
 }
@@ -60,4 +65,12 @@ async fn main() -> impl Termination {
 
     env_logger::init();
     Cli::parse().run().await
+}
+
+pub fn color_mode(choice: ColorChoice) -> ColorMode {
+    match choice {
+        ColorChoice::Auto => ColorMode::Auto(Output::StdOut),
+        ColorChoice::Always => ColorMode::On,
+        ColorChoice::Never => ColorMode::Off,
+    }
 }
