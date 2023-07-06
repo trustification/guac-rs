@@ -1,4 +1,4 @@
-use self::certify_good_q1::{PackageQualifierSpec, PkgSpec};
+use self::certify_bad_q1::{PackageQualifierSpec, PkgSpec};
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
 use serde::Serialize;
@@ -7,10 +7,10 @@ use std::str::FromStr;
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/graphql/schema.json",
-    query_path = "src/graphql/query/certify_good.gql",
+    query_path = "src/graphql/query/certify_bad.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct CertifyGoodQ1;
+pub struct CertifyBadQ1;
 
 impl TryFrom<&str> for PkgSpec {
     type Error = anyhow::Error;
@@ -43,7 +43,7 @@ impl TryFrom<&str> for PkgSpec {
 }
 
 #[derive(Serialize)]
-pub struct CertifyGood {
+pub struct CertifyBad {
     pub justification: String,
     pub origin: String,
     pub collector: String,

@@ -9,7 +9,6 @@ use openvex::Metadata;
 use openvex::OpenVex;
 use openvex::Statement;
 use openvex::Status;
-use packageurl::PackageUrl;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -19,6 +18,8 @@ use crate::graphql::mutation::certify_bad::CertifyBadM1;
 use crate::graphql::mutation::certify_good::CertifyGoodM1;
 use crate::graphql::packages::get_packages::PkgSpec as PkgPkgSpec;
 use crate::graphql::packages::get_packages::Variables as PkgVariables;
+use crate::graphql::query::certify_bad::CertifyBad;
+use crate::graphql::query::certify_good::CertifyGood;
 use crate::graphql::{
     cve::{self, certify_vuln_q2, CertifyVulnQ2},
     dependency::{self, GetDependencies},
@@ -26,9 +27,8 @@ use crate::graphql::{
     mutation::certify_bad::certify_bad_m1,
     mutation::certify_good::certify_good_m1,
     packages::{self, GetPackages},
-    query::certify_good::{
-        certify_good_q1, certify_good_q1::AllCertifyGoodTreeSubject, CertifyGoodQ1,
-    },
+    query::certify_bad::{certify_bad_q1, CertifyBadQ1},
+    query::certify_good::{certify_good_q1, CertifyGoodQ1},
     vuln::{self, certify_vuln_q1, CertifyVulnQ1},
 };
 
@@ -94,7 +94,7 @@ impl GuacClient {
             .collect())
     }
 
-    pub async fn certify_good(&self, purl: &str) -> Result<Vec<PackageUrl>, anyhow::Error> {
+    pub async fn certify_good(&self, purl: &str) -> Result<Vec<CertifyGood>, anyhow::Error> {
         let pkg = certify_good_q1::PkgSpec::try_from(purl)?;
         let variables = certify_good_q1::Variables { package: Some(pkg) };
         let response_body =
@@ -103,42 +103,17 @@ impl GuacClient {
             .data
             .with_context(|| "No data found in response");
 
-        let mut purls = Vec::new();
+        let mut certified = Vec::new();
 
         for entry in response_data?.certify_good {
-            match &entry.subject {
-                AllCertifyGoodTreeSubject::Package(package) => {
-                    for namespace in &package.namespaces {
-                        for name in &namespace.names {
-                            for version in &name.versions {
-                                let mut purl =
-                                    PackageUrl::new(package.type_.clone(), name.name.clone())?;
-                                purl.with_namespace(namespace.namespace.clone());
-                                purl.with_version(version.version.clone());
-                                if !version.subpath.is_empty() {
-                                    purl.with_subpath(version.subpath.clone())?;
-                                }
-                                for qualifier in &version.qualifiers {
-                                    purl.add_qualifier(
-                                        qualifier.key.clone(),
-                                        qualifier.value.clone(),
-                                    )?;
-                                }
-                                purls.push(purl);
-                            }
-                        }
-                    }
-                }
-                AllCertifyGoodTreeSubject::Artifact(_artifact) => {
-                    todo!()
-                }
-                AllCertifyGoodTreeSubject::Source(_source) => {
-                    todo!()
-                }
-            }
+            certified.push(CertifyGood {
+                justification: entry.justification,
+                origin: entry.origin,
+                collector: entry.collector,
+            });
         }
 
-        Ok(purls)
+        Ok(certified)
     }
 
     pub async fn ingest_certify_good(
@@ -163,6 +138,28 @@ impl GuacClient {
             .with_context(|| "No data found in response")?;
 
         Ok(())
+    }
+
+    pub async fn certify_bad(&self, purl: &str) -> Result<Vec<CertifyBad>, anyhow::Error> {
+        let pkg = certify_bad_q1::PkgSpec::try_from(purl)?;
+        let variables = certify_bad_q1::Variables { package: Some(pkg) };
+        let response_body =
+            post_graphql::<CertifyBadQ1, _>(&self.client, self.url.to_owned(), variables).await?;
+        let response_data = response_body
+            .data
+            .with_context(|| "No data found in response");
+
+        let mut certified = Vec::new();
+
+        for entry in response_data?.certify_bad {
+            certified.push(CertifyBad {
+                justification: entry.justification,
+                origin: entry.origin,
+                collector: entry.collector,
+            });
+        }
+
+        Ok(certified)
     }
 
     pub async fn ingest_certify_bad(
