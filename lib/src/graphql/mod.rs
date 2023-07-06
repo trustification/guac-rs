@@ -4,6 +4,7 @@ pub use client::*;
 mod cve;
 mod dependency;
 mod dependent;
-mod good;
+mod mutation;
 mod packages;
+mod query;
 mod vuln;

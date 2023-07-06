@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 
+#[allow(clippy::module_inception)]
 pub mod collector;
 pub mod emitter;
 
