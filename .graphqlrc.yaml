@@ -1,0 +1,5 @@
+schema: lib/src/schema.json
+documents: '**/*.gql'
+extensions:
+  endpoints:
+    dev: http://localhost:8085/query
