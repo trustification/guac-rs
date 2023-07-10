@@ -16,6 +16,7 @@ use crate::graphql::dependency::get_dependencies::PkgSpec as DepPkgSpec;
 use crate::graphql::dependency::get_dependencies::Variables as DepVariables;
 use crate::graphql::mutation::certify_bad::CertifyBadM1;
 use crate::graphql::mutation::certify_good::CertifyGoodM1;
+use crate::graphql::mutation::package::{ingest_package_m1, IngestPackageM1};
 use crate::graphql::packages::get_packages::PkgSpec as PkgPkgSpec;
 use crate::graphql::packages::get_packages::Variables as PkgVariables;
 use crate::graphql::query::certify_bad::CertifyBad;
@@ -31,7 +32,6 @@ use crate::graphql::{
     query::certify_good::{certify_good_q1, CertifyGoodQ1},
     vuln::{self, certify_vuln_q1, CertifyVulnQ1},
 };
-use crate::graphql::mutation::package::{ingest_package_m1, IngestPackageM1};
 
 #[derive(Clone)]
 pub struct GuacClient {
@@ -189,16 +189,12 @@ impl GuacClient {
         Ok(())
     }
 
-    pub async fn ingest_package(
-        &self,
-        purl: &str,
-    ) -> Result<(), anyhow::Error> {
+    pub async fn ingest_package(&self, purl: &str) -> Result<(), anyhow::Error> {
         let pkg = ingest_package_m1::PkgInputSpec::try_from(purl)?;
-        let variables = ingest_package_m1::Variables {
-            package: pkg,
-        };
+        let variables = ingest_package_m1::Variables { package: pkg };
         let response_body =
-            post_graphql::<IngestPackageM1, _>(&self.client, self.url.to_owned(), variables).await?;
+            post_graphql::<IngestPackageM1, _>(&self.client, self.url.to_owned(), variables)
+                .await?;
 
         println!("{:?}", response_body);
 

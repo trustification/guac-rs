@@ -1,9 +1,9 @@
 mod package;
 
-use std::process::ExitCode;
+use crate::ingest::package::PackageCommand;
 use clap::ColorChoice;
 use clap::Subcommand;
-use crate::ingest::package::PackageCommand;
+use std::process::ExitCode;
 
 #[derive(Subcommand, Debug)]
 pub enum IngestCommand {
@@ -14,9 +14,9 @@ pub enum IngestCommand {
 #[command(rename_all_env = "SCREAMING_SNAKE_CASE")]
 pub struct IngestConfig {
     #[arg(
-    short = 'g',
-    long = "guac",
-    default_value = "http://localhost:8080/query"
+        short = 'g',
+        long = "guac",
+        default_value = "http://localhost:8080/query"
     )]
     pub(crate) guac_url: String,
 
