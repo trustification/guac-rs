@@ -38,7 +38,7 @@ pub struct GuacClient {
     url: String,
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Vulnerability {
     pub cve: Option<String>,
     pub osv: Option<String>,
