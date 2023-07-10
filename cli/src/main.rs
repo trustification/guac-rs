@@ -6,6 +6,7 @@ use colored_json::{ColorMode, Output};
 pub mod certify;
 pub mod collect;
 pub mod query;
+pub mod ingest;
 
 #[derive(clap::Subcommand, Debug)]
 pub enum Command {
@@ -15,6 +16,8 @@ pub enum Command {
     Certify(certify::CertifyCommand),
     #[command(subcommand)]
     Collect(collect::CollectCommand),
+    #[command(subcommand)]
+    Ingest(ingest::IngestCommand),
 }
 
 #[derive(Parser, Debug)]
@@ -52,6 +55,7 @@ impl Cli {
             Command::Query(run) => run.run().await,
             Command::Collect(run) => run.run().await,
             Command::Certify(run) => run.run().await,
+            Command::Ingest(run) => run.run().await,
         }
     }
 }
