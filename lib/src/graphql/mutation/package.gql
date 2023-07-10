@@ -1,0 +1,28 @@
+fragment allPkgTree on Package {
+  id
+  type
+  namespaces {
+    id
+    namespace
+    names {
+      id
+      name
+      versions {
+        id
+        version
+        qualifiers {
+          key
+          value
+        }
+        subpath
+      }
+    }
+  }
+}
+
+mutation IngestPackageM1($package: PkgInputSpec!) {
+  ingestPackage(pkg: $package) {
+    ...allPkgTree
+  }
+}
+

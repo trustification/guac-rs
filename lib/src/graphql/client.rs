@@ -31,6 +31,7 @@ use crate::graphql::{
     query::certify_good::{certify_good_q1, CertifyGoodQ1},
     vuln::{self, certify_vuln_q1, CertifyVulnQ1},
 };
+use crate::graphql::mutation::package::{ingest_package_m1, IngestPackageM1};
 
 #[derive(Clone)]
 pub struct GuacClient {
@@ -178,6 +179,28 @@ impl GuacClient {
         };
         let response_body =
             post_graphql::<CertifyBadM1, _>(&self.client, self.url.to_owned(), variables).await?;
+
+        println!("{:?}", response_body);
+
+        let _ = response_body
+            .data
+            .with_context(|| "No data found in response")?;
+
+        Ok(())
+    }
+
+    pub async fn ingest_package(
+        &self,
+        purl: &str,
+    ) -> Result<(), anyhow::Error> {
+        let pkg = ingest_package_m1::PkgInputSpec::try_from(purl)?;
+        let variables = ingest_package_m1::Variables {
+            package: pkg,
+        };
+        let response_body =
+            post_graphql::<IngestPackageM1, _>(&self.client, self.url.to_owned(), variables).await?;
+
+        println!("{:?}", response_body);
 
         let _ = response_body
             .data
