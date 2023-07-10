@@ -5,8 +5,8 @@ use colored_json::{ColorMode, Output};
 
 pub mod certify;
 pub mod collect;
-pub mod query;
 pub mod ingest;
+pub mod query;
 
 #[derive(clap::Subcommand, Debug)]
 pub enum Command {

@@ -1,13 +1,13 @@
-use self::ingest_package_m1::{PkgInputSpec, PackageQualifierInputSpec};
+use self::ingest_package_m1::{PackageQualifierInputSpec, PkgInputSpec};
 use graphql_client::GraphQLQuery;
-use std::str::FromStr;
 use packageurl::PackageUrl;
+use std::str::FromStr;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-schema_path = "src/graphql/schema.json",
-query_path = "src/graphql/mutation/package.gql",
-response_derives = "Debug, Serialize, Deserialize"
+    schema_path = "src/graphql/schema.json",
+    query_path = "src/graphql/mutation/package.gql",
+    response_derives = "Debug, Serialize, Deserialize"
 )]
 pub struct IngestPackageM1;
 
