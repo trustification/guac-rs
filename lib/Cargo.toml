@@ -1,7 +1,9 @@
 [package]
 name = "guac"
-version = "0.1.0"
+version = "0.1.0-alpha1"
 edition = "2021"
+license = "Apache-2.0"
+description = "A library that provides toolkit for working with [Guac](https://guac.sh) from Rust."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
