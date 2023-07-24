@@ -57,12 +57,24 @@ query CertifyVulnQ1 {
     }
 }
 
-mutation CertifyVulnM1($package: PkgInputSpec!, $vulnerability: VulnerabilityInput!, $meta: VulnerabilityMetaDataInput!) {
+mutation IngestCertifyVuln($package: PkgInputSpec!, $vulnerability: VulnerabilityInput!, $meta: VulnerabilityMetaDataInput!) {
     ingestVulnerability(
         pkg: $package
         vulnerability: $vulnerability
         certifyVuln: $meta
     )  {
+        ...allCertifyVulnTree
+    }
+}
+
+query QueryCertifyVulnByPackage($package: PkgSpec) {
+    CertifyVuln(certifyVulnSpec: {package: $package}) {
+        ...allCertifyVulnTree
+    }
+}
+
+query QueryCertifyVulnByCve($cve: CVESpec) {
+    CertifyVuln(certifyVulnSpec: {vulnerability: {cve: $cve}}) {
         ...allCertifyVulnTree
     }
 }

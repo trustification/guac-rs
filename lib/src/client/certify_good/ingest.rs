@@ -1,15 +1,17 @@
-use self::ingest_package_m1::{PackageQualifierInputSpec, PkgInputSpec};
+
 use graphql_client::GraphQLQuery;
-use packageurl::PackageUrl;
-use std::str::FromStr;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "src/graphql/schema.json",
-    query_path = "src/graphql/mutation/package.gql",
+    schema_path = "src/client/schema.json",
+    query_path = "src/client/certify_good/certify_good.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct IngestPackageM1;
+pub struct IngestCertifyGood;
+
+use self::ingest_certify_good::{PackageQualifierInputSpec, PkgInputSpec};
+use packageurl::PackageUrl;
+use std::str::FromStr;
 
 impl TryFrom<&str> for PkgInputSpec {
     type Error = anyhow::Error;

@@ -1,19 +1,26 @@
 use graphql_client::GraphQLQuery;
-
-use get_dependencies::PackageQualifierSpec;
-use get_dependencies::PkgSpec;
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
-use self::get_dependencies::AllIsDependencyTreeDependentPackage;
+use self::query_certify_vuln_by_package::{PackageQualifierSpec, PkgSpec};
+
+use super::Time;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "src/graphql/schema.json",
-    query_path = "src/graphql/query/is_dependency.gql",
+    schema_path = "src/client/schema.json",
+    query_path = "src/client/certify_vuln/certify_vuln.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct GetDependencies;
+pub struct QueryCertifyVulnByPackage;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/client/schema.json",
+    query_path = "src/client/certify_vuln/certify_vuln.gql",
+    response_derives = "Debug, Serialize, Deserialize"
+)]
+pub struct QueryCertifyVulnByCve;
 
 impl TryFrom<&str> for PkgSpec {
     type Error = anyhow::Error;
@@ -45,17 +52,32 @@ impl TryFrom<&str> for PkgSpec {
     }
 }
 
-pub fn deps2purls(pkg: &AllIsDependencyTreeDependentPackage, version_range: &str) -> Vec<String> {
+/*
+pub fn vuln2purls(pkg: &AllCertifyVulnTreePackage) -> Vec<String> {
     let mut purls = Vec::new();
     let t = &pkg.type_;
     for namespace in pkg.namespaces.iter() {
         for name in namespace.names.iter() {
-            let purl = format!(
-                "pkg:{}/{}/{}@{}",
-                t, namespace.namespace, name.name, version_range
-            );
-            purls.push(purl);
+            for version in name.versions.iter() {
+                let qualifiers = if version.qualifiers.is_empty() {
+                    String::new()
+                } else {
+                    let mut data: Vec<String> = Vec::new();
+                    for entry in version.qualifiers.iter() {
+                        data.push(format!("{}={}", entry.key, entry.value));
+                    }
+                    let data = data.join("&");
+                    format!("?{}", data)
+                };
+                let purl = format!(
+                    "pkg:{}/{}/{}@{}{}",
+                    t, namespace.namespace, name.name, version.version, qualifiers
+                );
+                purls.push(purl);
+            }
         }
     }
     purls
 }
+
+ */

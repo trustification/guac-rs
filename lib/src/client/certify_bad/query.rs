@@ -1,33 +1,36 @@
-use self::certify_bad_m1::{PackageQualifierInputSpec, PkgInputSpec};
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
+use serde::Serialize;
 use std::str::FromStr;
+
+use self::query_certify_bad::{PackageQualifierSpec, PkgSpec};
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "src/graphql/schema.json",
-    query_path = "src/graphql/mutation/certify_bad.gql",
+    schema_path = "src/client/schema.json",
+    query_path = "src/client/certify_bad/certify_bad.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct CertifyBadM1;
+pub struct QueryCertifyBad;
 
-impl TryFrom<&str> for PkgInputSpec {
+impl TryFrom<&str> for PkgSpec {
     type Error = anyhow::Error;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         let purl = PackageUrl::from_str(s)?;
         let mut qualifiers = Vec::new();
         for (key, value) in purl.qualifiers().iter() {
-            qualifiers.push(PackageQualifierInputSpec {
+            qualifiers.push(PackageQualifierSpec {
                 key: key.to_string(),
-                value: value.to_string(),
+                value: Some(value.to_string()),
             })
         }
 
-        Ok(PkgInputSpec {
-            type_: purl.ty().to_string(),
+        Ok(PkgSpec {
+            id: None,
+            type_: Some(purl.ty().to_string()),
             namespace: purl.namespace().map(|s| s.to_string()),
-            name: purl.name().to_string(),
+            name: Some(purl.name().to_string()),
             subpath: purl.subpath().map(|s| s.to_string()),
             version: purl.version().map(|s| s.to_string()),
             qualifiers: if qualifiers.is_empty() {
@@ -35,6 +38,14 @@ impl TryFrom<&str> for PkgInputSpec {
             } else {
                 Some(qualifiers)
             },
+            match_only_empty_qualifiers: Some(false),
         })
     }
+}
+
+#[derive(Serialize)]
+pub struct CertifyBad {
+    pub justification: String,
+    pub origin: String,
+    pub collector: String,
 }

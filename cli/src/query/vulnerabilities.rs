@@ -1,6 +1,6 @@
 use crate::query::QueryConfig;
 use colored_json::ToColoredJson;
-use guac::graphql::{vulns2vex, GuacClient};
+use guac::client::{vulns2vex, GuacClient};
 use std::process::ExitCode;
 
 #[derive(clap::Args, Debug)]

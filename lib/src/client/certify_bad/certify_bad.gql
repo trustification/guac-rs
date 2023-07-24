@@ -39,7 +39,7 @@ fragment allCertifyBadTree on CertifyBad {
   collector
 }
 
-mutation CertifyBadM1($package: PkgInputSpec!, $origin: String!, $collector: String!, $justification: String!) {
+mutation IngestCertifyBad($package: PkgInputSpec!, $origin: String!, $collector: String!, $justification: String!) {
   ingestCertifyBad(
     subject: {
       package: $package
@@ -55,3 +55,8 @@ mutation CertifyBadM1($package: PkgInputSpec!, $origin: String!, $collector: Str
   }
 }
 
+query QueryCertifyBad($package: PkgSpec) {
+  CertifyBad(certifyBadSpec: { subject: {package: $package}}) {
+    ...allCertifyBadTree
+  }
+}
