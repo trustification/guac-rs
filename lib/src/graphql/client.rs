@@ -27,11 +27,14 @@ use crate::graphql::{
     dependent::{self, is_dependent::Variables as IsDepVariables, IsDependent},
     mutation::certify_bad::certify_bad_m1,
     mutation::certify_good::certify_good_m1,
+    mutation::certify_vuln::certify_vuln_m1,
     packages::{self, GetPackages},
     query::certify_bad::{certify_bad_q1, CertifyBadQ1},
     query::certify_good::{certify_good_q1, CertifyGoodQ1},
     vuln::{self, certify_vuln_q1, CertifyVulnQ1},
 };
+use crate::graphql::mutation::certify_vuln;
+use crate::graphql::mutation::certify_vuln::CertifyVulnM1;
 
 #[derive(Clone)]
 pub struct GuacClient {
@@ -179,6 +182,31 @@ impl GuacClient {
         };
         let response_body =
             post_graphql::<CertifyBadM1, _>(&self.client, self.url.to_owned(), variables).await?;
+
+        println!("{:?}", response_body);
+
+        let _ = response_body
+            .data
+            .with_context(|| "No data found in response")?;
+
+        Ok(())
+    }
+
+    pub async fn ingest_certify_vuln(
+        &self,
+        purl: &str,
+        vulnerability: certify_vuln::Vulnerability,
+        meta: certify_vuln::Metadata,
+    ) -> Result<(), anyhow::Error> {
+        let pkg = certify_vuln_m1::PkgInputSpec::try_from(purl)?;
+        let variables = certify_vuln_m1::Variables {
+            package: pkg,
+            meta: meta.try_into()?,
+            vulnerability: vulnerability.try_into()?,
+        };
+
+        let response_body =
+            post_graphql::<CertifyVulnM1, _>(&self.client, self.url.to_owned(), variables).await?;
 
         println!("{:?}", response_body);
 
