@@ -1,0 +1,68 @@
+fragment allCertifyVulnTree on CertifyVuln {
+    id
+    package {
+        id
+        type
+        namespaces {
+            id
+            namespace
+            names {
+                id
+                name
+                versions {
+                    id
+                    version
+                    qualifiers {
+                        key
+                        value
+                    }
+                    subpath
+                }
+            }
+        }
+    }
+    vulnerability {
+        __typename
+        ... on CVE {
+            id
+            year
+            cveId
+        }
+        ... on OSV {
+            id
+            osvId
+        }
+        ... on GHSA {
+            id
+            ghsaId
+        }
+        ... on NoVuln {
+            id
+        }
+    }
+    metadata {
+        dbUri
+        dbVersion
+        scannerUri
+        scannerVersion
+        timeScanned
+        origin
+        collector
+    }
+}
+
+query CertifyVulnQ1 {
+    CertifyVuln(certifyVulnSpec: {}) {
+        ...allCertifyVulnTree
+    }
+}
+
+mutation CertifyVulnM1($package: PkgInputSpec!, $vulnerability: VulnerabilityInput!, $meta: VulnerabilityMetaDataInput!) {
+    ingestVulnerability(
+        pkg: $package
+        vulnerability: $vulnerability
+        certifyVuln: $meta
+    )  {
+        ...allCertifyVulnTree
+    }
+}
