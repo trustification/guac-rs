@@ -1,6 +1,6 @@
 use crate::query::QueryConfig;
 use colored_json::ToColoredJson;
-use guac::graphql::GuacClient;
+use guac::client::GuacClient;
 use std::process::ExitCode;
 
 #[derive(clap::Args, Debug)]
@@ -16,7 +16,7 @@ pub struct DependenciesCommand {
 impl DependenciesCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
         let guac = GuacClient::new(self.config.guac_url);
-        let deps = guac.get_dependencies(&self.config.purl).await?;
+        let deps = guac.is_dependency(&self.config.purl).await?;
         let out =
             serde_json::to_string(&deps)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);

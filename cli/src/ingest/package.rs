@@ -1,5 +1,5 @@
 use crate::ingest::IngestConfig;
-use guac::graphql::GuacClient;
+use guac::client::GuacClient;
 use std::process::ExitCode;
 
 #[derive(clap::Args, Debug)]

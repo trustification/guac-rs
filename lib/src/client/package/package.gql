@@ -20,8 +20,14 @@ fragment allPkgTree on Package {
   }
 }
 
-mutation IngestPackageM1($package: PkgInputSpec!) {
+mutation IngestPackage($package: PkgInputSpec!) {
   ingestPackage(pkg: $package) {
+    ...allPkgTree
+  }
+}
+
+query QueryPackage($package: PkgSpec) {
+  packages(pkgSpec: $package) {
     ...allPkgTree
   }
 }

@@ -1,16 +1,17 @@
-use self::certify_good_q1::{PackageQualifierSpec, PkgSpec};
+use self::query_dependencies::{
+    AllIsDependencyTreeDependentPackage, PackageQualifierSpec, PkgSpec,
+};
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
-use serde::Serialize;
 use std::str::FromStr;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "src/graphql/schema.json",
-    query_path = "src/graphql/query/certify_good.gql",
+    schema_path = "src/client/schema.json",
+    query_path = "src/client/is_dependency/is_dependency.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct CertifyGoodQ1;
+pub struct QueryDependencies;
 
 impl TryFrom<&str> for PkgSpec {
     type Error = anyhow::Error;
@@ -42,9 +43,17 @@ impl TryFrom<&str> for PkgSpec {
     }
 }
 
-#[derive(Serialize)]
-pub struct CertifyGood {
-    pub justification: String,
-    pub origin: String,
-    pub collector: String,
+pub fn deps2purls(pkg: &AllIsDependencyTreeDependentPackage, version_range: &str) -> Vec<String> {
+    let mut purls = Vec::new();
+    let t = &pkg.type_;
+    for namespace in pkg.namespaces.iter() {
+        for name in namespace.names.iter() {
+            let purl = format!(
+                "pkg:{}/{}/{}@{}",
+                t, namespace.namespace, name.name, version_range
+            );
+            purls.push(purl);
+        }
+    }
+    purls
 }

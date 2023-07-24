@@ -1,0 +1,52 @@
+fragment allIsDependencyTree on IsDependency {
+  justification
+  package {
+    type
+    namespaces {
+      namespace 
+      names {
+        name
+        versions {
+          version
+          qualifiers {
+            key
+            value
+          }
+          subpath
+        }
+      }
+    }
+  }
+dependentPackage {
+      type
+    namespaces {
+      namespace 
+      names {
+        name
+        versions {
+          version
+          qualifiers {
+            key
+            value
+          }
+          subpath
+        }
+      }
+    }
+  }
+versionRange
+origin
+collector
+}
+
+query QueryDependencies($package: PkgSpec) {
+  IsDependency(isDependencySpec: {package: $package}) {
+    ...allIsDependencyTree
+  }
+}
+
+query QueryDependents($package: PkgNameSpec, $version: String) {
+  IsDependency(isDependencySpec: {dependentPackage: $package, versionRange: $version}) {
+    ...allIsDependencyTree
+  }
+}
