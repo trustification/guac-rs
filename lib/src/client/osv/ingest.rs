@@ -20,7 +20,7 @@ impl TryFrom<Osv> for OSVInputSpec {
 
 #[cfg(test)]
 pub mod test {
-    use crate::client::certify_vuln::{Ghsa, Metadata, Vulnerability};
+    use crate::client::certify_vuln::{Metadata, Vulnerability};
     use crate::client::GuacClient;
 
     use super::*;
@@ -29,7 +29,7 @@ pub mod test {
     async fn ingest_osv() -> Result<(), anyhow::Error> {
         let client = GuacClient::new("http://localhost:8080/query".into());
 
-        let result = client
+        client
             .ingest_package("pkg:maven/org.apache.logging.log4j/log4j-core@2.13.0")
             .await?;
 

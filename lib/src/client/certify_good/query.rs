@@ -1,4 +1,3 @@
-
 use self::query_certify_good::{PackageQualifierSpec, PkgSpec};
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
