@@ -1,4 +1,3 @@
-
 use graphql_client::GraphQLQuery;
 
 #[derive(GraphQLQuery)]

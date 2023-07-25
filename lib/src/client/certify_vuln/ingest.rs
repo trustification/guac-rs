@@ -127,7 +127,7 @@ pub mod test {
             collector: "collectorist-osv".to_string(),
         };
 
-        let result = client
+        client
             .ingest_package("pkg:maven/org.apache.logging.log4j/log4j-core@2.13.0")
             .await?;
 
@@ -137,7 +137,10 @@ pub mod test {
                 vuln,
                 meta,
             )
-            .await?;
+            .await;
+
+        assert!(result.is_ok());
+        println!("{:?}", result);
 
         //client.ingest_certify_vuln(
 
