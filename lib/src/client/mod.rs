@@ -1,9 +1,9 @@
-mod certify_bad;
-mod certify_good;
-mod certify_vuln;
-mod is_dependency;
-mod osv;
-mod package;
+pub mod certify_bad;
+pub mod certify_good;
+pub mod certify_vuln;
+pub mod is_dependency;
+pub mod osv;
+pub mod package;
 
 use std::collections::HashSet;
 use std::sync::atomic::AtomicU64;
