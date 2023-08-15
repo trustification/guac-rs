@@ -24,26 +24,11 @@ impl GuacClient {
         Ok(())
     }
 
-    pub async fn get_all_packages(&self) -> Result<Vec<String>, anyhow::Error> {
-        use self::query::query_package;
-        let variables = query_package::Variables { package: None };
-        let response_body =
-            post_graphql::<QueryPackage, _>(&self.client, self.url.to_owned(), variables).await?;
-        let response_data = response_body
-            .data
-            .with_context(|| "No data found in response");
-        Ok(response_data?
-            .packages
-            .iter()
-            .flat_map(query::pkg2purls)
-            .collect())
-    }
-
     pub async fn get_packages(&self, purl: &str) -> Result<Vec<String>, anyhow::Error> {
         use self::query::query_package;
         let pkg = query_package::PkgSpec::try_from(purl)?;
 
-        let variables = query_package::Variables { package: Some(pkg) };
+        let variables = query_package::Variables { package: pkg };
         let response_body =
             post_graphql::<QueryPackage, _>(&self.client, self.url.to_owned(), variables).await?;
         let response_data = response_body

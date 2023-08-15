@@ -26,7 +26,7 @@ mutation IngestPackage($package: PkgInputSpec!) {
   }
 }
 
-query QueryPackage($package: PkgSpec) {
+query QueryPackage($package: PkgSpec!) {
   packages(pkgSpec: $package) {
     ...allPkgTree
   }
