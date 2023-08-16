@@ -14,7 +14,7 @@ use std::str::FromStr;
 pub struct QueryDependencies;
 
 impl TryFrom<&str> for PkgSpec {
-    type Error = anyhow::Error;
+    type Error = packageurl::Error;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         let purl = PackageUrl::from_str(s)?;

@@ -17,6 +17,16 @@ use openvex::Status;
 
 use crate::client::certify_vuln::VulnerabilityResult;
 
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("Purl parsing error: {0}")]
+    Purl(#[from] packageurl::Error),
+    #[error("Http request error: {0}")]
+    Http(#[from] reqwest::Error),
+    #[error("GraphQL response error: {0}")]
+    GraphQL(String),
+}
+
 #[derive(Clone)]
 pub struct GuacClient {
     pub(crate) client: reqwest::Client,

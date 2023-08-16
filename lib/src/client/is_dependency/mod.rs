@@ -1,15 +1,16 @@
 use crate::client::is_dependency::query::is_dependency::QueryDependencies;
 use crate::client::is_dependency::query::is_dependent::QueryDependents;
 use crate::client::GuacClient;
-use anyhow::Context;
 use graphql_client::reqwest::post_graphql;
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
+use super::Error;
+
 mod query;
 
 impl GuacClient {
-    pub async fn is_dependency(&self, purl: &str) -> Result<Vec<String>, anyhow::Error> {
+    pub async fn is_dependency(&self, purl: &str) -> Result<Vec<String>, Error> {
         use self::query::is_dependency;
 
         let pkg = is_dependency::query_dependencies::PkgSpec::try_from(purl)?;
@@ -19,7 +20,7 @@ impl GuacClient {
                 .await?;
         let response_data = response_body
             .data
-            .with_context(|| "No data found in response");
+            .ok_or(Error::GraphQL("No data found in response".to_string()));
         Ok(response_data?
             .is_dependency
             .iter()
@@ -29,7 +30,7 @@ impl GuacClient {
             .collect())
     }
 
-    pub async fn is_dependent(&self, purl: &str) -> Result<Vec<String>, anyhow::Error> {
+    pub async fn is_dependent(&self, purl: &str) -> Result<Vec<String>, Error> {
         use self::query::is_dependent;
 
         let pkg = is_dependent::query_dependents::PkgNameSpec::try_from(purl.clone())?;
@@ -45,7 +46,7 @@ impl GuacClient {
                 .await?;
         let response_data = response_body
             .data
-            .with_context(|| "No data found in response");
+            .ok_or(Error::GraphQL("No data found in response".to_string()));
         Ok(response_data?
             .is_dependency
             .iter()

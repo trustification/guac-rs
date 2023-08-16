@@ -12,7 +12,7 @@ use std::str::FromStr;
 pub struct IngestPackage;
 
 impl TryFrom<&str> for PkgInputSpec {
-    type Error = anyhow::Error;
+    type Error = packageurl::Error;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         let purl = PackageUrl::from_str(s)?;
