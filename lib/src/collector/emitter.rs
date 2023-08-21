@@ -11,6 +11,8 @@ pub trait Emitter {
     async fn send(&self, subject: &str, data: Vec<u8>) -> Result<(), anyhow::Error>;
 
     async fn publish(&self, document: Document) -> Result<(), anyhow::Error> {
+        log::info!("Serializing");
+
         let bytes = serde_json::to_vec(&json!(document))?;
 
         //self.send(SUBJECT_COLLECTED, bytes).await
