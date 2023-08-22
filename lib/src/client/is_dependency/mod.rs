@@ -33,7 +33,7 @@ impl GuacClient {
     pub async fn is_dependent(&self, purl: &str) -> Result<Vec<String>, Error> {
         use self::query::is_dependent;
 
-        let pkg = is_dependent::query_dependents::PkgNameSpec::try_from(purl.clone())?;
+        let pkg = is_dependent::query_dependents::PkgSpec::try_from(purl.clone())?;
         let purl = PackageUrl::from_str(purl)?;
 
         let variables = is_dependent::query_dependents::Variables {

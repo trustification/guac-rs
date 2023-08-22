@@ -1,16 +1,18 @@
 use std::str::FromStr;
+use chrono::Utc;
 
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
 
-use crate::client::certify_vuln::{Metadata, Vulnerability};
-
-use super::Time;
+use crate::client::certify_vuln::Metadata;
+use crate::client::vulnerability::Vulnerability;
 
 use self::ingest_certify_vuln::{
-    CVEInputSpec, GHSAInputSpec, OSVInputSpec, PackageQualifierInputSpec, PkgInputSpec,
-    VulnerabilityInput, VulnerabilityMetaDataInput,
+    PackageQualifierInputSpec, PkgInputSpec, ScanMetadataInput, VulnerabilityInputSpec,
 };
+
+type Time = chrono::DateTime<Utc>;
+
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -48,49 +50,22 @@ impl TryFrom<&str> for PkgInputSpec {
     }
 }
 
-impl TryFrom<Vulnerability> for VulnerabilityInput {
+impl TryFrom<Vulnerability> for VulnerabilityInputSpec {
     type Error = anyhow::Error;
 
     fn try_from(vuln: Vulnerability) -> Result<Self, Self::Error> {
-        match vuln {
-            Vulnerability::Cve(cve) => Ok(VulnerabilityInput {
-                cve: Some(CVEInputSpec {
-                    cve_id: cve.cve_id,
-                    year: cve.year,
-                }),
-                osv: None,
-                ghsa: None,
-                no_vuln: None,
-            }),
-            Vulnerability::Osv(osv) => Ok(VulnerabilityInput {
-                cve: None,
-                osv: Some(OSVInputSpec { osv_id: osv.osv_id }),
-                ghsa: None,
-                no_vuln: None,
-            }),
-            Vulnerability::Ghsa(ghsa) => Ok(VulnerabilityInput {
-                cve: None,
-                osv: None,
-                ghsa: Some(GHSAInputSpec {
-                    ghsa_id: ghsa.ghsa_id,
-                }),
-                no_vuln: None,
-            }),
-            Vulnerability::None => Ok(VulnerabilityInput {
-                cve: None,
-                osv: None,
-                ghsa: None,
-                no_vuln: Some(true),
-            }),
-        }
+        Ok(VulnerabilityInputSpec {
+            type_: vuln.ty,
+            vulnerability_id: vuln.vulnerability_id,
+        })
     }
 }
 
-impl TryFrom<Metadata> for VulnerabilityMetaDataInput {
+impl TryFrom<Metadata> for ScanMetadataInput {
     type Error = anyhow::Error;
 
     fn try_from(meta: Metadata) -> Result<Self, Self::Error> {
-        Ok(VulnerabilityMetaDataInput {
+        Ok(ScanMetadataInput {
             db_uri: meta.db_uri,
             db_version: meta.db_version,
             scanner_uri: meta.scanner_uri,

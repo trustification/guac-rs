@@ -22,22 +22,11 @@ fragment allCertifyVulnTree on CertifyVuln {
         }
     }
     vulnerability {
-        __typename
-        ... on CVE {
+        id
+        type
+        vulnerabilityIDs {
             id
-            year
-            cveId
-        }
-        ... on OSV {
-            id
-            osvId
-        }
-        ... on GHSA {
-            id
-            ghsaId
-        }
-        ... on NoVuln {
-            id
+            vulnerabilityID
         }
     }
     metadata {
@@ -57,13 +46,13 @@ query CertifyVulnQ1 {
     }
 }
 
-mutation IngestCertifyVuln($package: PkgInputSpec!, $vulnerability: VulnerabilityInput!, $meta: VulnerabilityMetaDataInput!) {
-    ingestVulnerability(
+mutation IngestCertifyVuln($package: PkgInputSpec!, $vulnerability: VulnerabilityInputSpec!, $meta: ScanMetadataInput!) {
+    ingestCertifyVuln(
         pkg: $package
         vulnerability: $vulnerability
         certifyVuln: $meta
     )  {
-        ...allCertifyVulnTree
+        id
     }
 }
 
@@ -73,8 +62,8 @@ query QueryCertifyVulnByPackage($package: PkgSpec) {
     }
 }
 
-query QueryCertifyVulnByCve($cve: CVESpec) {
-    CertifyVuln(certifyVulnSpec: {vulnerability: {cve: $cve}}) {
+query QueryCertifyVulnById($id: String!) {
+    CertifyVuln(certifyVulnSpec: {vulnerability: { vulnerabilityID: $id}}) {
         ...allCertifyVulnTree
     }
 }

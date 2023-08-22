@@ -385,145 +385,6 @@
           "possibleTypes": []
         },
         {
-          "description": "CVE represents a vulnerability in the Common Vulnerabilities and Exposures\nschema.\n\nThe vulnerability identifier contains a year field, so we are extracting that\nto allow matching for vulnerabilities found in a given year.\n\nThe vulnerability identifier field is mandatory and canonicalized to be\nlowercase.\n\nThis node can be referred to by other parts of GUAC.",
-          "enumValues": [],
-          "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "year",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "cveId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "CVE",
-          "possibleTypes": []
-        },
-        {
-          "description": "CVEInputSpec specifies a CVE vulnerability for mutations.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "year",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cveId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "CVEInputSpec",
-          "possibleTypes": []
-        },
-        {
-          "description": "CVESpec allows filtering the list of advisories to return in a query.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "year",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cveId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "CVESpec",
-          "possibleTypes": []
-        },
-        {
           "description": "CertifyBad is an attestation that a package, source, or artifact is considered\nbad.\n\nAll evidence trees record a justification for the property they represent as\nwell as the document that contains the attestation (origin) and the collector\nthat collected the document (collector).\n\nThe certification applies to a subject which is a package, source, or artifact.\nIf the attestation targets a package, it must target a PackageName or a\nPackageVersion. If the attestation targets a source, it must target a\nSourceName.",
           "enumValues": [],
           "fields": [
@@ -1102,7 +963,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVEXStatement is an attestation to attach VEX statements to a package or\nartifact to clarify the impact of a specific vulnerability (CVE, GHSA or OSV).",
+          "description": "CertifyVEXStatement is an attestation to attach VEX statements to a package or\nartifact to clarify the impact of a specific vulnerability.",
           "enumValues": [],
           "fields": [
             {
@@ -1147,7 +1008,7 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "UNION",
+                  "kind": "OBJECT",
                   "name": "Vulnerability",
                   "ofType": null
                 }
@@ -1273,7 +1134,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVEXStatementSpec allows filtering the list of VEX statements to\nreturn in a query.\n\nOnly one subject type (package or artifact) and one vulnerability type (CVE,\nGHSA or OSV) may be specified.\n\nNote that setting noVuln in VulnerabilitySpec is invalid for VEX statements!",
+          "description": "CertifyVEXStatementSpec allows filtering the list of VEX statements to\nreturn in a query.\n\nOnly one subject type (package or artifact) and one vulnerability may be specified.\n\nNote that setting noVuln vulnerability type is invalid for VEX statements!",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -1384,7 +1245,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVuln is an attestation to attach vulnerability information to a package.\n\nThis information is obtained via a scanner. If there is no vulnerability\ndetected (no OSV, CVE, or GHSA), we attach the special NoVuln node.",
+          "description": "CertifyVuln is an attestation to attach vulnerability information to a package.\n\nThis information is obtained via a scanner. If there is no vulnerability\ndetected, we attach the a vulnerability with \"NoVuln\" type and an empty string \nfor the vulnerability ID.",
           "enumValues": [],
           "fields": [
             {
@@ -1422,14 +1283,14 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "The vulnerability object. Can be an OSV, CVE, or GHSA or the special NoVuln node.",
+              "description": "The vulnerability can be an be a specific vulnerability or NoVuln type.",
               "isDeprecated": false,
               "name": "vulnerability",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "UNION",
+                  "kind": "OBJECT",
                   "name": "Vulnerability",
                   "ofType": null
                 }
@@ -1446,7 +1307,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "VulnerabilityMetaData",
+                  "name": "ScanMetadata",
                   "ofType": null
                 }
               }
@@ -1459,7 +1320,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVulnSpec allows filtering the list of vulnerability certifications to\nreturn in a query.\n\nSpecifying just the package allows to query for all vulnerabilities associated\nwith the package.\n\nOnly one vulnerability type (OSV, CVE, GHSA, or special NoVuln) may be\nspecified.",
+          "description": "CertifyVulnSpec allows filtering the list of vulnerability certifications to\nreturn in a query.\n\nSpecifying just the package allows to query for all vulnerabilities associated\nwith the package.\n\nOnly one vulnerability (or NoVuln vulnerability type) may be\nspecified.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -1570,86 +1431,44 @@
           "possibleTypes": []
         },
         {
-          "description": "CveOrGhsa is a union of CVE and GHSA.",
-          "enumValues": [],
+          "description": "The Comparator is used by the vulnerability score filter on ranges",
+          "enumValues": [
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "GREATER"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "EQUAL"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "LESS"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "GREATER_EQUAL"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "LESS_EQUAL"
+            }
+          ],
           "fields": [],
           "inputFields": [],
           "interfaces": [],
-          "kind": "UNION",
-          "name": "CveOrGhsa",
-          "possibleTypes": [
-            {
-              "kind": "OBJECT",
-              "name": "CVE",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "GHSA",
-              "ofType": null
-            }
-          ]
-        },
-        {
-          "description": "CveOrGhsaInput allows using CveOrGhsa union as input type for mutations.\n\nExactly one field must be specified.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cve",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CVEInputSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsa",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "GHSAInputSpec",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "CveOrGhsaInput",
-          "possibleTypes": []
-        },
-        {
-          "description": "CveOrGhsaSpec allows using CveOrGhsa union as input type for queries.\n\nExactly one field must be specified.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cve",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CVESpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsa",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "GHSASpec",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "CveOrGhsaSpec",
+          "kind": "ENUM",
+          "name": "Comparator",
           "possibleTypes": []
         },
         {
@@ -1748,61 +1567,19 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "CVE_CERTIFY_VEX_STATEMENT"
+              "name": "VULNERABILITY_CERTIFY_VEX_STATEMENT"
             },
             {
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "CVE_CERTIFY_VULN"
+              "name": "VULNERABILITY_CERTIFY_VULN"
             },
             {
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "CVE_IS_VULNERABILITY"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "GHSA_CERTIFY_VEX_STATEMENT"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "GHSA_CERTIFY_VULN"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "GHSA_IS_VULNERABILITY"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "NO_VULN_CERTIFY_VULN"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "OSV_CERTIFY_VEX_STATEMENT"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "OSV_CERTIFY_VULN"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "OSV_IS_VULNERABILITY"
+              "name": "VULNERABILITY_VULN_EQUAL"
             },
             {
               "deprecationReason": null,
@@ -1964,19 +1741,7 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "CERTIFY_VEX_STATEMENT_CVE"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "CERTIFY_VEX_STATEMENT_GHSA"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "CERTIFY_VEX_STATEMENT_OSV"
+              "name": "CERTIFY_VEX_STATEMENT_VULNERABILITY"
             },
             {
               "deprecationReason": null,
@@ -1988,25 +1753,7 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "CERTIFY_VULN_CVE"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "CERTIFY_VULN_GHSA"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "CERTIFY_VULN_NO_VULN"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "CERTIFY_VULN_OSV"
+              "name": "CERTIFY_VULN_VULNERABILITY"
             },
             {
               "deprecationReason": null,
@@ -2090,19 +1837,7 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "IS_VULNERABILITY_CVE"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "IS_VULNERABILITY_GHSA"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "IS_VULNERABILITY_OSV"
+              "name": "VULN_EQUAL_VULNERABILITY"
             },
             {
               "deprecationReason": null,
@@ -2162,105 +1897,6 @@
           "interfaces": [],
           "kind": "SCALAR",
           "name": "Float",
-          "possibleTypes": []
-        },
-        {
-          "description": "GHSA represents GitHub security advisories.\n\nThe advisory id field is mandatory and canonicalized to be lowercase.\n\nThis node can be referred to by other parts of GUAC.",
-          "enumValues": [],
-          "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "ghsaId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "GHSA",
-          "possibleTypes": []
-        },
-        {
-          "description": "GHSAInputSpec specifies a GitHub Security Advisory for mutations.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsaId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "GHSAInputSpec",
-          "possibleTypes": []
-        },
-        {
-          "description": "GHSASpec allows filtering the list of advisories to return in a query.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsaId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "GHSASpec",
           "possibleTypes": []
         },
         {
@@ -3656,7 +3292,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "Package for the dependency; MUST BE PackageName, not PackageVersion",
+              "description": "Package for the dependency; MUST be PackageName or PackageVersion",
               "isDeprecated": false,
               "name": "dependentPackage",
               "type": {
@@ -3672,7 +3308,7 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "Version range for the dependency link",
+              "description": "Version range for the dependency link, required if depedentPackage points to PackageName",
               "isDeprecated": false,
               "name": "versionRange",
               "type": {
@@ -3763,7 +3399,7 @@
           "inputFields": [
             {
               "defaultValue": null,
-              "description": null,
+              "description": "versionRange should be specified for depedentPackages that point to PackageName",
               "name": "versionRange",
               "type": {
                 "kind": "NON_NULL",
@@ -3868,7 +3504,7 @@
               "name": "dependentPackage",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "PkgNameSpec",
+                "name": "PkgSpec",
                 "ofType": null
               }
             },
@@ -4157,237 +3793,6 @@
           "interfaces": [],
           "kind": "INPUT_OBJECT",
           "name": "IsOccurrenceSpec",
-          "possibleTypes": []
-        },
-        {
-          "description": "IsVulnerability is an attestation to link CVE/GHSA with data in OSV.",
-          "enumValues": [],
-          "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": "The OSV that encapsulates the vulnerability",
-              "isDeprecated": false,
-              "name": "osv",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "OSV",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": "The upstream vulnerability information",
-              "isDeprecated": false,
-              "name": "vulnerability",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "UNION",
-                  "name": "CveOrGhsa",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": "Justification for the attested relationship",
-              "isDeprecated": false,
-              "name": "justification",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": "Document from which this attestation is generated from",
-              "isDeprecated": false,
-              "name": "origin",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": "GUAC collector for the document",
-              "isDeprecated": false,
-              "name": "collector",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "IsVulnerability",
-          "possibleTypes": []
-        },
-        {
-          "description": "IsVulnerabilityInputSpec represents the input to link CVE/GHSA with OSV data.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "justification",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "origin",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "collector",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "IsVulnerabilityInputSpec",
-          "possibleTypes": []
-        },
-        {
-          "description": "IsVulnerabilitySpec allows filtering the list of vulnerability links to return\nin a query.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "osv",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "OSVSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "vulnerability",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CveOrGhsaSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "justification",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "origin",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "collector",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "IsVulnerabilitySpec",
           "possibleTypes": []
         },
         {
@@ -4974,7 +4379,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "VulnerabilityInput",
+                      "name": "VulnerabilityInputSpec",
                       "ofType": null
                     }
                   }
@@ -5033,7 +4438,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "VulnerabilityInput",
+                      "name": "VulnerabilityInputSpec",
                       "ofType": null
                     }
                   }
@@ -5047,7 +4452,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "VulnerabilityMetaDataInput",
+                      "name": "ScanMetadataInput",
                       "ofType": null
                     }
                   }
@@ -5056,7 +4461,7 @@
               "deprecationReason": null,
               "description": "Adds a certification that a package has been scanned for vulnerabilities.",
               "isDeprecated": false,
-              "name": "ingestVulnerability",
+              "name": "ingestCertifyVuln",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5064,6 +4469,97 @@
                   "kind": "OBJECT",
                   "name": "CertifyVuln",
                   "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "pkgs",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "PkgInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilities",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "certifyVulns",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "ScanMetadataInput",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Bulk add certifications that a package has been scanned for vulnerabilities.",
+              "isDeprecated": false,
+              "name": "ingestCertifyVulns",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "CertifyVuln",
+                      "ofType": null
+                    }
+                  }
                 }
               }
             },
@@ -5123,154 +4619,6 @@
                   "kind": "OBJECT",
                   "name": "PointOfContact",
                   "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "cve",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "CVEInputSpec",
-                    "ofType": null
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Ingests new CVE and returns it.",
-              "isDeprecated": false,
-              "name": "ingestCVE",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CVE",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "cves",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "INPUT_OBJECT",
-                          "name": "CVEInputSpec",
-                          "ofType": null
-                        }
-                      }
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Bulk ingests new CVEs and returns a list of them.",
-              "isDeprecated": false,
-              "name": "ingestCVEs",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "CVE",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "ghsa",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "GHSAInputSpec",
-                    "ofType": null
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Ingests a new GitHub Security Advisory and returns it.",
-              "isDeprecated": false,
-              "name": "ingestGHSA",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "GHSA",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "ghsas",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "INPUT_OBJECT",
-                          "name": "GHSAInputSpec",
-                          "ofType": null
-                        }
-                      }
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Bulk ingests new GHSAs and returns a list of them.",
-              "isDeprecated": false,
-              "name": "ingestGHSAs",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "GHSA",
-                      "ofType": null
-                    }
-                  }
                 }
               }
             },
@@ -5838,6 +5186,20 @@
                 {
                   "defaultValue": null,
                   "description": null,
+                  "name": "depPkgMatchType",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "MatchFlags",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
                   "name": "dependency",
                   "type": {
                     "kind": "NON_NULL",
@@ -5907,6 +5269,20 @@
                           "ofType": null
                         }
                       }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "depPkgMatchType",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "MatchFlags",
+                      "ofType": null
                     }
                   }
                 },
@@ -6102,65 +5478,6 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "osv",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "OSVInputSpec",
-                      "ofType": null
-                    }
-                  }
-                },
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "vulnerability",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "CveOrGhsaInput",
-                      "ofType": null
-                    }
-                  }
-                },
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "isVulnerability",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "IsVulnerabilityInputSpec",
-                      "ofType": null
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Ingest a mapping between an OSV entry and a CVE/GHSA vulnerability.",
-              "isDeprecated": false,
-              "name": "ingestIsVulnerability",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "IsVulnerability",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
                   "name": "subject",
                   "type": {
                     "kind": "NON_NULL",
@@ -6212,80 +5529,6 @@
                   "kind": "OBJECT",
                   "name": "HasMetadata",
                   "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "osv",
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "OSVInputSpec",
-                    "ofType": null
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Ingests a new OSV vulnerability and returns it.",
-              "isDeprecated": false,
-              "name": "ingestOSV",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "OSV",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "osvs",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "INPUT_OBJECT",
-                          "name": "OSVInputSpec",
-                          "ofType": null
-                        }
-                      }
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Bulk ingests new OSVs and returns a list of them.",
-              "isDeprecated": false,
-              "name": "ingestOSVs",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "OSV",
-                      "ofType": null
-                    }
-                  }
                 }
               }
             },
@@ -6503,24 +5746,56 @@
                   }
                 }
               }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "Mutation",
-          "possibleTypes": []
-        },
-        {
-          "description": "NoVuln is a special vulnerability node to attest that no vulnerability has been\nfound during a vulnerability scan.\n\nBackends guarantee that this is a singleton node.",
-          "enumValues": [],
-          "fields": [
+            },
             {
-              "args": [],
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "score",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityScoreInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilityMetadata",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityMetadataInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
               "deprecationReason": null,
-              "description": null,
+              "description": "Adds metadata about a vulnerability.",
               "isDeprecated": false,
-              "name": "id",
+              "name": "ingestVulnerabilityMetadata",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -6530,12 +5805,240 @@
                   "ofType": null
                 }
               }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilities",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "scores",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityScoreInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilityMetadatas",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityMetadataInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Bulk add certifications that vulnerability has a specific score.",
+              "isDeprecated": false,
+              "name": "ingestVulnerabilityMetadatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "otherVulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnEqual",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnEqualInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingest a mapping between vulnerabilities.",
+              "isDeprecated": false,
+              "name": "ingestVulnEqual",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "VulnEqual",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vuln",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Ingests a new vulnerability and returns the corresponding vulnerability trie path.",
+              "isDeprecated": false,
+              "name": "ingestVulnerability",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Vulnerability",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulns",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Bulk ingests vulnerabilities and returns the list of corresponding vulnerability trie path.",
+              "isDeprecated": false,
+              "name": "ingestVulnerabilities",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Vulnerability",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
             }
           ],
           "inputFields": [],
           "interfaces": [],
           "kind": "OBJECT",
-          "name": "NoVuln",
+          "name": "Mutation",
           "possibleTypes": []
         },
         {
@@ -6569,22 +6072,7 @@
             },
             {
               "kind": "OBJECT",
-              "name": "OSV",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "CVE",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "GHSA",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "NoVuln",
+              "name": "Vulnerability",
               "ofType": null
             },
             {
@@ -6599,7 +6087,7 @@
             },
             {
               "kind": "OBJECT",
-              "name": "IsVulnerability",
+              "name": "VulnEqual",
               "ofType": null
             },
             {
@@ -6663,105 +6151,6 @@
               "ofType": null
             }
           ]
-        },
-        {
-          "description": "OSV represents an Open Source Vulnerability.\n\nThe osvId field is mandatory and canonicalized to be lowercase.\n\nThis maps to a vulnerability ID specific to the environment (e.g., GHSA ID or\nCVE ID).\n\nThis node can be referred to by other parts of GUAC.",
-          "enumValues": [],
-          "fields": [
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "id",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "osvId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "OBJECT",
-          "name": "OSV",
-          "possibleTypes": []
-        },
-        {
-          "description": "OSVInputSpec specifies a OSV vulnerability for mutations.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "osvId",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "OSVInputSpec",
-          "possibleTypes": []
-        },
-        {
-          "description": "OSVSpec allows filtering the list of advisories to return in a query.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "osvId",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "OSVSpec",
-          "possibleTypes": []
         },
         {
           "description": "Package represents the root of the package trie/tree.\n\nWe map package information to a trie, closely matching the pURL specification\n(https://github.com/package-url/purl-spec/blob/0dd92f26f8bb11956ffdf5e8acfcee71e8560407/README.rst),\nbut deviating from it where GUAC heuristics allow for better representation of\npackage information. Each path in the trie fully represents a package; we split\nthe trie based on the pURL components.\n\nThis node matches a pkg:<type> partial pURL. The type field matches the\npURL types but we might also use \"guac\" for the cases where the pURL\nrepresentation is not complete or when we have custom rules.\n\nSince this node is at the root of the package trie, it is named Package, not\nPackageType.",
@@ -7925,57 +7314,6 @@
           "possibleTypes": []
         },
         {
-          "description": "PkgNameSpec is used to query for dependent packages.\n\nThis is different from PkgSpec as the IsDependency attestation should only be\nallowed to be made to the packageName node and not the packageVersion node.\nVersions will be handled by the version_range in the IsDependency attestation\nnode.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "id",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "type",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "namespace",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "name",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "PkgNameSpec",
-          "possibleTypes": []
-        },
-        {
           "description": "PkgSpec allows filtering the list of sources to return in a query.\n\nEach field matches a qualifier from pURL. Use null to match on all values at\nthat level. For example, to get all packages in GUAC backend, use a PkgSpec\nwhere every field is null.\n\nEmpty string at a field means matching with the empty string. If passing in\nqualifiers, all of the values in the list must match. Since we want to return\nnodes with any number of qualifiers if no qualifiers are passed in the input,\nwe must also return the same set of nodes it the qualifiers list is empty. To\nmatch on nodes that don't contain any qualifier, set matchOnlyEmptyQualifiers\nto true. If this field is true, then the qualifiers argument is ignored.",
           "enumValues": [],
           "fields": [],
@@ -8720,84 +8058,6 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "cveSpec",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "CVESpec",
-                      "ofType": null
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Returns all CVEs matching a filter.",
-              "isDeprecated": false,
-              "name": "cve",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "CVE",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "ghsaSpec",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "GHSASpec",
-                      "ofType": null
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Returns all GitHub Security Advisories matching a filter.",
-              "isDeprecated": false,
-              "name": "ghsa",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "GHSA",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
                   "name": "hasSBOMSpec",
                   "type": {
                     "kind": "NON_NULL",
@@ -9032,45 +8292,6 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "isVulnerabilitySpec",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "IsVulnerabilitySpec",
-                      "ofType": null
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Returns all OSV-CVE/GHSA vulnerability mappings that match a filter.",
-              "isDeprecated": false,
-              "name": "IsVulnerability",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "IsVulnerability",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
                   "name": "hasMetadataSpec",
                   "type": {
                     "kind": "NON_NULL",
@@ -9099,45 +8320,6 @@
                     "ofType": {
                       "kind": "OBJECT",
                       "name": "HasMetadata",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "osvSpec",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "OSVSpec",
-                      "ofType": null
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Returns all OSV vulnerabilities matching a filter.",
-              "isDeprecated": false,
-              "name": "osv",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "OSV",
                       "ofType": null
                     }
                   }
@@ -9522,6 +8704,123 @@
                     "ofType": {
                       "kind": "OBJECT",
                       "name": "Source",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilityMetadataSpec",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityMetadataSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all vulnerabilityMetadata attestations matching a filter.",
+              "isDeprecated": false,
+              "name": "vulnerabilityMetadata",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "VulnerabilityMetadata",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnEqualSpec",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnEqualSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all equal vulnerability mappings that match a filter.",
+              "isDeprecated": false,
+              "name": "vulnEqual",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "VulnEqual",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnSpec",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilitySpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all vulnerabilities matching a filter.",
+              "isDeprecated": false,
+              "name": "vulnerabilities",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Vulnerability",
                       "ofType": null
                     }
                   }
@@ -9926,6 +9225,238 @@
           "interfaces": [],
           "kind": "INPUT_OBJECT",
           "name": "SLSAPredicateSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "ScanMetadata is the metadata attached to vulnerability certification.\n\nIt contains metadata about the scanner process that created the certification.",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Time of scan (in RFC 3339 format)",
+              "isDeprecated": false,
+              "name": "timeScanned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "URI of the vulnerability database used by the scanner",
+              "isDeprecated": false,
+              "name": "dbUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Version of the vulnerability database used by the scanner",
+              "isDeprecated": false,
+              "name": "dbVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "URI of the scanner",
+              "isDeprecated": false,
+              "name": "scannerUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Version of the scanner",
+              "isDeprecated": false,
+              "name": "scannerVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "Document from which this attestation is generated from",
+              "isDeprecated": false,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": "GUAC collector for the document",
+              "isDeprecated": false,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "ScanMetadata",
+          "possibleTypes": []
+        },
+        {
+          "description": "ScanMetadataInput represents the input for certifying vulnerability\nscans in mutations.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "timeScanned",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "dbUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "dbVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "scannerUri",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "scannerVersion",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "ScanMetadataInput",
           "possibleTypes": []
         },
         {
@@ -10854,103 +10385,21 @@
           "possibleTypes": []
         },
         {
-          "description": "Vulnerability is a union of OSV, CVE, GHSA or the NoVuln node.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [],
-          "interfaces": [],
-          "kind": "UNION",
-          "name": "Vulnerability",
-          "possibleTypes": [
-            {
-              "kind": "OBJECT",
-              "name": "OSV",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "CVE",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "GHSA",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "NoVuln",
-              "ofType": null
-            }
-          ]
-        },
-        {
-          "description": "VulnerabilityInput allows using Vulnerability union as\ninput type to be used in mutations.\n\nEither noVuln must be set to true or one of osv, cve, or ghsa must be\nset to non-nil. If noVuln is set then this is an ingestion of a known lack of\nvulnerabilities, so the special NoVuln node will be used by the backend.\nOtherwise, the specific vulnerability type will be linked to this attestation.",
-          "enumValues": [],
-          "fields": [],
-          "inputFields": [
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "osv",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "OSVInputSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "cve",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CVEInputSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "ghsa",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "GHSAInputSpec",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "noVuln",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            }
-          ],
-          "interfaces": [],
-          "kind": "INPUT_OBJECT",
-          "name": "VulnerabilityInput",
-          "possibleTypes": []
-        },
-        {
-          "description": "VulnerabilityMetaData is the metadata attached to vulnerability certification.\n\nIt contains metadata about the scanner process that created the certification.",
+          "description": "VulnEqual is an attestation to link two vulnerabilities together as being equal\"\n\nNote that setting noVuln vulnerability type is invalid for VulnEqual!",
           "enumValues": [],
           "fields": [
             {
               "args": [],
               "deprecationReason": null,
-              "description": "Time of scan (in RFC 3339 format)",
+              "description": null,
               "isDeprecated": false,
-              "name": "timeScanned",
+              "name": "id",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Time",
+                  "name": "ID",
                   "ofType": null
                 }
               }
@@ -10958,57 +10407,33 @@
             {
               "args": [],
               "deprecationReason": null,
-              "description": "URI of the vulnerability database used by the scanner",
+              "description": "Collection of vulnerabilities that are similar",
               "isDeprecated": false,
-              "name": "dbUri",
+              "name": "vulnerabilities",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Vulnerability",
+                      "ofType": null
+                    }
+                  }
                 }
               }
             },
             {
               "args": [],
               "deprecationReason": null,
-              "description": "Version of the vulnerability database used by the scanner",
+              "description": "Justification for the attested relationship",
               "isDeprecated": false,
-              "name": "dbVersion",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": "URI of the scanner",
-              "isDeprecated": false,
-              "name": "scannerUri",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": "Version of the scanner",
-              "isDeprecated": false,
-              "name": "scannerVersion",
+              "name": "justification",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11055,74 +10480,18 @@
           "inputFields": [],
           "interfaces": [],
           "kind": "OBJECT",
-          "name": "VulnerabilityMetaData",
+          "name": "VulnEqual",
           "possibleTypes": []
         },
         {
-          "description": "VulnerabilityMetaDataInput represents the input for certifying vulnerability\nscans in mutations.",
+          "description": "VulnEqualInputSpec represents the input to link vulnerabilities to each other.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
             {
               "defaultValue": null,
               "description": null,
-              "name": "timeScanned",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Time",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "dbUri",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "dbVersion",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "scannerUri",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "scannerVersion",
+              "name": "justification",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11164,41 +10533,660 @@
           ],
           "interfaces": [],
           "kind": "INPUT_OBJECT",
-          "name": "VulnerabilityMetaDataInput",
+          "name": "VulnEqualInputSpec",
           "possibleTypes": []
         },
         {
-          "description": "VulnerabilitySpec allows using Vulnerability union as input type to be used in\nread queries.\n\nEither noVuln must be set or exactly one of osv, cve or ghsa\nmust be set to non-nil. Setting noVuln to true means retrieving only nodes where\nthere is no vulnerability attached. Setting it to false means retrieving only nodes\nwith identified vulnerabilities. Setting one of the other fields means retrieving\ncertifications for the corresponding vulnerability types.",
+          "description": "VulnEqualSpec allows filtering the list of vulnerability links to return\nin a query.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
             {
               "defaultValue": null,
               "description": null,
-              "name": "osv",
+              "name": "id",
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "OSVSpec",
+                "kind": "SCALAR",
+                "name": "ID",
                 "ofType": null
               }
             },
             {
               "defaultValue": null,
               "description": null,
-              "name": "cve",
+              "name": "vulnerabilities",
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "CVESpec",
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "VulnerabilitySpec",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "justification",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               }
             },
             {
               "defaultValue": null,
               "description": null,
-              "name": "ghsa",
+              "name": "origin",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnEqualSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "Vulnerability represents the root of the vulnerability trie/tree.\n\nWe map vulnerability information to a trie, as a derivative of the pURL specification:\neach path in the trie represents a type and a vulnerability ID. This allows for generic\nrepresentation of the various vulnerabilities and does not limit to just cve, ghsa or osv. \nThis would be in the general format: vuln://<general-type>/<vuln-id>\n\nExamples:\n\nCVE, using path separator: vuln://cve/cve-2023-20753\nOSV, representing its knowledge of a GHSA: vuln://osv/ghsa-205hk\nRandom vendor: vuln://snyk/sn-whatever\nNoVuln: vuln://novuln/\n\n\nThis node represents the type part of the trie path. It is used to represent\nthe specific type of the vulnerability: cve, ghsa, osv or some other vendor specific\n\nSince this node is at the root of the vulnerability trie, it is named Vulnerability, not\nVulnerabilityType.\n\nNoVuln is a special vulnerability node to attest that no vulnerability has been\nfound during a vulnerability scan. It will have the type \"novuln\" and contain an empty string \nfor vulnerabilityID\n\nThe resolvers will enforce that both the type and vulnerability IDs are lower case.",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "type",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "vulnerabilityIDs",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "VulnerabilityID",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "Vulnerability",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityID is a specific vulnerability ID associated with the type of the vulnerability.\n\nThis will be enforced to be all lowercase.\n\nThe namespace field is mandatory.",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "vulnerabilityID",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "VulnerabilityID",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnInputSpec specifies a vulnerability for mutations.\n\nThis is different than VulnSpec because we want to encode mandatory fields:\ntype and vulnerabilityID.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "type",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "vulnerabilityID",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityMetadata is an attestation that a vulnerability has a related score\nassociated with it.\n\nThe intent of this evidence tree predicate is to allow extensibility of vulnerability\nscores (one-to-one mapping) with a specific vulnerability ID.\n\nA vulnerability ID can have a one-to-many relationship with the VulnerabilityMetadata\nnode as a vulnerability ID can have multiple scores (in various frameworks).\n\nThe timestamp is used to determine when the score was evaluated for the specific vulnerability.",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "vulnerability",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Vulnerability",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "score",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "VulnerabilityScore",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "VulnerabilityMetadata",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityMetadataInputSpec represents the mutation input to ingest a vulnerability metadata.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Time",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityMetadataInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityMetadataSpec allows filtering the list of VulnerabilityMetadata evidence \nto return in a query.\n\nTimestamp specified indicates filtering timestamps after the specified time",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "vulnerability",
               "type": {
                 "kind": "INPUT_OBJECT",
-                "name": "GHSASpec",
+                "name": "VulnerabilitySpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "score",
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "VulnerabilityScoreSpec",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "timestamp",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Time",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "origin",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "collector",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityMetadataSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityScore node captures the score type and its corresponding value. There is a\none-to-one relationship between the VulnerabilityMetadata and the score.\n\nExamples:\n\ntype: EPSSv1\nvalue: 0.960760000\n\ntype: CVSSv2\nvalue: 5.0\n\ntype: CVSSv3\nvalue: 7.5",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "type",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VulnerabilityScoreType",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "value",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "VulnerabilityScore",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityScoreInputSpec represents the mutation input to ingest a vulnerability score.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "type",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VulnerabilityScoreType",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "value",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityScoreInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityScoreSpec allows for filtering a vulnerability score.\nComparator field is an enum that be set to filter the score and return a\nrange that matches.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "type",
+              "type": {
+                "kind": "ENUM",
+                "name": "VulnerabilityScoreType",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "comparator",
+              "type": {
+                "kind": "ENUM",
+                "name": "Comparator",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "value",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityScoreSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "Records the type of the score being captured by the score node",
+          "enumValues": [
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CVSSv2"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "CVSSv3"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "EPSSv1"
+            },
+            {
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "EPSSv2"
+            }
+          ],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "ENUM",
+          "name": "VulnerabilityScoreType",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilitySpec allows filtering the list of vulnerabilities to return in a query.\n\nUse null to match on all values at that level. \nFor example, to get all vulnerabilities in GUAC backend, use a VulnSpec\nwhere every field is null.\n\nSetting the noVuln boolean true will ignore the other inputs for type and vulnerabilityID.\nSetting noVuln to true means retrieving only nodes where the type of the vulnerability is \"novuln\" \nand the it has an empty string for vulnerabilityID. Setting it to false filters out all results that are \"novuln\".\nSetting one of the other fields and omitting the noVuln means retrieving vulnerabilities for the corresponding \ntype and vulnerabilityID. Omission of noVuln field will return all vulnerabilities and novuln.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "id",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "type",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "vulnerabilityID",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               }
             },

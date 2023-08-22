@@ -20,7 +20,7 @@ pub struct QueryCertifyVulnByPackage;
     query_path = "src/client/certify_vuln/certify_vuln.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct QueryCertifyVulnByCve;
+pub struct QueryCertifyVulnById;
 
 impl TryFrom<&str> for PkgSpec {
     type Error = anyhow::Error;
