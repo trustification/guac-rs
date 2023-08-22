@@ -3,10 +3,11 @@ use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
 
 use crate::client::certify_vuln::ingest::IngestCertifyVuln;
-use crate::client::certify_vuln::query::{QueryCertifyVulnByCve, QueryCertifyVulnByPackage};
+use crate::client::certify_vuln::query::{QueryCertifyVulnByPackage};
 use crate::client::GuacClient;
 
 use serde::{Deserialize, Serialize};
+use crate::client::vulnerability::Vulnerability;
 
 pub mod ingest;
 pub mod query;
@@ -15,52 +16,18 @@ pub mod query;
 type Time = chrono::DateTime<Utc>;
 
 #[derive(Serialize, Deserialize)]
-pub enum Vulnerability {
-    Cve(Cve),
-    Osv(Osv),
-    Ghsa(Ghsa),
-    None,
-}
-
-impl Vulnerability {
-    pub fn id(&self) -> Option<String> {
-        match self {
-            Vulnerability::Cve(id) => Some(id.cve_id.clone()),
-            Vulnerability::Osv(id) => Some(id.osv_id.clone()),
-            Vulnerability::Ghsa(id) => Some(id.ghsa_id.clone()),
-            Vulnerability::None => None,
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize)]
 pub struct VulnerabilityResult {
     pub vulnerability: Vulnerability,
     pub packages: Vec<String>,
 }
 
 impl VulnerabilityResult {
-    pub fn id(&self) -> Option<String> {
+    pub fn id(&self) -> String {
         self.vulnerability.id()
     }
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct Cve {
-    pub year: i64,
-    pub cve_id: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Osv {
-    pub osv_id: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Ghsa {
-    pub ghsa_id: String,
-}
-
 pub struct Metadata {
     pub db_uri: String,
     pub db_version: String,
@@ -89,11 +56,9 @@ impl GuacClient {
 
         let response_body =
             post_graphql::<IngestCertifyVuln, _>(&self.client, self.url.to_owned(), variables)
-                .await?;
+                .await;
 
-        println!("{:?}", response_body);
-
-        let _ = response_body
+        let _ = response_body?
             .data
             .with_context(|| "No data found in response")?;
 
@@ -121,26 +86,10 @@ impl GuacClient {
             .certify_vuln
             .iter()
             .map(|entry| {
-                let vulnerability = match &entry.vulnerability {
-                    query_certify_vuln_by_package::AllCertifyVulnTreeVulnerability::CVE(id) => {
-                        Vulnerability::Cve(Cve {
-                            year: id.year,
-                            cve_id: id.cve_id.clone(),
-                        })
-                    }
-                    query_certify_vuln_by_package::AllCertifyVulnTreeVulnerability::OSV(id) => {
-                        Vulnerability::Osv(Osv {
-                            osv_id: id.osv_id.clone(),
-                        })
-                    }
-                    query_certify_vuln_by_package::AllCertifyVulnTreeVulnerability::GHSA(id) => {
-                        Vulnerability::Ghsa(Ghsa {
-                            ghsa_id: id.ghsa_id.clone(),
-                        })
-                    }
-                    query_certify_vuln_by_package::AllCertifyVulnTreeVulnerability::NoVuln(_) => {
-                        Vulnerability::None
-                    }
+                let vulnerability = Vulnerability {
+                    //id: entry.id.clone(),
+                    ty: entry.vulnerability.type_.clone(),
+                    vulnerability_id: entry.vulnerability.vulnerability_i_ds[0].vulnerability_id.clone(),
                 };
 
                 let packages = package::vuln2purls(&entry.package);
@@ -153,21 +102,18 @@ impl GuacClient {
             .collect())
     }
 
+    /*
     pub async fn get_vulnerabilities(
         &self,
-        cve: &str,
+        vuln_id: &str,
     ) -> Result<Vec<VulnerabilityResult>, anyhow::Error> {
-        use self::query::query_certify_vuln_by_cve;
+        use self::query::query_certify_vuln_by_id;
 
-        let variables = query_certify_vuln_by_cve::Variables {
-            cve: Some(query_certify_vuln_by_cve::CVESpec {
-                cve_id: Some(cve.to_string()),
-                id: None,
-                year: None,
-            }),
+        let variables = query_certify_vuln_by_id::Variables {
+            id: vuln_id.to_string(),
         };
         let response_body =
-            post_graphql::<QueryCertifyVulnByCve, _>(&self.client, self.url.to_owned(), variables)
+            post_graphql::<QueryCertifyVulnById, _>(&self.client, self.url.to_owned(), variables)
                 .await?;
         let response_data = response_body
             .data
@@ -176,26 +122,10 @@ impl GuacClient {
             .certify_vuln
             .iter()
             .map(|entry| {
-                let vulnerability = match &entry.vulnerability {
-                    query_certify_vuln_by_cve::AllCertifyVulnTreeVulnerability::CVE(id) => {
-                        Vulnerability::Cve(Cve {
-                            year: id.year,
-                            cve_id: id.cve_id.clone(),
-                        })
-                    }
-                    query_certify_vuln_by_cve::AllCertifyVulnTreeVulnerability::OSV(id) => {
-                        Vulnerability::Osv(Osv {
-                            osv_id: id.osv_id.clone(),
-                        })
-                    }
-                    query_certify_vuln_by_cve::AllCertifyVulnTreeVulnerability::GHSA(id) => {
-                        Vulnerability::Ghsa(Ghsa {
-                            ghsa_id: id.ghsa_id.clone(),
-                        })
-                    }
-                    query_certify_vuln_by_cve::AllCertifyVulnTreeVulnerability::NoVuln(_) => {
-                        Vulnerability::None
-                    }
+                let vulnerability = Vulnerability {
+                    //id: entry.vulnerability.id.clone(),
+                    ty: entry.vulnerability.type_.clone(),
+                    vulnerability_id: entry.vulnerability.vulnerability_i_ds[0].vulnerability_id.clone(),
                 };
 
                 let packages = cve::vuln2purls(&entry.package);
@@ -206,6 +136,7 @@ impl GuacClient {
             })
             .collect())
     }
+     */
 }
 
 pub mod package {
@@ -242,7 +173,7 @@ pub mod package {
 
 pub mod cve {
     pub fn vuln2purls(
-        pkg: &super::query::query_certify_vuln_by_cve::AllCertifyVulnTreePackage,
+        pkg: &super::query::query_certify_vuln_by_id::AllCertifyVulnTreePackage,
     ) -> Vec<String> {
         let mut purls = Vec::new();
         let t = &pkg.type_;

@@ -1,4 +1,4 @@
-use self::query_dependents::{AllIsDependencyTreePackage, PkgNameSpec};
+use self::query_dependents::{AllIsDependencyTreePackage, PkgSpec, PackageQualifierSpec};
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
 use std::str::FromStr;
@@ -11,20 +11,31 @@ use std::str::FromStr;
 )]
 pub struct QueryDependents;
 
-impl TryFrom<&str> for PkgNameSpec {
+impl TryFrom<&str> for PkgSpec {
     type Error = packageurl::Error;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         let purl = PackageUrl::from_str(s)?;
 
-        Ok(PkgNameSpec {
+        Ok(PkgSpec {
             id: None,
             type_: Some(purl.ty().to_string()),
             namespace: purl.namespace().map(|s| s.to_string()),
             name: Some(purl.name().to_string()),
+            qualifiers: Some(purl.qualifiers()
+                .iter().map(|(k,v)| {
+                PackageQualifierSpec {
+                    key: k.to_string(),
+                    value: Some(v.to_string()),
+                }
+            }).collect()),
+            version: purl.version().map(|v| v.to_owned()),
+            subpath: purl.subpath().map(|sp| sp.to_owned()),
+            match_only_empty_qualifiers: None,
         })
     }
 }
+
 
 pub fn deps2purls(pkg: &AllIsDependencyTreePackage) -> Vec<String> {
     let mut purls = Vec::new();

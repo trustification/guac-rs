@@ -2,8 +2,9 @@ pub mod certify_bad;
 pub mod certify_good;
 pub mod certify_vuln;
 pub mod is_dependency;
-pub mod osv;
 pub mod package;
+
+pub mod vulnerability;
 
 use std::collections::HashSet;
 use std::sync::atomic::AtomicU64;
@@ -72,7 +73,7 @@ pub fn vulns2vex(vulns: Vec<VulnerabilityResult>) -> OpenVex {
         // TODO consider all products?
         products.insert(vuln.packages[0].clone());
 
-        let id = vuln.id().unwrap_or("NOT_SET".into());
+        let id = vuln.id();
 
         //let now_parsed = DateTime::parse_from_rfc3339(&vuln.time_scanned).unwrap();
         let now_parsed = Utc::now(); //TODO fix time problem
