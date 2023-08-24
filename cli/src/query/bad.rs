@@ -15,11 +15,14 @@ pub struct BadCommand {
 
 impl BadCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
+        /*
         let guac = GuacClient::new(self.config.guac_url);
         let good = guac.certify_bad(&self.config.purl).await?;
         let out =
             serde_json::to_string(&good)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
+
+         */
         Ok(ExitCode::SUCCESS)
     }
 }

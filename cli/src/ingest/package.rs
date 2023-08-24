@@ -16,8 +16,8 @@ pub struct PackageCommand {
 
 impl PackageCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
-        let guac = GuacClient::new(self.config.guac_url);
-        guac.ingest_package(&self.purl).await?;
+        //let guac = GuacClient::new(self.config.guac_url);
+        //guac.ingest_package(&self.purl).await?;
         Ok(ExitCode::SUCCESS)
     }
 }

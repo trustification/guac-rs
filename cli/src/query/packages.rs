@@ -15,11 +15,14 @@ pub struct PackagesCommand {
 
 impl PackagesCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
+        /*
         let guac = GuacClient::new(self.config.guac_url);
         let pkgs = guac.get_packages(&self.config.purl).await?;
         let out =
             serde_json::to_string(&pkgs)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
+
+         */
         Ok(ExitCode::SUCCESS)
     }
 }

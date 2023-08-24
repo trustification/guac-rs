@@ -15,11 +15,14 @@ pub struct DependenciesCommand {
 
 impl DependenciesCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
+        /*
         let guac = GuacClient::new(self.config.guac_url);
         let deps = guac.is_dependency(&self.config.purl).await?;
         let out =
             serde_json::to_string(&deps)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
+
+         */
         Ok(ExitCode::SUCCESS)
     }
 }
