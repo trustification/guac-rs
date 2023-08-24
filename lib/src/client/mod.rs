@@ -1,10 +1,5 @@
-pub mod certify_bad;
-pub mod certify_good;
-pub mod certify_vuln;
-pub mod is_dependency;
-pub mod package;
-
-pub mod vulnerability;
+pub mod intrinsic;
+pub mod semantic;
 
 use std::collections::HashSet;
 use std::sync::atomic::AtomicU64;
@@ -16,7 +11,8 @@ use openvex::OpenVex;
 use openvex::Statement;
 use openvex::Status;
 
-use crate::client::certify_vuln::VulnerabilityResult;
+use crate::client::intrinsic::IntrinsicGuacClient;
+use crate::client::semantic::SemanticGuacClient;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -24,8 +20,16 @@ pub enum Error {
     Purl(#[from] packageurl::Error),
     #[error("Http request error: {0}")]
     Http(#[from] reqwest::Error),
-    #[error("GraphQL response error: {0}")]
-    GraphQL(String),
+    #[error("GraphQL response error: {}", format_graphql_message(.0))]
+    GraphQL(Vec<graphql_client::Error>),
+}
+
+fn format_graphql_message(inner: &Vec<graphql_client::Error>) -> String {
+    if inner.is_empty() {
+        format!("<unspecified>")
+    } else {
+        format!("{:#?}", inner)
+    }
 }
 
 #[derive(Clone)]
@@ -40,6 +44,14 @@ impl GuacClient {
             client: reqwest::Client::new(),
             url,
         }
+    }
+
+    pub fn semantic(&self) -> SemanticGuacClient {
+        SemanticGuacClient::new( self )
+    }
+
+    pub fn intrinsic(&self) -> IntrinsicGuacClient {
+        IntrinsicGuacClient::new( self )
     }
 }
 
@@ -63,6 +75,7 @@ fn openvex() -> OpenVex {
     }
 }
 
+/*
 pub fn vulns2vex(vulns: Vec<VulnerabilityResult>) -> OpenVex {
     let mut vex = openvex();
 
@@ -99,3 +112,5 @@ pub fn vulns2vex(vulns: Vec<VulnerabilityResult>) -> OpenVex {
 
     vex
 }
+
+ */

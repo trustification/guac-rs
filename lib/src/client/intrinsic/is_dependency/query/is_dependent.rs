@@ -5,8 +5,8 @@ use std::str::FromStr;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "src/client/schema.json",
-    query_path = "src/client/is_dependency/is_dependency.gql",
+    schema_path = "src/client/intrinsic/schema.json",
+    query_path = "src/client/intrinsic/is_dependency/is_dependency.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
 pub struct QueryDependents;

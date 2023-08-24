@@ -1,6 +1,6 @@
 use crate::query::QueryConfig;
 use colored_json::ToColoredJson;
-use guac::client::{vulns2vex, GuacClient};
+use guac::client::{GuacClient};
 use std::process::ExitCode;
 
 #[derive(clap::Args, Debug)]
@@ -18,8 +18,9 @@ pub struct VulnerabilitiesCommand {
 
 impl VulnerabilitiesCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
+        /*
         let guac = GuacClient::new(self.config.guac_url);
-        let vulns = guac.certify_vuln(&self.config.purl).await?;
+        let vulns = guac.intrinsic().certify_vuln(&self.config.purl).await?;
         let out = if self.vex {
             let vex = vulns2vex(vulns);
             serde_json::to_string(&vex)?.to_colored_json(crate::color_mode(self.config.color))?
@@ -27,6 +28,7 @@ impl VulnerabilitiesCommand {
             serde_json::to_string(&vulns)?.to_colored_json(crate::color_mode(self.config.color))?
         };
         println!("{}", out);
+         */
         Ok(ExitCode::SUCCESS)
     }
 }

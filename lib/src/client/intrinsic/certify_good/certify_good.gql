@@ -1,14 +1,19 @@
-fragment allCertifyBadTree on CertifyBad {
+fragment allCertifyGoodTree on CertifyGood {
+  id
   justification
   subject {
     __typename
     ... on Package {
+      id
       type
       namespaces {
+        id
         namespace
         names {
+          id
           name
           versions {
+            id
             version
             qualifiers {
               key
@@ -20,6 +25,7 @@ fragment allCertifyBadTree on CertifyBad {
       }
     }
     ... on Source {
+      id
       type
       namespaces {
         namespace
@@ -31,6 +37,7 @@ fragment allCertifyBadTree on CertifyBad {
       }
     }
     ... on Artifact {
+      id
       algorithm
       digest
     }
@@ -39,24 +46,19 @@ fragment allCertifyBadTree on CertifyBad {
   collector
 }
 
-mutation IngestCertifyBad($package: PkgInputSpec!, $origin: String!, $collector: String!, $justification: String!) {
-  ingestCertifyBad(
-    subject: {
-      package: $package
-    }
-    pkgMatchType: { pkg: SPECIFIC_VERSION }
-    certifyBad: {
-      justification: $justification
-      origin: $origin
-      collector: $collector
-    }
+mutation IngestCertifyGood($subject: PackageSourceOrArtifactInput!, $pkgMatchType: MatchFlags!, $certifyGood: CertifyGoodInputSpec!) {
+  ingestCertifyGood(
+    subject: $subject
+    pkgMatchType: $pkgMatchType
+    certifyGood: $certifyGood
   ) {
-    ...allCertifyBadTree
+    id
   }
 }
 
-query QueryCertifyBad($package: PkgSpec) {
-  CertifyBad(certifyBadSpec: { subject: {package: $package}}) {
-    ...allCertifyBadTree
+query QueryCertifyGood($certifyGoodSpec: CertifyGoodSpec!) {
+  CertifyGood(certifyGoodSpec: $certifyGoodSpec) {
+    ... allCertifyGoodTree
   }
 }
+

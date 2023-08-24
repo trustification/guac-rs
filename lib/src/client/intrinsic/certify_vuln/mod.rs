@@ -2,12 +2,12 @@ use anyhow::Context;
 use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
 
-use crate::client::certify_vuln::ingest::IngestCertifyVuln;
-use crate::client::certify_vuln::query::{QueryCertifyVulnByPackage};
-use crate::client::GuacClient;
-
 use serde::{Deserialize, Serialize};
-use crate::client::vulnerability::Vulnerability;
+use crate::client::Error;
+use crate::client::intrinsic::{Id, IntrinsicGuacClient};
+use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec};
+use self::ingest::IngestCertifyVuln;
 
 pub mod ingest;
 pub mod query;
@@ -15,56 +15,38 @@ pub mod query;
 //#[derive(Debug, Serialize, Deserialize)]
 type Time = chrono::DateTime<Utc>;
 
-#[derive(Serialize, Deserialize)]
-pub struct VulnerabilityResult {
-    pub vulnerability: Vulnerability,
-    pub packages: Vec<String>,
-}
-
-impl VulnerabilityResult {
-    pub fn id(&self) -> String {
-        self.vulnerability.id()
-    }
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Metadata {
-    pub db_uri: String,
-    pub db_version: String,
-    pub scanner_uri: String,
-    pub scanner_version: String,
-    pub time_scanned: Time,
-    pub origin: String,
-    pub collector: String,
-}
-
-impl GuacClient {
+impl IntrinsicGuacClient<'_> {
     pub async fn ingest_certify_vuln(
         &self,
-        purl: &str,
-        vulnerability: Vulnerability,
-        meta: Metadata,
-    ) -> Result<(), anyhow::Error> {
+        package: &PkgInputSpec,
+        vulnerability: &VulnerabilityInputSpec,
+        meta: &ScanMetadataInput,
+    ) -> Result<Id, Error> {
         use self::ingest::ingest_certify_vuln;
 
-        let pkg = ingest_certify_vuln::PkgInputSpec::try_from(purl)?;
         let variables = ingest_certify_vuln::Variables {
-            package: pkg,
-            meta: meta.try_into()?,
-            vulnerability: vulnerability.try_into()?,
+            package: package.into(),
+            vulnerability: vulnerability.into(),
+            meta: meta.into(),
         };
 
         let response_body =
-            post_graphql::<IngestCertifyVuln, _>(&self.client, self.url.to_owned(), variables)
-                .await;
+            post_graphql::<IngestCertifyVuln, _>(self.client(), self.url(), variables)
+                .await?;
 
-        let _ = response_body?
+        if let Some(errors) = response_body.errors {
+            return Err(Error::GraphQL(errors))
+        }
+
+        let data = response_body
             .data
-            .with_context(|| "No data found in response")?;
+            .ok_or( Error::GraphQL(vec![]))?;
 
-        Ok(())
+        Ok( data.ingest_certify_vuln.id )
     }
 
+
+    /*
     pub async fn certify_vuln(
         &self,
         purl: &str,
@@ -74,8 +56,8 @@ impl GuacClient {
         let pkg = query_certify_vuln_by_package::PkgSpec::try_from(purl)?;
         let variables = query_certify_vuln_by_package::Variables { package: Some(pkg) };
         let response_body = post_graphql::<QueryCertifyVulnByPackage, _>(
-            &self.client,
-            self.url.to_owned(),
+            self.client(),
+            self.url(),
             variables,
         )
         .await?;
@@ -101,6 +83,8 @@ impl GuacClient {
             })
             .collect())
     }
+
+     */
 
     /*
     pub async fn get_vulnerabilities(
@@ -138,6 +122,7 @@ impl GuacClient {
     }
      */
 }
+/*
 
 pub mod package {
 
@@ -171,6 +156,9 @@ pub mod package {
     }
 }
 
+ */
+
+/*
 pub mod cve {
     pub fn vuln2purls(
         pkg: &super::query::query_certify_vuln_by_id::AllCertifyVulnTreePackage,
@@ -200,4 +188,40 @@ pub mod cve {
         }
         purls
     }
+}
+
+ */
+
+struct CertifyVuln {
+    pub id: String,
+    pub package: Package,
+    pub vulnerability: Vulnerability,
+    pub metadata: ScanMetadata,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ScanMetadata {
+    pub db_uri: String,
+    pub db_version: String,
+    pub scanner_uri: String,
+    pub scanner_version: String,
+    pub time_scanned: Time,
+    pub origin: String,
+    pub collector: String,
+}
+
+type ScanMetadataInput = ScanMetadata;
+
+struct CertifyVulnSpec {
+    pub id: Option<String>,
+    pub package: Option<PkgSpec>,
+    pub vulnerability: Option<VulnerabilitySpec>,
+    pub timeScanned: Option<Time>,
+    pub dbUri: Option<String>,
+    pub dbVersion: Option<String>,
+    pub scannerUri: Option<String>,
+    pub scannerVersion: Option<String>,
+    pub origin: Option<String>,
+    pub collector: Option<String>,
+
 }

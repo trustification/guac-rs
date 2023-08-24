@@ -1,15 +1,17 @@
-use crate::client::is_dependency::query::is_dependency::QueryDependencies;
-use crate::client::is_dependency::query::is_dependent::QueryDependents;
+use crate::client::intrinsic::is_dependency::query::is_dependency::QueryDependencies;
+use crate::client::intrinsic::is_dependency::query::is_dependent::QueryDependents;
 use crate::client::GuacClient;
 use graphql_client::reqwest::post_graphql;
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
-use super::Error;
+use crate::client::Error;
+use crate::client::intrinsic::IntrinsicGuacClient;
 
 mod query;
 
-impl GuacClient {
+impl IntrinsicGuacClient<'_> {
+    /*
     pub async fn is_dependency(&self, purl: &str) -> Result<Vec<String>, Error> {
         use self::query::is_dependency;
 
@@ -53,4 +55,7 @@ impl GuacClient {
             .flat_map(|entry| is_dependent::deps2purls(&entry.package))
             .collect())
     }
+
+
+     */
 }

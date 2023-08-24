@@ -22,11 +22,11 @@ fragment allPkgTree on Package {
 
 mutation IngestPackage($package: PkgInputSpec!) {
   ingestPackage(pkg: $package) {
-    ...allPkgTree
+    id
   }
 }
 
-query QueryPackage($package: PkgSpec!) {
+query QueryPackages($package: PkgSpec!) {
   packages(pkgSpec: $package) {
     ...allPkgTree
   }

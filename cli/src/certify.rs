@@ -50,9 +50,12 @@ pub struct CertifyGoodCommand {
 
 impl CertifyGoodCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
+        /*
         let guac = GuacClient::new(self.guac_url);
         guac.ingest_certify_good(&self.purl, self.origin, self.collector, self.justification)
             .await?;
+
+         */
         Ok(ExitCode::SUCCESS)
     }
 }
@@ -88,9 +91,12 @@ pub struct CertifyBadCommand {
 
 impl CertifyBadCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
+        /*
         let guac = GuacClient::new(self.guac_url);
         guac.ingest_certify_bad(&self.purl, self.origin, self.collector, self.justification)
             .await?;
+
+         */
         Ok(ExitCode::SUCCESS)
     }
 }

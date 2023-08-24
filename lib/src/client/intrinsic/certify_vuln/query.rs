@@ -2,25 +2,31 @@ use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
-use self::query_package::PackageQualifierSpec;
+use self::query_certify_vuln_by_package::{PackageQualifierSpec, PkgSpec};
 
-use self::query_package::allPkgTree;
-use self::query_package::PkgSpec;
+use super::Time;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-    schema_path = "src/client/schema.json",
-    query_path = "src/client/package/package.gql",
+    schema_path = "src/client/intrinsic/schema.json",
+    query_path = "src/client/intrinsic/certify_vuln/certify_vuln.gql",
     response_derives = "Debug, Serialize, Deserialize"
 )]
-pub struct QueryPackage;
+pub struct QueryCertifyVulnByPackage;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/client/intrinsic/schema.json",
+    query_path = "src/client/intrinsic/certify_vuln/certify_vuln.gql",
+    response_derives = "Debug, Serialize, Deserialize"
+)]
+pub struct QueryCertifyVulnById;
 
 impl TryFrom<&str> for PkgSpec {
-    type Error = packageurl::Error;
+    type Error = anyhow::Error;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         let purl = PackageUrl::from_str(s)?;
-
         let mut qualifiers = Vec::new();
         for (key, value) in purl.qualifiers().iter() {
             qualifiers.push(PackageQualifierSpec {
@@ -46,7 +52,8 @@ impl TryFrom<&str> for PkgSpec {
     }
 }
 
-pub fn pkg2purls(pkg: &allPkgTree) -> Vec<String> {
+/*
+pub fn vuln2purls(pkg: &AllCertifyVulnTreePackage) -> Vec<String> {
     let mut purls = Vec::new();
     let t = &pkg.type_;
     for namespace in pkg.namespaces.iter() {
@@ -72,3 +79,5 @@ pub fn pkg2purls(pkg: &allPkgTree) -> Vec<String> {
     }
     purls
 }
+
+ */
