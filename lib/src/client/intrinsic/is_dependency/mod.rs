@@ -1,16 +1,76 @@
-use crate::client::intrinsic::is_dependency::query::is_dependency::QueryDependencies;
-use crate::client::intrinsic::is_dependency::query::is_dependent::QueryDependents;
-use crate::client::GuacClient;
-use graphql_client::reqwest::post_graphql;
-use packageurl::PackageUrl;
 use std::str::FromStr;
+use graphql_client::reqwest::post_graphql;
 
+use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
+use crate::client::intrinsic::{Id, IntrinsicGuacClient, MatchFlags};
 use crate::client::Error;
-use crate::client::intrinsic::IntrinsicGuacClient;
+use crate::client::intrinsic::is_dependency::ingest::IngestDependency;
+use crate::client::intrinsic::is_dependency::query::QueryIsDependency;
 
-mod query;
+pub mod ingest;
+pub mod query;
 
 impl IntrinsicGuacClient<'_> {
+    pub async fn ingest_is_dependency(
+        &self,
+        pkg: &PkgInputSpec,
+        dep_pkg: &PkgInputSpec,
+        dep_pkg_match_type: &MatchFlags,
+        dependency: &IsDependencyInputSpec,
+    ) -> Result<Id, Error> {
+        use self::ingest::ingest_dependency;
+
+        let variables = ingest_dependency::Variables {
+            pkg: pkg.into(),
+            dep_pkg: dep_pkg.into(),
+            dep_pkg_match_type: dep_pkg_match_type.into(),
+            dependency: dependency.into(),
+        };
+
+        let response_body =
+            post_graphql::<IngestDependency, _>(self.client(), self.url(), variables)
+                .await?;
+
+        if let Some(errors) = response_body.errors {
+            return Err(Error::GraphQL(errors))
+        }
+
+        let data = response_body
+            .data
+            .ok_or( Error::GraphQL(vec![]))?;
+
+        Ok( data.ingest_dependency.id )
+
+    }
+
+    pub async fn is_dependency(
+        &self,
+        is_dependency_spec: &IsDependencySpec,
+    ) -> Result<Id, Error> {
+        use self::query::query_is_dependency;
+
+        let variables = query_is_dependency::Variables {
+            is_dependency_spec: is_dependency_spec.into()
+        };
+
+        let response_body =
+            post_graphql::<QueryIsDependency, _>(self.client(), self.url(), variables)
+                .await?;
+
+        if let Some(errors) = response_body.errors {
+            return Err(Error::GraphQL(errors))
+        }
+
+        let data = response_body
+            .data
+            .ok_or( Error::GraphQL(vec![]))?;
+
+        todo!()
+
+        //Ok( data.ingest_dependency.id )
+
+    }
+
     /*
     pub async fn is_dependency(&self, purl: &str) -> Result<Vec<String>, Error> {
         use self::query::is_dependency;
@@ -58,4 +118,40 @@ impl IntrinsicGuacClient<'_> {
 
 
      */
+}
+
+pub enum DependencyType {
+    Direct,
+    Indirect,
+    Unknown,
+}
+
+pub struct IsDependency {
+    id: Id,
+    package: Package,
+    dependent_package: Package,
+    version_range: String,
+    dependency_type: DependencyType,
+    justification: String,
+    origin: String,
+    collector: String,
+}
+
+pub struct IsDependencySpec {
+    id: Option<Id>,
+    package: Option<PkgSpec>,
+    dependent_package: Option<PkgSpec>,
+    version_range: Option<String>,
+    dependency_type: Option<DependencyType>,
+    justification: Option<String>,
+    origin: Option<String>,
+    collector: Option<String>,
+}
+
+pub struct IsDependencyInputSpec {
+    version_range: String,
+    dependency_type: DependencyType,
+    justification: String,
+    origin: String,
+    collector: String,
 }

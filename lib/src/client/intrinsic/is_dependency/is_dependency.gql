@@ -39,14 +39,35 @@ origin
 collector
 }
 
-query QueryDependencies($package: PkgSpec) {
-  IsDependency(isDependencySpec: {package: $package}) {
-    ...allIsDependencyTree
-  }
+#query QueryDependencies($package: PkgSpec) {
+  #IsDependency(isDependencySpec: {package: $package}) {
+    #...allIsDependencyTree
+  #}
+#}
+#
+#query QueryDependents($package: PkgSpec, $version: String) {
+  #IsDependency(isDependencySpec: {dependentPackage: $package, versionRange: $version}) {
+    #...allIsDependencyTree
+  #}
+#}
+
+query QueryIsDependency($isDependencySpec: IsDependencySpec!) {
+    IsDependency( isDependencySpec: $isDependencySpec) {
+      ...allIsDependencyTree
+    }
 }
 
-query QueryDependents($package: PkgSpec, $version: String) {
-  IsDependency(isDependencySpec: {dependentPackage: $package, versionRange: $version}) {
-    ...allIsDependencyTree
+mutation IngestDependency(
+  $pkg: PkgInputSpec!,
+  $depPkg: PkgInputSpec!,
+  $depPkgMatchType: MatchFlags!,
+  $dependency: IsDependencyInputSpec!
+) {
+  ingestDependency(
+    pkg: $pkg,
+    depPkg: $depPkg,
+    depPkgMatchType: $depPkgMatchType,
+    dependency: $dependency) {
+    id
   }
 }
