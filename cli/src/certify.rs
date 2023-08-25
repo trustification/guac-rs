@@ -2,8 +2,6 @@ use std::process::ExitCode;
 
 use clap::{ColorChoice, Subcommand};
 
-use guac::client::GuacClient;
-
 #[derive(Subcommand, Debug)]
 pub enum CertifyCommand {
     Good(CertifyGoodCommand),

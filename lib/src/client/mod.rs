@@ -26,7 +26,7 @@ pub enum Error {
 
 fn format_graphql_message(inner: &Vec<graphql_client::Error>) -> String {
     if inner.is_empty() {
-        format!("<unspecified>")
+        "<unspecified>".to_string()
     } else {
         format!("{:#?}", inner)
     }
@@ -39,19 +39,19 @@ pub struct GuacClient {
 }
 
 impl GuacClient {
-    pub fn new(url: String) -> Self {
+    pub fn new(url: &str) -> Self {
         Self {
             client: reqwest::Client::new(),
-            url,
+            url: url.to_owned(),
         }
     }
 
     pub fn semantic(&self) -> SemanticGuacClient {
-        SemanticGuacClient::new( self )
+        SemanticGuacClient::new(self)
     }
 
     pub fn intrinsic(&self) -> IntrinsicGuacClient {
-        IntrinsicGuacClient::new( self )
+        IntrinsicGuacClient::new(self)
     }
 }
 

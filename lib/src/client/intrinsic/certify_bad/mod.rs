@@ -1,91 +1,105 @@
-use crate::client::intrinsic::certify_bad::ingest::IngestCertifyBad;
-//use crate::client::intrinsic::certify_bad::query::{CertifyBad, QueryCertifyBad};
-use crate::client::{Error, GuacClient};
-use anyhow::Context;
 use graphql_client::reqwest::post_graphql;
+use packageurl::PackageUrl;
+use serde::{Deserialize, Serialize};
+
+use crate::client::intrinsic::certify_bad::ingest::IngestCertifyBad;
 use crate::client::intrinsic::certify_bad::query::QueryCertifyBad;
-use crate::client::intrinsic::{Id, IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput, PackageSourceOrArtifactSpec};
+use crate::client::intrinsic::{
+    Id, IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput,
+    PackageSourceOrArtifactSpec,
+};
+use crate::client::Error;
 
 pub mod ingest;
 pub mod query;
 
 impl IntrinsicGuacClient<'_> {
-
-    pub async fn ingest_certify_bad(
+    pub async fn ingest_certify_bad<MF: Into<MatchFlags>>(
         &self,
         subject: &PackageSourceOrArtifactInput,
-        pkg_match_type: &MatchFlags,
+        pkg_match_type: MF,
         certify_bad: &CertifyBadInputSpec,
     ) -> Result<Id, Error> {
         use self::ingest::ingest_certify_bad;
 
         let variables = ingest_certify_bad::Variables {
             subject: subject.into(),
-            pkg_match_type: pkg_match_type.into(),
+            pkg_match_type: pkg_match_type.into().into(),
             certify_bad: certify_bad.into(),
         };
 
         let response_body =
-            post_graphql::<IngestCertifyBad, _>(self.client(), self.url(), variables)
-                .await?;
+            post_graphql::<IngestCertifyBad, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
-            return Err(Error::GraphQL(errors))
+            return Err(Error::GraphQL(errors));
         }
 
-        let data = response_body
-            .data
-            .ok_or( Error::GraphQL(vec![]))?;
+        let data = response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        Ok( data.ingest_certify_bad.id )
+        Ok(data.ingest_certify_bad.id)
     }
 
-    pub async fn certify_bad(&self, certify_bad_spec: &CertifyBadSpec) -> Result<Vec<CertifyBad>, Error> {
+    pub async fn certify_bad(
+        &self,
+        certify_bad_spec: &CertifyBadSpec,
+    ) -> Result<Vec<CertifyBad>, Error> {
         use self::query::query_certify_bad;
 
         let variables = query_certify_bad::Variables {
             certify_bad_spec: certify_bad_spec.into(),
         };
         let response_body =
-            post_graphql::<QueryCertifyBad, _>(self.client(), self.url(), variables)
-                .await?;
+            post_graphql::<QueryCertifyBad, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
-            return Err(Error::GraphQL(errors))
+            return Err(Error::GraphQL(errors));
         }
 
-        let data = response_body
-            .data
-            .ok_or( Error::GraphQL(vec![]))?;
+        let data = response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
         let mut certified = Vec::new();
 
         for entry in &data.certify_bad {
-            certified.push(entry.into() );
+            certified.push(entry.into());
         }
 
         Ok(certified)
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CertifyBad {
-    id: Id,
-    subject: PackageSourceOrArtifact,
-    justification: String,
-    origin: String,
-    collector: String,
+    pub id: Id,
+    pub subject: PackageSourceOrArtifact,
+    pub justification: String,
+    pub origin: String,
+    pub collector: String,
 }
 
+#[derive(Default, Debug, Clone)]
 pub struct CertifyBadSpec {
-    id: Option<Id>,
-    subject: Option<PackageSourceOrArtifactSpec>,
-    justification: Option<String>,
-    origin: Option<String>,
-    collector: Option<String>,
+    pub id: Option<Id>,
+    pub subject: Option<PackageSourceOrArtifactSpec>,
+    pub justification: Option<String>,
+    pub origin: Option<String>,
+    pub collector: Option<String>,
 }
 
+impl From<&PackageUrl<'_>> for CertifyBadSpec {
+    fn from(purl: &PackageUrl) -> Self {
+        Self {
+            subject: Some(PackageSourceOrArtifactSpec {
+                package: Some(purl.clone().into()),
+            }),
+            ..Default::default()
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct CertifyBadInputSpec {
-    justification: String,
-    origin: String,
-    collector: String,
+    pub justification: String,
+    pub origin: String,
+    pub collector: String,
 }

@@ -1,6 +1,8 @@
 use crate::ingest::IngestConfig;
 use guac::client::GuacClient;
+use packageurl::PackageUrl;
 use std::process::ExitCode;
+use std::str::FromStr;
 
 #[derive(clap::Args, Debug)]
 #[command(
@@ -16,8 +18,11 @@ pub struct PackageCommand {
 
 impl PackageCommand {
     pub async fn run(self) -> anyhow::Result<ExitCode> {
-        //let guac = GuacClient::new(self.config.guac_url);
-        //guac.ingest_package(&self.purl).await?;
+        let guac = GuacClient::new(&self.config.guac_url);
+
+        guac.intrinsic()
+            .ingest_package(&PackageUrl::from_str(&self.purl)?.into())
+            .await?;
         Ok(ExitCode::SUCCESS)
     }
 }

@@ -1,7 +1,7 @@
-use graphql_client::GraphQLQuery;
 use crate::client::intrinsic::certify_bad::CertifyBadInputSpec;
-use crate::client::intrinsic::{MatchFlags, PackageSourceOrArtifactInput, PkgMatchType};
 use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
+use crate::client::intrinsic::{MatchFlags, PackageSourceOrArtifactInput, PkgMatchType};
+use graphql_client::GraphQLQuery;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -10,7 +10,6 @@ use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec}
     response_derives = "Debug, Serialize, Deserialize"
 )]
 pub struct IngestCertifyBad;
-
 
 impl From<&PackageSourceOrArtifactInput> for ingest_certify_bad::PackageSourceOrArtifactInput {
     fn from(value: &PackageSourceOrArtifactInput) -> Self {
@@ -22,10 +21,10 @@ impl From<&PackageSourceOrArtifactInput> for ingest_certify_bad::PackageSourceOr
     }
 }
 
-impl From<&MatchFlags> for ingest_certify_bad::MatchFlags {
-    fn from(value: &MatchFlags) -> Self {
+impl From<MatchFlags> for ingest_certify_bad::MatchFlags {
+    fn from(value: MatchFlags) -> Self {
         Self {
-            pkg: (&value.pkg).into()
+            pkg: (&value.pkg).into(),
         }
     }
 }
@@ -47,11 +46,10 @@ impl From<&PkgInputSpec> for ingest_certify_bad::PkgInputSpec {
             namespace: value.namespace.clone(),
             name: value.name.clone(),
             version: value.version.clone(),
-            qualifiers: value.qualifiers.as_ref().map(|e| {
-                e.iter().map(|e| {
-                    e.into()
-                }).collect()
-            }),
+            qualifiers: value
+                .qualifiers
+                .as_ref()
+                .map(|e| e.iter().map(|e| e.into()).collect()),
             subpath: value.subpath.clone(),
         }
     }

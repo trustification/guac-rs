@@ -1,6 +1,6 @@
 //use self::ingest_package::{PackageQualifierInputSpec, PkgInputSpec};
-use graphql_client::GraphQLQuery;
 use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
+use graphql_client::GraphQLQuery;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -10,7 +10,6 @@ use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec}
 )]
 pub struct IngestPackage;
 
-
 impl From<&PkgInputSpec> for ingest_package::PkgInputSpec {
     fn from(value: &PkgInputSpec) -> Self {
         Self {
@@ -18,12 +17,11 @@ impl From<&PkgInputSpec> for ingest_package::PkgInputSpec {
             namespace: value.namespace.clone(),
             name: value.name.clone(),
             version: value.version.clone(),
-            qualifiers: value.qualifiers.clone().map(|inner| {
-                inner.iter().map(|each| {
-                    each.into()
-                }).collect()
-            }),
-            subpath: value.subpath.clone()
+            qualifiers: value
+                .qualifiers
+                .clone()
+                .map(|inner| inner.iter().map(|each| each.into()).collect()),
+            subpath: value.subpath.clone(),
         }
     }
 }

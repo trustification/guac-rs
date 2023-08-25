@@ -1,0 +1,69 @@
+use std::str::FromStr;
+
+use packageurl::PackageUrl;
+
+use common::GUAC_URL;
+use guac::client::intrinsic::is_dependency::{
+    DependencyType, IsDependencyInputSpec, IsDependencySpec,
+};
+use guac::client::intrinsic::{MatchFlags, PkgMatchType};
+use guac::client::GuacClient;
+
+mod common;
+
+#[tokio::test]
+async fn is_dependency() -> Result<(), anyhow::Error> {
+    let client = GuacClient::new(GUAC_URL);
+
+    let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-pkg-A@0.3.0")?;
+
+    let _ = client
+        .intrinsic()
+        .ingest_package(&pkg_a.clone().into())
+        .await?;
+
+    let pkg_b = PackageUrl::from_str("pkg:rpm/trustification-pkg-B@0.3.0")?;
+
+    let _ = client
+        .intrinsic()
+        .ingest_package(&pkg_b.clone().into())
+        .await?;
+
+    let pkg_c = PackageUrl::from_str("pkg:rpm/trustification-pkg-C@0.3.0")?;
+
+    let _ = client
+        .intrinsic()
+        .ingest_package(&pkg_c.clone().into())
+        .await?;
+
+    client
+        .intrinsic()
+        .ingest_is_dependency(
+            &pkg_a.clone().into(),
+            &pkg_b.clone().into(),
+            PkgMatchType::SpecificVersion,
+            &IsDependencyInputSpec {
+                version_range: "".to_string(),
+                dependency_type: DependencyType::Direct,
+                justification: "dep-justificatoin".to_string(),
+                origin: "dep-origin".to_string(),
+                collector: "dep-collector".to_string(),
+            },
+        )
+        .await?;
+
+    let result = client
+        .intrinsic()
+        .is_dependency(&IsDependencySpec {
+            package: Some(pkg_a.clone().into()),
+            ..Default::default()
+        })
+        .await?;
+
+    assert_eq!(1, result.len());
+
+    assert!(result[0].package.matches_exact(pkg_a));
+    assert!(result[0].dependent_package.matches_exact(pkg_b));
+
+    Ok(())
+}
