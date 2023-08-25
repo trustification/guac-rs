@@ -18,7 +18,7 @@ pub mod query;
 //#[derive(Debug, Serialize, Deserialize)]
 type Time = chrono::DateTime<Utc>;
 
-impl IntrinsicGuacClient<'_> {
+impl IntrinsicGuacClient {
     pub async fn ingest_certify_vuln(
         &self,
         package: &PkgInputSpec,

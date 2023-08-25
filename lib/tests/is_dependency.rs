@@ -67,3 +67,55 @@ async fn is_dependency() -> Result<(), anyhow::Error> {
 
     Ok(())
 }
+
+#[tokio::test]
+async fn dependencies_of() -> Result<(), anyhow::Error> {
+    let client = GuacClient::new(GUAC_URL);
+
+    let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-pkg-A@0.3.0")?;
+
+    let _ = client
+        .intrinsic()
+        .ingest_package(&pkg_a.clone().into())
+        .await?;
+
+    let pkg_b = PackageUrl::from_str("pkg:rpm/trustification-pkg-B@0.3.0")?;
+
+    let _ = client
+        .intrinsic()
+        .ingest_package(&pkg_b.clone().into())
+        .await?;
+
+    let pkg_c = PackageUrl::from_str("pkg:rpm/trustification-pkg-C@0.3.0")?;
+
+    let _ = client
+        .intrinsic()
+        .ingest_package(&pkg_c.clone().into())
+        .await?;
+
+    client
+        .intrinsic()
+        .ingest_is_dependency(
+            &pkg_a.clone().into(),
+            &pkg_b.clone().into(),
+            PkgMatchType::SpecificVersion,
+            &IsDependencyInputSpec {
+                version_range: "".to_string(),
+                dependency_type: DependencyType::Direct,
+                justification: "dep-justificatoin".to_string(),
+                origin: "dep-origin".to_string(),
+                collector: "dep-collector".to_string(),
+            },
+        )
+        .await?;
+
+    let dependencies = client.semantic().dependencies_of(&pkg_a).await?;
+    assert_eq!(1, dependencies.len());
+    assert!(dependencies.contains(&pkg_b));
+
+    let dependents = client.semantic().dependents_of(&pkg_b).await?;
+    assert_eq!(1, dependents.len());
+    assert!(dependents.contains(&pkg_a));
+
+    Ok(())
+}

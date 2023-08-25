@@ -12,13 +12,15 @@ pub mod is_dependency;
 pub mod package;
 pub mod vulnerability;
 
-pub struct IntrinsicGuacClient<'c> {
-    client: &'c GuacClient,
+pub struct IntrinsicGuacClient {
+    client: GuacClient,
 }
 
-impl<'c> IntrinsicGuacClient<'c> {
-    pub(crate) fn new(client: &'c GuacClient) -> Self {
-        Self { client }
+impl IntrinsicGuacClient {
+    pub(crate) fn new(client: &GuacClient) -> Self {
+        Self {
+            client: client.clone(),
+        }
     }
 
     pub(crate) fn client(&self) -> &Client {
@@ -30,7 +32,7 @@ impl<'c> IntrinsicGuacClient<'c> {
     }
 
     pub fn semantic(&self) -> SemanticGuacClient {
-        SemanticGuacClient::new(self.client)
+        SemanticGuacClient::new(&self.client)
     }
 }
 

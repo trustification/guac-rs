@@ -1,4 +1,5 @@
 use graphql_client::reqwest::post_graphql;
+use packageurl::PackageUrl;
 use std::str::FromStr;
 
 use crate::client::intrinsic::is_dependency::ingest::IngestDependency;
@@ -10,7 +11,7 @@ use crate::client::Error;
 pub mod ingest;
 pub mod query;
 
-impl IntrinsicGuacClient<'_> {
+impl IntrinsicGuacClient {
     pub async fn ingest_is_dependency<MF: Into<MatchFlags>>(
         &self,
         pkg: &PkgInputSpec,
@@ -81,7 +82,7 @@ pub struct IsDependency {
     pub collector: String,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Default, Debug, Clone)]
 pub struct IsDependencySpec {
     pub id: Option<Id>,
     pub package: Option<PkgSpec>,
