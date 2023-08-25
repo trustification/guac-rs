@@ -2,7 +2,10 @@ use packageurl::PackageUrl;
 
 use crate::client::intrinsic::is_dependency::IsDependencySpec;
 use crate::client::intrinsic::IntrinsicGuacClient;
+use crate::client::semantic::ingest::{Predicate, Subject};
 use crate::client::{Error, GuacClient};
+
+pub mod ingest;
 
 pub struct SemanticGuacClient {
     client: GuacClient,
@@ -17,6 +20,14 @@ impl SemanticGuacClient {
 
     pub fn intrinsic(&self) -> IntrinsicGuacClient {
         IntrinsicGuacClient::new(&self.client)
+    }
+
+    pub async fn ingest<S: Subject, P: Predicate<S>>(
+        &self,
+        subject: &S,
+        predicate: &P,
+    ) -> Result<(), Error> {
+        predicate.apply(&self.client, subject).await
     }
 
     pub async fn dependencies_of<'a, 'b>(

@@ -7,6 +7,7 @@ use guac::client::intrinsic::is_dependency::{
     DependencyType, IsDependencyInputSpec, IsDependencySpec,
 };
 use guac::client::intrinsic::{MatchFlags, PkgMatchType};
+use guac::client::semantic::ingest::HasDependency;
 use guac::client::GuacClient;
 
 mod common;
@@ -64,6 +65,26 @@ async fn is_dependency() -> Result<(), anyhow::Error> {
 
     assert!(result[0].package.matches_exact(pkg_a));
     assert!(result[0].dependent_package.matches_exact(pkg_b));
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn ingest_has_dependency() -> Result<(), anyhow::Error> {
+    let client = GuacClient::new(GUAC_URL);
+
+    let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-semantic-pkg-A@0.3.0")?;
+    let pkg_b = PackageUrl::from_str("pkg:rpm/trustification-semantic-pkg-B@0.3.0")?;
+
+    client
+        .semantic()
+        .ingest(&pkg_a, &HasDependency::new(&pkg_b))
+        .await?;
+
+    let dependencies = client.semantic().dependencies_of(&pkg_a).await?;
+
+    assert_eq!(1, dependencies.len());
+    assert!(dependencies.contains(&pkg_b));
 
     Ok(())
 }
