@@ -40,12 +40,6 @@ fragment allCertifyVulnTree on CertifyVuln {
     }
 }
 
-query CertifyVulnQ1 {
-    CertifyVuln(certifyVulnSpec: {}) {
-        ...allCertifyVulnTree
-    }
-}
-
 mutation IngestCertifyVuln($package: PkgInputSpec!, $vulnerability: VulnerabilityInputSpec!, $meta: ScanMetadataInput!) {
     ingestCertifyVuln(
         pkg: $package
@@ -56,8 +50,8 @@ mutation IngestCertifyVuln($package: PkgInputSpec!, $vulnerability: Vulnerabilit
     }
 }
 
-query QueryCertifyVulnByPackage($package: PkgSpec) {
-    CertifyVuln(certifyVulnSpec: {package: $package}) {
+query QueryCertifyVuln($certifyVulnSpec: CertifyVulnSpec!) {
+    CertifyVuln(certifyVulnSpec: $certifyVulnSpec) {
         ...allCertifyVulnTree
     }
 }

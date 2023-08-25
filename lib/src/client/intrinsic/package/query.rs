@@ -1,7 +1,10 @@
+use crate::client::intrinsic::package::{
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
+    PkgSpec,
+};
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
 use std::str::FromStr;
-use crate::client::intrinsic::package::{Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec};
 
 //use self::query_packages::PackageQualifierSpec;
 
@@ -24,14 +27,12 @@ impl From<&PkgSpec> for query_packages::PkgSpec {
             namespace: value.namespace.clone(),
             name: value.name.clone(),
             version: value.version.clone(),
-            qualifiers: value.qualifiers.as_ref().map(|inner| {
-                inner.iter().map(|e| {
-                    e.into()
-                }).collect()
-            }),
+            qualifiers: value
+                .qualifiers
+                .as_ref()
+                .map(|inner| inner.iter().map(|e| e.into()).collect()),
             match_only_empty_qualifiers: value.match_only_empty_qualifiers,
             subpath: value.subpath.clone(),
-
         }
     }
 }
@@ -50,9 +51,7 @@ impl From<&query_packages::allPkgTree> for Package {
         Self {
             id: value.id.clone(),
             r#type: value.type_.clone(),
-            namespaces: value.namespaces.iter().map(|e| {
-                e.into()
-            }).collect(),
+            namespaces: value.namespaces.iter().map(|e| e.into()).collect(),
         }
     }
 }
@@ -62,9 +61,7 @@ impl From<&query_packages::AllPkgTreeNamespaces> for PackageNamespace {
         Self {
             id: value.id.clone(),
             namespace: value.namespace.clone(),
-            names: value.names.iter().map(|e| {
-                e.into()
-            }).collect(),
+            names: value.names.iter().map(|e| e.into()).collect(),
         }
     }
 }
@@ -74,9 +71,7 @@ impl From<&query_packages::AllPkgTreeNamespacesNames> for PackageName {
         Self {
             id: value.id.clone(),
             name: value.name.clone(),
-            versions: value.versions.iter().map(|e| {
-                e.into()
-            }).collect(),
+            versions: value.versions.iter().map(|e| e.into()).collect(),
         }
     }
 }
@@ -86,9 +81,7 @@ impl From<&query_packages::AllPkgTreeNamespacesNamesVersions> for PackageVersion
         Self {
             id: value.id.clone(),
             version: value.version.clone(),
-            qualifiers: value.qualifiers.iter().map(|e| {
-                e.into()
-            }).collect(),
+            qualifiers: value.qualifiers.iter().map(|e| e.into()).collect(),
             subpath: value.subpath.clone(),
         }
     }

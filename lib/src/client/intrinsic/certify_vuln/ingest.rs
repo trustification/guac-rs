@@ -2,13 +2,11 @@ use chrono::Utc;
 
 use graphql_client::GraphQLQuery;
 
-use crate::client::intrinsic::vulnerability::{VulnerabilityInputSpec};
 use crate::client::intrinsic::certify_vuln::ScanMetadataInput;
 use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
-
+use crate::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 
 type Time = chrono::DateTime<Utc>;
-
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -25,12 +23,11 @@ impl From<&PkgInputSpec> for ingest_certify_vuln::PkgInputSpec {
             namespace: value.namespace.clone(),
             name: value.name.clone(),
             version: value.version.clone(),
-            qualifiers: value.qualifiers.clone().map(|inner| {
-                inner.iter().map(|each| {
-                    each.into()
-                }).collect()
-            }),
-            subpath: value.subpath.clone()
+            qualifiers: value
+                .qualifiers
+                .clone()
+                .map(|inner| inner.iter().map(|each| each.into()).collect()),
+            subpath: value.subpath.clone(),
         }
     }
 }

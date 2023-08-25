@@ -1,8 +1,7 @@
-use graphql_client::GraphQLQuery;
 use crate::client::intrinsic::is_dependency::{DependencyType, IsDependencyInputSpec};
-use crate::client::intrinsic::{MatchFlags, PkgMatchType};
 use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
-
+use crate::client::intrinsic::{MatchFlags, PkgMatchType};
+use graphql_client::GraphQLQuery;
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -19,11 +18,10 @@ impl From<&PkgInputSpec> for ingest_dependency::PkgInputSpec {
             namespace: value.namespace.clone(),
             name: value.name.clone(),
             version: value.version.clone(),
-            qualifiers: value.qualifiers.as_ref().map(|e| {
-                e.iter().map(|e| {
-                    e.into()
-                }).collect()
-            }),
+            qualifiers: value
+                .qualifiers
+                .as_ref()
+                .map(|e| e.iter().map(|e| e.into()).collect()),
             subpath: value.subpath.clone(),
         }
     }
@@ -38,11 +36,10 @@ impl From<&PackageQualifierInputSpec> for ingest_dependency::PackageQualifierInp
     }
 }
 
-
-impl From<&MatchFlags> for ingest_dependency::MatchFlags {
-    fn from(value: &MatchFlags) -> Self {
+impl From<MatchFlags> for ingest_dependency::MatchFlags {
+    fn from(value: MatchFlags) -> Self {
         Self {
-            pkg: (&value.pkg).into()
+            pkg: (&value.pkg).into(),
         }
     }
 }
@@ -71,15 +68,9 @@ impl From<&IsDependencyInputSpec> for ingest_dependency::IsDependencyInputSpec {
 impl From<&DependencyType> for ingest_dependency::DependencyType {
     fn from(value: &DependencyType) -> Self {
         match value {
-            DependencyType::Direct => {
-                Self::DIRECT
-            }
-            DependencyType::Indirect => {
-                Self::INDIRECT
-            }
-            DependencyType::Unknown => {
-                Self::UNKNOWN
-            }
+            DependencyType::Direct => Self::DIRECT,
+            DependencyType::Indirect => Self::INDIRECT,
+            DependencyType::Unknown => Self::UNKNOWN,
         }
     }
 }

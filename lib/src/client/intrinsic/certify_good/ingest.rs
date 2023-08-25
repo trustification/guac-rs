@@ -1,7 +1,8 @@
 use graphql_client::GraphQLQuery;
-use crate::client::intrinsic::{MatchFlags, PackageSourceOrArtifactInput, PkgMatchType};
-use crate::client::intrinsic::certify_good::{CertifyGood, CertifyGoodInputSpec};
+
+use crate::client::intrinsic::certify_good::CertifyGoodInputSpec;
 use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
+use crate::client::intrinsic::{MatchFlags, PackageSourceOrArtifactInput, PkgMatchType};
 
 #[derive(GraphQLQuery)]
 #[graphql(
@@ -21,10 +22,10 @@ impl From<&PackageSourceOrArtifactInput> for ingest_certify_good::PackageSourceO
     }
 }
 
-impl From<&MatchFlags> for ingest_certify_good::MatchFlags {
-    fn from(value: &MatchFlags) -> Self {
+impl From<MatchFlags> for ingest_certify_good::MatchFlags {
+    fn from(value: MatchFlags) -> Self {
         Self {
-            pkg: (&value.pkg).into()
+            pkg: (&value.pkg).into(),
         }
     }
 }
@@ -46,11 +47,10 @@ impl From<&PkgInputSpec> for ingest_certify_good::PkgInputSpec {
             namespace: value.namespace.clone(),
             name: value.name.clone(),
             version: value.version.clone(),
-            qualifiers: value.qualifiers.as_ref().map(|e| {
-                e.iter().map(|e| {
-                    e.into()
-                }).collect()
-            }),
+            qualifiers: value
+                .qualifiers
+                .as_ref()
+                .map(|e| e.iter().map(|e| e.into()).collect()),
             subpath: value.subpath.clone(),
         }
     }

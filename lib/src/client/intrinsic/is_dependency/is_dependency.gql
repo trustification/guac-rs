@@ -1,42 +1,76 @@
+fragment allPackageTree on Package {
+  id
+  type
+  namespaces {
+    id
+    namespace
+    names {
+      id
+      name
+      versions {
+        id
+        version
+        qualifiers {
+          key
+          value
+        }
+        subpath
+      }
+    }
+  }
+}
+
 fragment allIsDependencyTree on IsDependency {
-  justification
+  id
   package {
-    type
-    namespaces {
-      namespace 
-      names {
-        name
-        versions {
-          version
-          qualifiers {
-            key
-            value
-          }
-          subpath
-        }
-      }
-    }
+    #id
+    #type
+    #namespaces {
+      #id
+      #namespace
+      #names {
+        #id
+        #name
+        #versions {
+          #id
+          #version
+          #qualifiers {
+            #key
+            #value
+          #}
+          #subpath
+        #}
+      #}
+    #}
+    ... allPackageTree
   }
-dependentPackage {
-      type
-    namespaces {
-      namespace 
-      names {
-        name
-        versions {
-          version
-          qualifiers {
-            key
-            value
-          }
-          subpath
-        }
-      }
-    }
+  dependentPackage {
+    ... allPackageTree
+    #id
+    #type
+    #namespaces {
+      #id
+      #namespace
+      #names {
+        #id
+        #name
+        #versions {
+          #id
+          #version
+          #qualifiers {
+            #key
+            #value
+          #}
+          #subpath
+        #}
+      #}
+    #}
   }
-versionRange
-origin
-collector
+  dependencyType
+  versionRange
+  justification
+  origin
+  collector
 }
 
 #query QueryDependencies($package: PkgSpec) {
