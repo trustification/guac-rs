@@ -14,7 +14,7 @@ use crate::client::Error;
 pub mod ingest;
 pub mod query;
 
-impl IntrinsicGuacClient<'_> {
+impl IntrinsicGuacClient {
     pub async fn ingest_certify_good<MF: Into<MatchFlags>>(
         &self,
         subject: &PackageSourceOrArtifactInput,

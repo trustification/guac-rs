@@ -14,7 +14,7 @@ use crate::client::Error;
 pub mod ingest;
 pub mod query;
 
-impl IntrinsicGuacClient<'_> {
+impl IntrinsicGuacClient {
     pub async fn ingest_package(&self, package: &PkgInputSpec) -> Result<Id, Error> {
         use self::ingest::ingest_package;
         let variables = ingest_package::Variables {
