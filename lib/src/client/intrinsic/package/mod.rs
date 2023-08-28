@@ -4,15 +4,31 @@ use graphql_client::reqwest::post_graphql;
 use packageurl::PackageUrl;
 use serde::{Deserialize, Serialize};
 
+use crate::client::intrinsic::package::ingest::ingest_package::allPkgTree;
 use crate::client::intrinsic::package::ingest::IngestPackage;
 use crate::client::intrinsic::package::query::QueryPackages;
-use crate::client::intrinsic::{Id, IntrinsicGuacClient};
-use crate::client::Error;
-
+use crate::client::intrinsic::IntrinsicGuacClient;
+use crate::client::{Error, Id};
 //use crate::client::intrinsic::package::query::query_package::PackageQualifierSpec;
 
 mod ingest;
 mod query;
+
+fn extract_deep_id(tree: &allPkgTree) -> Id {
+    if tree.namespaces.is_empty() {
+        return tree.id.clone();
+    }
+
+    if tree.namespaces[0].names.is_empty() {
+        return tree.namespaces[0].id.clone();
+    }
+
+    if tree.namespaces[0].names[0].versions.is_empty() {
+        return tree.namespaces[0].names[0].id.clone();
+    }
+
+    tree.namespaces[0].names[0].versions[0].id.clone()
+}
 
 impl IntrinsicGuacClient {
     pub async fn ingest_package(&self, package: &PkgInputSpec) -> Result<Id, Error> {
@@ -30,7 +46,7 @@ impl IntrinsicGuacClient {
 
         let data = response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        Ok(data.ingest_package.id)
+        Ok(extract_deep_id(&data.ingest_package))
     }
 
     pub async fn packages(&self, package: &PkgSpec) -> Result<Vec<Package>, Error> {
@@ -135,6 +151,21 @@ pub struct PkgSpec {
     pub qualifiers: Option<Vec<PackageQualifierSpec>>,
     pub match_only_empty_qualifiers: Option<bool>,
     pub subpath: Option<String>,
+}
+
+impl From<&Package> for PkgSpec {
+    fn from(value: &Package) -> Self {
+        Self {
+            id: Some(value.id.clone()),
+            r#type: None,
+            namespace: None,
+            name: None,
+            version: None,
+            qualifiers: None,
+            match_only_empty_qualifiers: None,
+            subpath: None,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

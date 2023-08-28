@@ -1,0 +1,81 @@
+fragment allPackageTree on Package {
+    id
+    type
+    namespaces {
+        id
+        namespace
+        names {
+            id
+            name
+            versions {
+                id
+                version
+                qualifiers {
+                    key
+                    value
+                }
+                subpath
+            }
+        }
+    }
+}
+
+fragment allIsDependencyTree on IsDependency {
+    id
+    package {
+        ... allPackageTree
+    }
+    dependentPackage {
+        ... allPackageTree
+    }
+    dependencyType
+    versionRange
+    justification
+    origin
+    collector
+}
+
+fragment allCertifyVulnTree on CertifyVuln {
+    id
+    package {
+        ... allPackageTree
+    }
+    vulnerability {
+        id
+        type
+        vulnerabilityIDs {
+            id
+            vulnerabilityID
+        }
+    }
+    metadata {
+        dbUri
+        dbVersion
+        scannerUri
+        scannerVersion
+        timeScanned
+        origin
+        collector
+    }
+}
+
+
+
+fragment allNodeTree on Node {
+    __typename
+    ... on Package {
+        ... allPackageTree
+    }
+    ... on IsDependency {
+        ... allIsDependencyTree
+    }
+    ... on CertifyVuln {
+        ... allCertifyVulnTree
+    }
+}
+
+query Neighbors( $node: ID!, $usingOnly: [Edge!]!) {
+    neighbors(node: $node, usingOnly: $usingOnly) {
+        ...allNodeTree
+    }
+}

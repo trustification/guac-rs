@@ -4,9 +4,9 @@ mod query;
 use crate::client::intrinsic::has_sbom::ingest::IngestHasSBOM;
 use crate::client::intrinsic::has_sbom::query::QueryHasSBOM;
 use crate::client::intrinsic::{
-    Id, IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec,
+    IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec,
 };
-use crate::client::Error;
+use crate::client::{Error, Id};
 use graphql_client::reqwest::post_graphql;
 use packageurl::PackageUrl;
 

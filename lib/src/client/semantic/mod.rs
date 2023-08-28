@@ -1,6 +1,9 @@
 use packageurl::PackageUrl;
+use std::collections::{HashMap, HashSet};
 
+use crate::client::graph::Node;
 use crate::client::intrinsic::is_dependency::IsDependencySpec;
+use crate::client::intrinsic::package::PkgSpec;
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::semantic::ingest::{Predicate, Subject};
 use crate::client::{Error, GuacClient};
@@ -78,5 +81,59 @@ impl SemanticGuacClient {
         }
 
         Ok(dependents)
+    }
+
+    pub async fn transitive_dependents_of<'a>(
+        &self,
+        package: &PackageUrl<'a>,
+    ) -> Result<Vec<Vec<PackageUrl<'a>>>, Error> {
+        let intrinsic = self.intrinsic();
+
+        let mut queue = Vec::new();
+        queue.push(package.clone());
+
+        let mut segments = HashMap::new();
+
+        loop {
+            if let Some(cur) = queue.pop() {
+                let dependents = self.dependents_of(&cur).await?;
+                for each in &dependents {
+                    if !segments.contains_key(&each.to_string()) {
+                        queue.push(each.clone());
+                    }
+                }
+                segments.insert(cur.to_string(), dependents);
+            } else {
+                break;
+            }
+        }
+
+        let mut paths = Vec::new();
+        let mut queue = Vec::new();
+
+        queue.push(vec![package.clone()]);
+        loop {
+            if let Some(cur) = queue.pop() {
+                if let Some(tail) = cur.last() {
+                    if let Some(next) = segments.get(&tail.to_string()) {
+                        if next.is_empty() {
+                            paths.push(cur);
+                        } else {
+                            for each in next {
+                                let mut todo = cur.clone();
+                                todo.push(each.clone());
+                                queue.push(todo);
+                            }
+                        }
+                    } else {
+                        paths.push(cur);
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+
+        Ok(paths)
     }
 }

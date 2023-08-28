@@ -1,18 +1,10 @@
+pub mod graph;
 pub mod intrinsic;
 pub mod semantic;
 
-use std::collections::HashSet;
-use std::sync::atomic::AtomicU64;
-use std::sync::atomic::Ordering;
-
-use chrono::Utc;
-use openvex::Metadata;
-use openvex::OpenVex;
-use openvex::Statement;
-use openvex::Status;
-
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::semantic::SemanticGuacClient;
+use std::sync::atomic::AtomicU64;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -56,6 +48,8 @@ impl GuacClient {
 }
 
 static VERSION: AtomicU64 = AtomicU64::new(1);
+
+/*
 fn openvex() -> OpenVex {
     OpenVex {
         metadata: Metadata {
@@ -75,7 +69,6 @@ fn openvex() -> OpenVex {
     }
 }
 
-/*
 pub fn vulns2vex(vulns: Vec<VulnerabilityResult>) -> OpenVex {
     let mut vex = openvex();
 
@@ -114,3 +107,5 @@ pub fn vulns2vex(vulns: Vec<VulnerabilityResult>) -> OpenVex {
 }
 
  */
+
+pub type Id = String;
