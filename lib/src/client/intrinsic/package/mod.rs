@@ -11,8 +11,8 @@ use crate::client::Error;
 
 //use crate::client::intrinsic::package::query::query_package::PackageQualifierSpec;
 
-pub mod ingest;
-pub mod query;
+mod ingest;
+mod query;
 
 impl IntrinsicGuacClient {
     pub async fn ingest_package(&self, package: &PkgInputSpec) -> Result<Id, Error> {
