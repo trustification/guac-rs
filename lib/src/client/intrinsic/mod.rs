@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 pub mod certify_bad;
 pub mod certify_good;
 pub mod certify_vuln;
+pub mod has_sbom;
 pub mod is_dependency;
 pub mod package;
 pub mod vulnerability;
@@ -84,6 +85,40 @@ impl From<PkgInputSpec> for PackageSourceOrArtifactInput {
 
 impl From<PackageUrl<'_>> for PackageSourceOrArtifactInput {
     fn from(package: PackageUrl) -> Self {
+        Self {
+            package: Some(package.into()),
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub enum PackageOrArtifact {
+    Package(Package),
+    //Artifact(Artifact),
+}
+
+#[derive(Clone, Debug)]
+pub struct PackageOrArtifactSpec {
+    package: Option<PkgSpec>,
+    // artifact: Option<Artifact>,
+}
+
+#[derive(Clone, Debug)]
+pub struct PackageOrArtifactInput {
+    package: Option<PkgInputSpec>,
+    // artifact: Option<ArtifactInputSpec>,
+}
+
+impl From<PackageUrl<'_>> for PackageOrArtifactInput {
+    fn from(package: PackageUrl) -> Self {
+        Self {
+            package: Some(package.into()),
+        }
+    }
+}
+
+impl From<PackageUrl<'_>> for PackageOrArtifactSpec {
+    fn from(package: PackageUrl<'_>) -> Self {
         Self {
             package: Some(package.into()),
         }

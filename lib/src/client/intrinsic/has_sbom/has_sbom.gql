@@ -1,0 +1,57 @@
+fragment allHasSBOMTree on HasSBOM {
+    id
+    subject {
+       __typename
+       ... on Package {
+           id
+           type
+           namespaces {
+               id
+               namespace
+               names {
+                   id
+                   name
+                   versions {
+                       id
+                       version
+                       qualifiers {
+                           key
+                           value
+                       }
+                       subpath
+                   }
+               }
+           }
+       }
+       ... on Artifact {
+           id
+           algorithm
+           digest
+       }
+    }
+    uri
+    algorithm,
+    digest
+    downloadLocation,
+    origin
+    collector,
+}
+
+
+mutation IngestHasSBOM(
+    $subject: PackageOrArtifactInput!,
+    $hasSBOM: HasSBOMInputSpec!
+) {
+    ingestHasSBOM(
+        subject: $subject,
+        hasSBOM: $hasSBOM
+    ) {
+        id
+    }
+}
+
+query QueryHasSBOM($hasSBOMSpec: HasSBOMSpec!) {
+    HasSBOM( hasSBOMSpec: $hasSBOMSpec) {
+        ...allHasSBOMTree
+    }
+}

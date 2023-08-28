@@ -12,8 +12,8 @@ use crate::client::intrinsic::{Id, IntrinsicGuacClient};
 use crate::client::Error;
 use serde::{Deserialize, Serialize};
 
-pub mod ingest;
-pub mod query;
+mod ingest;
+mod query;
 
 //#[derive(Debug, Serialize, Deserialize)]
 type Time = chrono::DateTime<Utc>;

@@ -10,8 +10,8 @@ use crate::client::intrinsic::{
 };
 use crate::client::Error;
 
-pub mod ingest;
-pub mod query;
+mod ingest;
+mod query;
 
 impl IntrinsicGuacClient {
     pub async fn ingest_certify_bad<MF: Into<MatchFlags>>(
