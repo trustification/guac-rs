@@ -83,7 +83,7 @@ impl SemanticGuacClient {
         Ok(dependents)
     }
 
-    pub async fn transitive_dependents_of<'a>(
+    pub async fn transitive_dependent_paths_of<'a>(
         &self,
         package: &PackageUrl<'a>,
     ) -> Result<Vec<Vec<PackageUrl<'a>>>, Error> {
@@ -116,15 +116,12 @@ impl SemanticGuacClient {
             if let Some(cur) = queue.pop() {
                 if let Some(tail) = cur.last() {
                     if let Some(next) = segments.get(&tail.to_string()) {
-                        if next.is_empty() {
-                            paths.push(cur);
-                        } else {
-                            for each in next {
-                                let mut todo = cur.clone();
-                                todo.push(each.clone());
-                                queue.push(todo);
-                            }
+                        for each in next {
+                            let mut todo = cur.clone();
+                            todo.push(each.clone());
+                            queue.push(todo);
                         }
+                        paths.push(cur);
                     } else {
                         paths.push(cur);
                     }
