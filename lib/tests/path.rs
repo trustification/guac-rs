@@ -228,7 +228,7 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
 
     let paths = client
         .semantic()
-        .transitive_dependents_of(&PackageUrl::from_str("pkg:rpm/log4j@1.0")?)
+        .transitive_dependent_paths_of(&PackageUrl::from_str("pkg:rpm/log4j@1.0")?)
         .await?;
 
     for path in paths {
