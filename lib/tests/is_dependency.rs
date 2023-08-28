@@ -123,7 +123,7 @@ async fn dependencies_of() -> Result<(), anyhow::Error> {
             &IsDependencyInputSpec {
                 version_range: "".to_string(),
                 dependency_type: DependencyType::Direct,
-                justification: "dep-justificatoin".to_string(),
+                justification: "dep-justification".to_string(),
                 origin: "dep-origin".to_string(),
                 collector: "dep-collector".to_string(),
             },

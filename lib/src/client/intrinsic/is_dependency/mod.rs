@@ -1,12 +1,11 @@
 use graphql_client::reqwest::post_graphql;
-use packageurl::PackageUrl;
 use std::str::FromStr;
 
 use crate::client::intrinsic::is_dependency::ingest::IngestDependency;
 use crate::client::intrinsic::is_dependency::query::QueryIsDependency;
 use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
-use crate::client::intrinsic::{Id, IntrinsicGuacClient, MatchFlags};
-use crate::client::Error;
+use crate::client::intrinsic::{IntrinsicGuacClient, MatchFlags};
+use crate::client::{Error, Id};
 
 pub mod ingest;
 pub mod query;

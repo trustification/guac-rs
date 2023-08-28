@@ -11,6 +11,7 @@ pub mod certify_vuln;
 pub mod has_sbom;
 pub mod is_dependency;
 pub mod package;
+pub mod path;
 pub mod vulnerability;
 
 pub struct IntrinsicGuacClient {
@@ -36,8 +37,6 @@ impl IntrinsicGuacClient {
         SemanticGuacClient::new(&self.client)
     }
 }
-
-type Id = String;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum PackageSourceOrArtifact {

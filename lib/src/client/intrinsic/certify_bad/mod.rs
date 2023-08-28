@@ -5,10 +5,10 @@ use serde::{Deserialize, Serialize};
 use crate::client::intrinsic::certify_bad::ingest::IngestCertifyBad;
 use crate::client::intrinsic::certify_bad::query::QueryCertifyBad;
 use crate::client::intrinsic::{
-    Id, IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput,
+    IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput,
     PackageSourceOrArtifactSpec,
 };
-use crate::client::Error;
+use crate::client::{Error, Id};
 
 mod ingest;
 mod query;

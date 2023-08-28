@@ -8,8 +8,8 @@ use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
 use crate::client::intrinsic::vulnerability::{
     Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec,
 };
-use crate::client::intrinsic::{Id, IntrinsicGuacClient};
-use crate::client::Error;
+use crate::client::intrinsic::IntrinsicGuacClient;
+use crate::client::{Error, Id};
 use serde::{Deserialize, Serialize};
 
 mod ingest;

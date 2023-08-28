@@ -2,14 +2,13 @@ use graphql_client::reqwest::post_graphql;
 use packageurl::PackageUrl;
 use serde::{Deserialize, Serialize};
 
-use crate::client::intrinsic::certify_bad::CertifyBadSpec;
 use crate::client::intrinsic::certify_good::ingest::IngestCertifyGood;
 use crate::client::intrinsic::certify_good::query::QueryCertifyGood;
 use crate::client::intrinsic::{
-    Id, IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput,
+    IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput,
     PackageSourceOrArtifactSpec,
 };
-use crate::client::Error;
+use crate::client::{Error, Id};
 
 mod ingest;
 mod query;
