@@ -93,7 +93,7 @@ pub struct ScanMetadata {
     pub collector: String,
 }
 
-type ScanMetadataInput = ScanMetadata;
+pub type ScanMetadataInput = ScanMetadata;
 
 #[derive(Debug, Clone, Default)]
 pub struct CertifyVulnSpec {
