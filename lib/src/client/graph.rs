@@ -3,7 +3,7 @@ use crate::client::intrinsic::certify_good::CertifyGood;
 use crate::client::intrinsic::certify_vuln::CertifyVuln;
 use crate::client::intrinsic::is_dependency::IsDependency;
 use crate::client::intrinsic::package::Package;
-use crate::client::intrinsic::vulnerability::VulnerabilityId;
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
 use crate::client::Id;
 
 #[derive(Clone, Debug)]
@@ -15,6 +15,7 @@ pub enum Node {
     CertifyGood(CertifyGood),
     CertifyBad(CertifyBad),
     CertifyVuln(CertifyVuln),
+    Vulnerability(Vulnerability),
     // ...
 }
 
@@ -27,6 +28,7 @@ impl Node {
             Node::CertifyGood(inner) => inner.id.clone(),
             Node::CertifyBad(inner) => inner.id.clone(),
             Node::CertifyVuln(inner) => inner.id.clone(),
+            Node::Vulnerability(inner) => inner.id.clone(),
         }
     }
 }

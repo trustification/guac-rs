@@ -97,11 +97,12 @@ impl From<&Edge> for neighbors::Edge {
 
 impl From<&neighbors::allNodeTree> for Node {
     fn from(value: &neighbors::allNodeTree) -> Self {
-        //println!("{:?}", value);
+        println!("{:?}", value);
         match value {
             neighbors::allNodeTree::Package(inner) => Node::Package(inner.into()),
             neighbors::allNodeTree::IsDependency(inner) => Node::IsDependency(inner.into()),
             neighbors::allNodeTree::CertifyVuln(inner) => Node::CertifyVuln(inner.into()),
+            neighbors::allNodeTree::Vulnerability(inner) => Node::Vulnerability(inner.into()),
             _ => todo!("neighbors node type not implemented"),
         }
     }
@@ -223,6 +224,25 @@ impl From<&neighbors::AllPackageTreeNamespacesNamesVersionsQualifiers> for Packa
         Self {
             key: value.key.clone(),
             value: value.value.clone(),
+        }
+    }
+}
+
+impl From<&neighbors::allVulnerabilityTree> for Vulnerability {
+    fn from(value: &neighbors::allVulnerabilityTree) -> Self {
+        Self {
+            id: value.id.clone(),
+            r#type: value.type_.clone(),
+            vulnerability_ids: value.vulnerability_i_ds.iter().map(|e| e.into()).collect(),
+        }
+    }
+}
+
+impl From<&neighbors::AllVulnerabilityTreeVulnerabilityIDs> for VulnerabilityId {
+    fn from(value: &neighbors::AllVulnerabilityTreeVulnerabilityIDs) -> Self {
+        Self {
+            id: value.id.clone(),
+            vulnerability_id: value.vulnerability_id.clone(),
         }
     }
 }

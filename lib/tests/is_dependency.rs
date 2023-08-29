@@ -16,21 +16,21 @@ mod common;
 async fn is_dependency() -> Result<(), anyhow::Error> {
     let client = GuacClient::new(GUAC_URL);
 
-    let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-pkg-A@0.3.0")?;
+    let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-pkg-is-dep-A@0.3.0")?;
 
     let _ = client
         .intrinsic()
         .ingest_package(&pkg_a.clone().into())
         .await?;
 
-    let pkg_b = PackageUrl::from_str("pkg:rpm/trustification-pkg-B@0.3.0")?;
+    let pkg_b = PackageUrl::from_str("pkg:rpm/trustification-pkg-is-dep-B@0.3.0")?;
 
     let _ = client
         .intrinsic()
         .ingest_package(&pkg_b.clone().into())
         .await?;
 
-    let pkg_c = PackageUrl::from_str("pkg:rpm/trustification-pkg-C@0.3.0")?;
+    let pkg_c = PackageUrl::from_str("pkg:rpm/trustification-pkg-is-dep-C@0.3.0")?;
 
     let _ = client
         .intrinsic()
@@ -46,7 +46,7 @@ async fn is_dependency() -> Result<(), anyhow::Error> {
             &IsDependencyInputSpec {
                 version_range: "".to_string(),
                 dependency_type: DependencyType::Direct,
-                justification: "dep-justificatoin".to_string(),
+                justification: "dep-justification".to_string(),
                 origin: "dep-origin".to_string(),
                 collector: "dep-collector".to_string(),
             },
