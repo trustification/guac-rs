@@ -59,6 +59,14 @@ fragment allCertifyVulnTree on CertifyVuln {
     }
 }
 
+fragment allVulnerabilityTree on Vulnerability {
+    id,
+    type,
+    vulnerabilityIDs {
+        id,
+        vulnerabilityID
+    }
+}
 
 
 fragment allNodeTree on Node {
@@ -71,6 +79,9 @@ fragment allNodeTree on Node {
     }
     ... on CertifyVuln {
         ... allCertifyVulnTree
+    }
+    ... on Vulnerability {
+        ... allVulnerabilityTree
     }
 }
 

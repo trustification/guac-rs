@@ -238,5 +238,114 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
         println!()
     }
 
+    let dependents = client
+        .semantic()
+        .transitive_dependents_of( &PackageUrl::from_str("pkg:rpm/log4j@1.0")?)
+        .await?;
+
+    for dependent in dependents {
+        println!("{}", dependent.to_string())
+    }
+
+    Ok(())
+}
+
+
+#[tokio::test]
+async fn transitive_affected() -> Result<(), anyhow::Error> {
+    macro_rules! add_dep {
+        ($client: ident, $a: literal, $b:literal) => {
+            let pkg_a = PackageUrl::from_str($a)?;
+
+            $client
+                .intrinsic()
+                .ingest_package(&pkg_a.clone().into())
+                .await?;
+
+            let pkg_b = PackageUrl::from_str($b)?;
+
+            $client
+                .intrinsic()
+                .ingest_package(&pkg_b.clone().into())
+                .await?;
+
+            $client
+                .intrinsic()
+                .ingest_is_dependency(
+                    &pkg_a.clone().into(),
+                    &pkg_b.clone().into(),
+                    PkgMatchType::SpecificVersion,
+                    &IsDependencyInputSpec {
+                        version_range: "".to_string(),
+                        dependency_type: DependencyType::Direct,
+                        justification: "justification".to_string(),
+                        origin: "test-origin".to_string(),
+                        collector: "test-collector".to_string(),
+                    },
+                )
+                .await?;
+        };
+    }
+
+    let client = GuacClient::new(GUAC_URL);
+
+    add_dep!(client, "pkg:rpm/your-app@1.0", "pkg:rpm/log4j@1.0");
+    add_dep!(client, "pkg:rpm/myapp@1.0", "pkg:rpm/component-a@1.0");
+    add_dep!(client, "pkg:rpm/myapp@1.0", "pkg:rpm/component-b@1.0");
+    add_dep!(client, "pkg:rpm/myapp@1.0", "pkg:rpm/component-c@1.0");
+
+    add_dep!(client, "pkg:rpm/component-a@1.0", "pkg:rpm/component-c@1.0");
+    add_dep!(client, "pkg:rpm/component-c@1.0", "pkg:rpm/component-d@1.0");
+    add_dep!(client, "pkg:rpm/component-a@1.0", "pkg:rpm/component-d@1.0");
+    add_dep!(client, "pkg:rpm/component-d@1.0", "pkg:rpm/component-e@1.0");
+    add_dep!(client, "pkg:rpm/component-e@1.0", "pkg:rpm/log4j@1.0");
+
+    client.intrinsic()
+        .ingest_vulnerability(
+            &VulnerabilityInputSpec {
+                r#type: "osv".to_string(),
+                vulnerability_id: "cve-log4shell".to_string(),
+            }
+        ).await?;
+
+    client.intrinsic()
+        .ingest_certify_vuln(
+            &PackageUrl::from_str( "pkg:rpm/log4j@1.0")?.into(),
+            &VulnerabilityInputSpec {
+                r#type: "osv".to_string(),
+                vulnerability_id: "cve-log4shell".to_string(),
+            },
+            &ScanMetadata {
+                db_uri: "test-db".to_string(),
+                db_version: "test-db-version".to_string(),
+                scanner_uri: "test-scanner-uri".to_string(),
+                scanner_version: "test-scanner-version".to_string(),
+                time_scanned: Default::default(),
+                origin: "test-origin".to_string(),
+                collector: "test-collector".to_string(),
+            }
+        ).await?;
+
+    let paths = client
+        .semantic()
+        .transitive_affected_paths_of("cve-log4shell" )
+        .await?;
+
+    for path in paths {
+        for segment in path {
+            print!("{} ", segment.to_string());
+        }
+        println!()
+    }
+
+    let affected = client
+        .semantic()
+        .transitive_affected_of( "cve-log4shell" )
+        .await?;
+
+    for affected in affected {
+        println!("{}", affected.to_string())
+    }
+
     Ok(())
 }
