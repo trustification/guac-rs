@@ -1245,7 +1245,7 @@
           "possibleTypes": []
         },
         {
-          "description": "CertifyVuln is an attestation to attach vulnerability information to a package.\n\nThis information is obtained via a scanner. If there is no vulnerability\ndetected, we attach the a vulnerability with \"NoVuln\" type and an empty string\nfor the vulnerability ID.",
+          "description": "CertifyVuln is an attestation to attach vulnerability information to a package.\n\nThis information is obtained via a scanner. If there is no vulnerability\ndetected, we attach the a vulnerability with \"NoVuln\" type and an empty string \nfor the vulnerability ID.",
           "enumValues": [],
           "fields": [
             {
@@ -1585,12 +1585,6 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "VULNERABILITY_VULN_METADATA"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
               "name": "PACKAGE_CERTIFY_BAD"
             },
             {
@@ -1886,12 +1880,6 @@
               "description": null,
               "isDeprecated": false,
               "name": "POINT_OF_CONTACT_SOURCE"
-            },
-            {
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "VULN_METADATA_VULNERABILITY"
             }
           ],
           "fields": [],
@@ -3850,15 +3838,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingests a new artifact and returns it. The returned ID can be empty string.",
+              "description": "Ingests a new artifact and returns it.",
               "isDeprecated": false,
               "name": "ingestArtifact",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "Artifact",
                   "ofType": null
                 }
               }
@@ -3889,7 +3877,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk ingests new artifacts and returns a list of them. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk ingests new artifacts and returns a list of them.",
               "isDeprecated": false,
               "name": "ingestArtifacts",
               "type": {
@@ -3902,8 +3890,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "Artifact",
                       "ofType": null
                     }
                   }
@@ -3924,15 +3912,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingests a new builder and returns it. The returned ID can be empty string.",
+              "description": "Ingests a new builder and returns it.",
               "isDeprecated": false,
               "name": "ingestBuilder",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "Builder",
                   "ofType": null
                 }
               }
@@ -3976,8 +3964,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "Builder",
                       "ofType": null
                     }
                   }
@@ -4030,15 +4018,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that a package, source or artifact is considered bad. The returned ID can be empty string.",
+              "description": "Adds a certification that a package, source or artifact is considered bad.",
               "isDeprecated": false,
               "name": "ingestCertifyBad",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "CertifyBad",
                   "ofType": null
                 }
               }
@@ -4097,7 +4085,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds bulk certifications that a package, source or artifact is considered bad. The returned array of IDs can be a an array of empty string.",
+              "description": "Adds bulk certifications that a package, source or artifact is considered bad.",
               "isDeprecated": false,
               "name": "ingestCertifyBads",
               "type": {
@@ -4110,8 +4098,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "CertifyBad",
                       "ofType": null
                     }
                   }
@@ -4164,15 +4152,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that a package, source or artifact is considered good. The returned ID can be empty string.",
+              "description": "Adds a certification that a package, source or artifact is considered good.",
               "isDeprecated": false,
               "name": "ingestCertifyGood",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "CertifyGood",
                   "ofType": null
                 }
               }
@@ -4231,7 +4219,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds bulk certifications that a package, source or artifact is considered good. The returned array of IDs can be a an array of empty string.",
+              "description": "Adds bulk certifications that a package, source or artifact is considered good.",
               "isDeprecated": false,
               "name": "ingestCertifyGoods",
               "type": {
@@ -4244,8 +4232,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "CertifyGood",
                       "ofType": null
                     }
                   }
@@ -4284,15 +4272,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that a source repository has a Scorecard. The returned ID can be empty string.",
+              "description": "Adds a certification that a source repository has a Scorecard.",
               "isDeprecated": false,
               "name": "ingestScorecard",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "CertifyScorecard",
                   "ofType": null
                 }
               }
@@ -4345,7 +4333,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds bulk certifications that a source repository has a Scorecard. The returned array of IDs can be a an array of empty string.",
+              "description": "Adds bulk certifications that a source repository has a Scorecard.",
               "isDeprecated": false,
               "name": "ingestScorecards",
               "type": {
@@ -4358,8 +4346,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "CertifyScorecard",
                       "ofType": null
                     }
                   }
@@ -4412,15 +4400,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a VEX certification for a package. The returned ID can be empty string.",
+              "description": "Adds a VEX certification for a package.",
               "isDeprecated": false,
               "name": "ingestVEXStatement",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "CertifyVEXStatement",
                   "ofType": null
                 }
               }
@@ -4471,15 +4459,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that a package has been scanned for vulnerabilities. The returned ID can be empty string.",
+              "description": "Adds a certification that a package has been scanned for vulnerabilities.",
               "isDeprecated": false,
               "name": "ingestCertifyVuln",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "CertifyVuln",
                   "ofType": null
                 }
               }
@@ -4554,7 +4542,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk add certifications that a package has been scanned for vulnerabilities. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk add certifications that a package has been scanned for vulnerabilities.",
               "isDeprecated": false,
               "name": "ingestCertifyVulns",
               "type": {
@@ -4567,8 +4555,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "CertifyVuln",
                       "ofType": null
                     }
                   }
@@ -4621,15 +4609,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a PointOfContact attestation to a package, source or artifact. The returned ID can be empty string.",
+              "description": "Adds a PointOfContact attestation to a package, source or artifact.",
               "isDeprecated": false,
               "name": "ingestPointOfContact",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "PointOfContact",
                   "ofType": null
                 }
               }
@@ -4666,15 +4654,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Certifies that a package or artifact has an SBOM. The returned ID can be empty string.",
+              "description": "Certifies that a package or artifact has an SBOM.",
               "isDeprecated": false,
               "name": "ingestHasSBOM",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "HasSBOM",
                   "ofType": null
                 }
               }
@@ -4719,7 +4707,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk ingest that package or artifact has an SBOM. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk ingest that package or artifact has an SBOM.",
               "isDeprecated": false,
               "name": "ingestHasSBOMs",
               "type": {
@@ -4732,8 +4720,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "HasSBOM",
                       "ofType": null
                     }
                   }
@@ -4808,15 +4796,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingests a SLSA attestation. The returned ID can be empty string.",
+              "description": "Ingests a SLSA attestation",
               "isDeprecated": false,
               "name": "ingestSLSA",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "HasSLSA",
                   "ofType": null
                 }
               }
@@ -4921,7 +4909,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk Ingest SLSA attestations. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk Ingest SLSA attestations",
               "isDeprecated": false,
               "name": "ingestSLSAs",
               "type": {
@@ -4934,8 +4922,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "HasSLSA",
                       "ofType": null
                     }
                   }
@@ -5002,15 +4990,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that a package (PackageName or PackageVersion) is built from the source. The returned ID can be empty string.",
+              "description": "Adds a certification that a package (PackageName or PackageVersion) is built from the source.",
               "isDeprecated": false,
               "name": "ingestHasSourceAt",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "HasSourceAt",
                   "ofType": null
                 }
               }
@@ -5061,15 +5049,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that two artifacts are equal. The returned ID can be empty string.",
+              "description": "Adds a certification that two artifacts are equal.",
               "isDeprecated": false,
               "name": "ingestHashEqual",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "HashEqual",
                   "ofType": null
                 }
               }
@@ -5144,7 +5132,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk ingest certifications that two artifacts are equal. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk ingest certifications that two artifacts are equal.",
               "isDeprecated": false,
               "name": "ingestHashEquals",
               "type": {
@@ -5157,8 +5145,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "HashEqual",
                       "ofType": null
                     }
                   }
@@ -5225,15 +5213,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a dependency between two packages. The returned ID can be empty string.",
+              "description": "Adds a dependency between two packages",
               "isDeprecated": false,
               "name": "ingestDependency",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "IsDependency",
                   "ofType": null
                 }
               }
@@ -5322,7 +5310,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk adds a dependency between two packages. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk adds a dependency between two packages",
               "isDeprecated": false,
               "name": "ingestDependencies",
               "type": {
@@ -5335,8 +5323,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "IsDependency",
                       "ofType": null
                     }
                   }
@@ -5389,15 +5377,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingest that an artifact is produced from a package or source. The returned ID can be empty string.",
+              "description": "Ingest that an artifact is produced from a package or source.",
               "isDeprecated": false,
               "name": "ingestOccurrence",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "IsOccurrence",
                   "ofType": null
                 }
               }
@@ -5464,7 +5452,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk ingest that an artifact is produced from a package or source. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk ingest that an artifact is produced from a package or source.",
               "isDeprecated": false,
               "name": "ingestOccurrences",
               "type": {
@@ -5477,8 +5465,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "IsOccurrence",
                       "ofType": null
                     }
                   }
@@ -5531,15 +5519,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds metadata about a package, source or artifact. The returned ID can be empty string.",
+              "description": "Adds metadata about a package, source or artifact.",
               "isDeprecated": false,
               "name": "ingestHasMetadata",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "HasMetadata",
                   "ofType": null
                 }
               }
@@ -5562,15 +5550,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingests a new package and returns the corresponding package trie path. The returned ID can be empty string.",
+              "description": "Ingests a new package and returns the corresponding package trie path.",
               "isDeprecated": false,
               "name": "ingestPackage",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "Package",
                   "ofType": null
                 }
               }
@@ -5601,7 +5589,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk ingests packages and returns the list of corresponding package trie path. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk ingests packages and returns the list of corresponding package trie path.",
               "isDeprecated": false,
               "name": "ingestPackages",
               "type": {
@@ -5614,8 +5602,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "Package",
                       "ofType": null
                     }
                   }
@@ -5668,15 +5656,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Adds a certification that two packages are similar. The returned ID can be empty string.",
+              "description": "Adds a certification that two packages are similar.",
               "isDeprecated": false,
               "name": "ingestPkgEqual",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "PkgEqual",
                   "ofType": null
                 }
               }
@@ -5699,15 +5687,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingests a new source and returns the corresponding source trie path. The returned ID can be empty string.",
+              "description": "Ingests a new source and returns the corresponding source trie path.",
               "isDeprecated": false,
               "name": "ingestSource",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "Source",
                   "ofType": null
                 }
               }
@@ -5738,9 +5726,159 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk ingests sources and returns the list of corresponding source trie path. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk ingests sources and returns the list of corresponding source trie path.",
               "isDeprecated": false,
               "name": "ingestSources",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Source",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerability",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "score",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityScoreInputSpec",
+                      "ofType": null
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilityMetadata",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnerabilityMetadataInputSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Adds metadata about a vulnerability.",
+              "isDeprecated": false,
+              "name": "ingestVulnerabilityMetadata",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilities",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "scores",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityScoreInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnerabilityMetadatas",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "INPUT_OBJECT",
+                          "name": "VulnerabilityMetadataInputSpec",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Bulk add certifications that vulnerability has a specific score.",
+              "isDeprecated": false,
+              "name": "ingestVulnerabilityMetadatas",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5805,130 +5943,16 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingest a mapping between vulnerabilities. The returned ID can be empty string.",
+              "description": "Ingest a mapping between vulnerabilities.",
               "isDeprecated": false,
               "name": "ingestVulnEqual",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "VulnEqual",
                   "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "vulnerability",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "VulnerabilityInputSpec",
-                      "ofType": null
-                    }
-                  }
-                },
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "vulnerabilityMetadata",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "VulnerabilityMetadataInputSpec",
-                      "ofType": null
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Adds metadata about a vulnerability. The returned ID can be empty string.",
-              "isDeprecated": false,
-              "name": "ingestVulnerabilityMetadata",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "vulnerabilities",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "INPUT_OBJECT",
-                          "name": "VulnerabilityInputSpec",
-                          "ofType": null
-                        }
-                      }
-                    }
-                  }
-                },
-                {
-                  "defaultValue": null,
-                  "description": null,
-                  "name": "vulnerabilityMetadatas",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "INPUT_OBJECT",
-                          "name": "VulnerabilityMetadataInputSpec",
-                          "ofType": null
-                        }
-                      }
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Bulk add certifications that vulnerability has a specific score. The returned array of IDs can be a an array of empty string.",
-              "isDeprecated": false,
-              "name": "ingestVulnerabilityMetadatas",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  }
                 }
               }
             },
@@ -5950,15 +5974,15 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Ingests a new vulnerability and returns the corresponding vulnerability trie path. The returned ID can be empty string.",
+              "description": "Ingests a new vulnerability and returns the corresponding vulnerability trie path.",
               "isDeprecated": false,
               "name": "ingestVulnerability",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "Vulnerability",
                   "ofType": null
                 }
               }
@@ -5989,7 +6013,7 @@
                 }
               ],
               "deprecationReason": null,
-              "description": "Bulk ingests vulnerabilities and returns the list of corresponding vulnerability trie path. The returned array of IDs can be a an array of empty string.",
+              "description": "Bulk ingests vulnerabilities and returns the list of corresponding vulnerability trie path.",
               "isDeprecated": false,
               "name": "ingestVulnerabilities",
               "type": {
@@ -6002,8 +6026,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
+                      "kind": "OBJECT",
+                      "name": "Vulnerability",
                       "ofType": null
                     }
                   }
@@ -6124,11 +6148,6 @@
             {
               "kind": "OBJECT",
               "name": "PointOfContact",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "VulnerabilityMetadata",
               "ofType": null
             }
           ]
@@ -8696,45 +8715,6 @@
                 {
                   "defaultValue": null,
                   "description": null,
-                  "name": "vulnEqualSpec",
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "VulnEqualSpec",
-                      "ofType": null
-                    }
-                  }
-                }
-              ],
-              "deprecationReason": null,
-              "description": "Returns all equal vulnerability mappings that match a filter.",
-              "isDeprecated": false,
-              "name": "vulnEqual",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "VulnEqual",
-                      "ofType": null
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "args": [
-                {
-                  "defaultValue": null,
-                  "description": null,
                   "name": "vulnerabilityMetadataSpec",
                   "type": {
                     "kind": "NON_NULL",
@@ -8763,6 +8743,45 @@
                     "ofType": {
                       "kind": "OBJECT",
                       "name": "VulnerabilityMetadata",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "vulnEqualSpec",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "VulnEqualSpec",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all equal vulnerability mappings that match a filter.",
+              "isDeprecated": false,
+              "name": "vulnEqual",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "VulnEqual",
                       "ofType": null
                     }
                   }
@@ -10583,7 +10602,7 @@
           "possibleTypes": []
         },
         {
-          "description": "Vulnerability represents the root of the vulnerability trie/tree.\n\nWe map vulnerability information to a trie, as a derivative of the pURL specification:\neach path in the trie represents a type and a vulnerability ID. This allows for generic\nrepresentation of the various vulnerabilities and does not limit to just cve, ghsa or osv.\nThis would be in the general format: vuln://<general-type>/<vuln-id>\n\nExamples:\n\nCVE, using path separator: vuln://cve/cve-2023-20753\nOSV, representing its knowledge of a GHSA: vuln://osv/ghsa-205hk\nRandom vendor: vuln://snyk/sn-whatever\nNoVuln: vuln://novuln/\n\n\nThis node represents the type part of the trie path. It is used to represent\nthe specific type of the vulnerability: cve, ghsa, osv or some other vendor specific\n\nSince this node is at the root of the vulnerability trie, it is named Vulnerability, not\nVulnerabilityType.\n\nNoVuln is a special vulnerability node to attest that no vulnerability has been\nfound during a vulnerability scan. It will have the type \"novuln\" and contain an empty string\nfor vulnerabilityID\n\nThe resolvers will enforce that both the type and vulnerability IDs are lower case.",
+          "description": "Vulnerability represents the root of the vulnerability trie/tree.\n\nWe map vulnerability information to a trie, as a derivative of the pURL specification:\neach path in the trie represents a type and a vulnerability ID. This allows for generic\nrepresentation of the various vulnerabilities and does not limit to just cve, ghsa or osv. \nThis would be in the general format: vuln://<general-type>/<vuln-id>\n\nExamples:\n\nCVE, using path separator: vuln://cve/cve-2023-20753\nOSV, representing its knowledge of a GHSA: vuln://osv/ghsa-205hk\nRandom vendor: vuln://snyk/sn-whatever\nNoVuln: vuln://novuln/\n\n\nThis node represents the type part of the trie path. It is used to represent\nthe specific type of the vulnerability: cve, ghsa, osv or some other vendor specific\n\nSince this node is at the root of the vulnerability trie, it is named Vulnerability, not\nVulnerabilityType.\n\nNoVuln is a special vulnerability node to attest that no vulnerability has been\nfound during a vulnerability scan. It will have the type \"novuln\" and contain an empty string \nfor vulnerabilityID\n\nThe resolvers will enforce that both the type and vulnerability IDs are lower case.",
           "enumValues": [],
           "fields": [
             {
@@ -10732,7 +10751,7 @@
           "possibleTypes": []
         },
         {
-          "description": "VulnerabilityMetadata is an attestation that a vulnerability has a related score\nassociated with it.\n\nThe intent of this evidence tree predicate is to allow extensibility of vulnerability\nscore (one-to-one mapping) with a specific vulnerability ID.\n\nA vulnerability ID can have a one-to-many relationship with the VulnerabilityMetadata\nnode as a vulnerability ID can have multiple scores (in various frameworks).\n\nExamples:\n\nscoreType: EPSSv1\nscoreValue: 0.960760000\n\nscoreType: CVSSv2\nscoreValue: 5.0\n\nscoreType: CVSSv3\nscoreValue: 7.5\n\nThe timestamp is used to determine when the score was evaluated for the specific vulnerability.",
+          "description": "VulnerabilityMetadata is an attestation that a vulnerability has a related score\nassociated with it.\n\nThe intent of this evidence tree predicate is to allow extensibility of vulnerability\nscores (one-to-one mapping) with a specific vulnerability ID.\n\nA vulnerability ID can have a one-to-many relationship with the VulnerabilityMetadata\nnode as a vulnerability ID can have multiple scores (in various frameworks).\n\nThe timestamp is used to determine when the score was evaluated for the specific vulnerability.",
           "enumValues": [],
           "fields": [
             {
@@ -10772,29 +10791,13 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "scoreType",
+              "name": "score",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "VulnerabilityScoreType",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "args": [],
-              "deprecationReason": null,
-              "description": null,
-              "isDeprecated": false,
-              "name": "scoreValue",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
+                  "kind": "OBJECT",
+                  "name": "VulnerabilityScore",
                   "ofType": null
                 }
               }
@@ -10862,34 +10865,6 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "scoreType",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "VulnerabilityScoreType",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "scoreValue",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
               "name": "timestamp",
               "type": {
                 "kind": "NON_NULL",
@@ -10936,7 +10911,7 @@
           "possibleTypes": []
         },
         {
-          "description": "VulnerabilityMetadataSpec allows filtering the list of VulnerabilityMetadata evidence \nto return in a query.\n\nComparator field is an enum that be set to filter the score and return a\nrange that matches. If the comparator is not specified, it will default to equal operation.\n\nTimestamp specified indicates filtering timestamps after the specified time",
+          "description": "VulnerabilityMetadataSpec allows filtering the list of VulnerabilityMetadata evidence \nto return in a query.\n\nTimestamp specified indicates filtering timestamps after the specified time",
           "enumValues": [],
           "fields": [],
           "inputFields": [
@@ -10963,30 +10938,10 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "scoreType",
+              "name": "score",
               "type": {
-                "kind": "ENUM",
-                "name": "VulnerabilityScoreType",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "scoreValue",
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              }
-            },
-            {
-              "defaultValue": null,
-              "description": null,
-              "name": "comparator",
-              "type": {
-                "kind": "ENUM",
-                "name": "Comparator",
+                "kind": "INPUT_OBJECT",
+                "name": "VulnerabilityScoreSpec",
                 "ofType": null
               }
             },
@@ -11027,6 +10982,145 @@
           "possibleTypes": []
         },
         {
+          "description": "VulnerabilityScore node captures the score type and its corresponding value. There is a\none-to-one relationship between the VulnerabilityMetadata and the score.\n\nExamples:\n\ntype: EPSSv1\nvalue: 0.960760000\n\ntype: CVSSv2\nvalue: 5.0\n\ntype: CVSSv3\nvalue: 7.5",
+          "enumValues": [],
+          "fields": [
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "type",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VulnerabilityScoreType",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "args": [],
+              "deprecationReason": null,
+              "description": null,
+              "isDeprecated": false,
+              "name": "value",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "OBJECT",
+          "name": "VulnerabilityScore",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityScoreInputSpec represents the mutation input to ingest a vulnerability score.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "type",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "VulnerabilityScoreType",
+                  "ofType": null
+                }
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "value",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Float",
+                  "ofType": null
+                }
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityScoreInputSpec",
+          "possibleTypes": []
+        },
+        {
+          "description": "VulnerabilityScoreSpec allows for filtering a vulnerability score.\nComparator field is an enum that be set to filter the score and return a\nrange that matches.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "type",
+              "type": {
+                "kind": "ENUM",
+                "name": "VulnerabilityScoreType",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "comparator",
+              "type": {
+                "kind": "ENUM",
+                "name": "Comparator",
+                "ofType": null
+              }
+            },
+            {
+              "defaultValue": null,
+              "description": null,
+              "name": "value",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              }
+            }
+          ],
+          "interfaces": [],
+          "kind": "INPUT_OBJECT",
+          "name": "VulnerabilityScoreSpec",
+          "possibleTypes": []
+        },
+        {
           "description": "Records the type of the score being captured by the score node",
           "enumValues": [
             {
@@ -11062,7 +11156,7 @@
           "possibleTypes": []
         },
         {
-          "description": "VulnerabilitySpec allows filtering the list of vulnerabilities to return in a query.\n\nUse null to match on all values at that level.\nFor example, to get all vulnerabilities in GUAC backend, use a VulnSpec\nwhere every field is null.\n\nSetting the noVuln boolean true will ignore the other inputs for type and vulnerabilityID.\nSetting noVuln to true means retrieving only nodes where the type of the vulnerability is \"novuln\"\nand the it has an empty string for vulnerabilityID. Setting it to false filters out all results that are \"novuln\".\nSetting one of the other fields and omitting the noVuln means retrieving vulnerabilities for the corresponding\ntype and vulnerabilityID. Omission of noVuln field will return all vulnerabilities and novuln.",
+          "description": "VulnerabilitySpec allows filtering the list of vulnerabilities to return in a query.\n\nUse null to match on all values at that level. \nFor example, to get all vulnerabilities in GUAC backend, use a VulnSpec\nwhere every field is null.\n\nSetting the noVuln boolean true will ignore the other inputs for type and vulnerabilityID.\nSetting noVuln to true means retrieving only nodes where the type of the vulnerability is \"novuln\" \nand the it has an empty string for vulnerabilityID. Setting it to false filters out all results that are \"novuln\".\nSetting one of the other fields and omitting the noVuln means retrieving vulnerabilities for the corresponding \ntype and vulnerabilityID. Omission of noVuln field will return all vulnerabilities and novuln.",
           "enumValues": [],
           "fields": [],
           "inputFields": [
