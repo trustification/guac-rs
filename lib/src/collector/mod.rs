@@ -10,6 +10,7 @@ pub struct Document {
     pub blob: Vec<u8>,
     pub r#type: DocumentType,
     pub format: FormatType,
+    pub encoding: EncodingType,
     pub source_information: SourceInformation,
 }
 
@@ -32,6 +33,12 @@ pub enum FormatType {
     JSON,
     JsonLines,
     XML,
+    UNKNOWN,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum EncodingType {
+    BZIP2,
     UNKNOWN,
 }
 

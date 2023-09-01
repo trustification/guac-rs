@@ -2,7 +2,7 @@ use std::fs;
 
 use async_trait::async_trait;
 
-use super::{emitter::Emitter, Document, DocumentType, FormatType, SourceInformation};
+use super::{emitter::Emitter, Document, DocumentType, FormatType, SourceInformation, EncodingType};
 
 #[async_trait]
 pub trait Collector {
@@ -22,6 +22,7 @@ impl Collector for FileCollector {
             blob: content,
             r#type: DocumentType::UNKNOWN,
             format: FormatType::UNKNOWN,
+            encoding: EncodingType::UNKNOWN,
             source_information: SourceInformation {
                 collector: "FileCollector".into(),
                 source: self.path.clone(),
