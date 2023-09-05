@@ -32,7 +32,7 @@ impl IntrinsicGuacClient {
 
         let data = response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        Ok(data.ingest_has_sbom.id)
+        Ok(data.ingest_has_sbom)
     }
 
     pub async fn has_sbom(&self, has_sbom_spec: &HasSBOMSpec) -> Result<Vec<HasSBOM>, Error> {

@@ -240,7 +240,7 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
 
     let dependents = client
         .semantic()
-        .transitive_dependents_of( &PackageUrl::from_str("pkg:rpm/log4j@1.0")?)
+        .transitive_dependents_of(&PackageUrl::from_str("pkg:rpm/log4j@1.0")?)
         .await?;
 
     for dependent in dependents {
@@ -249,7 +249,6 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
 
     Ok(())
 }
-
 
 #[tokio::test]
 async fn transitive_affected() -> Result<(), anyhow::Error> {
@@ -300,17 +299,18 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
     add_dep!(client, "pkg:rpm/component-d@1.0", "pkg:rpm/component-e@1.0");
     add_dep!(client, "pkg:rpm/component-e@1.0", "pkg:rpm/log4j@1.0");
 
-    client.intrinsic()
-        .ingest_vulnerability(
-            &VulnerabilityInputSpec {
-                r#type: "osv".to_string(),
-                vulnerability_id: "cve-log4shell".to_string(),
-            }
-        ).await?;
+    client
+        .intrinsic()
+        .ingest_vulnerability(&VulnerabilityInputSpec {
+            r#type: "osv".to_string(),
+            vulnerability_id: "cve-log4shell".to_string(),
+        })
+        .await?;
 
-    client.intrinsic()
+    client
+        .intrinsic()
         .ingest_certify_vuln(
-            &PackageUrl::from_str( "pkg:rpm/log4j@1.0")?.into(),
+            &PackageUrl::from_str("pkg:rpm/log4j@1.0")?.into(),
             &VulnerabilityInputSpec {
                 r#type: "osv".to_string(),
                 vulnerability_id: "cve-log4shell".to_string(),
@@ -323,12 +323,13 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
                 time_scanned: Default::default(),
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
-            }
-        ).await?;
+            },
+        )
+        .await?;
 
     let paths = client
         .semantic()
-        .transitive_affected_paths_of("cve-log4shell" )
+        .transitive_affected_paths_of("cve-log4shell")
         .await?;
 
     for path in paths {
@@ -340,7 +341,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
 
     let affected = client
         .semantic()
-        .transitive_affected_of( "cve-log4shell" )
+        .transitive_affected_of("cve-log4shell")
         .await?;
 
     for affected in affected {

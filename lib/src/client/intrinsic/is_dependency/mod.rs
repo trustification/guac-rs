@@ -36,7 +36,7 @@ impl IntrinsicGuacClient {
 
         let data = response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        Ok(data.ingest_dependency.id)
+        Ok(data.ingest_dependency)
     }
 
     pub async fn is_dependency(
