@@ -45,9 +45,7 @@ mutation IngestHasSBOM(
     ingestHasSBOM(
         subject: $subject,
         hasSBOM: $hasSBOM
-    ) {
-        id
-    }
+    )
 }
 
 query QueryHasSBOM($hasSBOMSpec: HasSBOMSpec!) {

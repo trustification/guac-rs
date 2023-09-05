@@ -45,9 +45,7 @@ mutation IngestCertifyVuln($package: PkgInputSpec!, $vulnerability: Vulnerabilit
         pkg: $package
         vulnerability: $vulnerability
         certifyVuln: $meta
-    )  {
-        id
-    }
+    )
 }
 
 query QueryCertifyVuln($certifyVulnSpec: CertifyVulnSpec!) {

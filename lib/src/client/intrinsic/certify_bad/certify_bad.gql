@@ -51,9 +51,7 @@ mutation IngestCertifyBad($subject: PackageSourceOrArtifactInput!, $pkgMatchType
     subject: $subject
     pkgMatchType: $pkgMatchType
     certifyBad: $certifyBad
-  ) {
-    id
-  }
+  )
 }
 
 query QueryCertifyBad($certifyBadSpec: CertifyBadSpec!) {
