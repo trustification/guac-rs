@@ -24,6 +24,8 @@ thiserror = "1"
 tonic = "0.9.2"
 prost = "0.11.9"
 async-std = "1.12.0"
+strum = "0.25"
+strum_macros = "0.25"
 
 [dev-dependencies]
 tokio = "1.29.1"

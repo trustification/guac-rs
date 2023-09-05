@@ -1,4 +1,7 @@
 use serde::{Deserialize, Serialize};
+use serde_json::from_str;
+use std::str::FromStr;
+use strum_macros::EnumString;
 
 #[allow(clippy::module_inception)]
 pub mod collector;
@@ -36,10 +39,22 @@ pub enum FormatType {
     UNKNOWN,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, EnumString, Debug)]
 pub enum EncodingType {
+    #[strum(ascii_case_insensitive)]
     BZIP2,
+    #[strum(ascii_case_insensitive)]
+    ZSTD,
     UNKNOWN,
+}
+
+impl From<Option<String>> for EncodingType {
+    fn from(value: Option<String>) -> Self {
+        match value {
+            Some(str) => EncodingType::from_str(&str).unwrap_or(EncodingType::UNKNOWN),
+            None => EncodingType::UNKNOWN,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]
