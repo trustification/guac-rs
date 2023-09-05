@@ -2,12 +2,12 @@ use std::collections::HashMap;
 
 use packageurl::PackageUrl;
 
-use crate::client::graph::{Edge, Node};
+use crate::client::{Error, GuacClient};
+use crate::client::intrinsic::certify_vuln::CertifyVulnSpec;
+use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::intrinsic::is_dependency::IsDependencySpec;
 use crate::client::intrinsic::vulnerability::VulnerabilitySpec;
-use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::semantic::ingest::{Predicate, Subject};
-use crate::client::{Error, GuacClient};
 
 pub mod ingest;
 
@@ -105,18 +105,27 @@ impl SemanticGuacClient {
             for id in &vuln.vulnerability_ids {
                 //println!("VULN {:?}", vuln);
                 let first_order_affected = intrinsic
-                    .neighbors(&id.id, vec![Edge::VulnerabilityCertifyVuln])
+                    //.neighbors(&id.id, vec![Edge::VulnerabilityCertifyVuln])
+                    .certify_vuln(
+                        &CertifyVulnSpec {
+                            vulnerability: Some(
+                                VulnerabilitySpec {
+                                    id: Some(id.id.clone()),
+                                    ..Default::default()
+                                }
+                            ),
+                            ..Default::default()
+                        }
+                    )
                     .await?;
 
                 for each in first_order_affected {
                     println!("FIRST: {:?}", each);
-                    if let Node::CertifyVuln(cert) = each {
-                        let purls = cert.package.try_as_purls()?;
+                    let purls = each.package.try_as_purls()?;
 
-                        for purl in &purls {
-                            if !roots.contains(purl) {
-                                roots.push(purl.clone())
-                            }
+                    for purl in &purls {
+                        if !roots.contains(purl) {
+                            roots.push(purl.clone())
                         }
                     }
                 }
