@@ -6,7 +6,7 @@ use common::GUAC_URL;
 use guac::client::intrinsic::is_dependency::{
     DependencyType, IsDependencyInputSpec, IsDependencySpec,
 };
-use guac::client::intrinsic::{MatchFlags, PkgMatchType};
+use guac::client::intrinsic::PkgMatchType;
 use guac::client::semantic::ingest::HasDependency;
 use guac::client::GuacClient;
 

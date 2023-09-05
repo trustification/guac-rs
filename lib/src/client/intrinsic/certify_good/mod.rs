@@ -37,7 +37,7 @@ impl IntrinsicGuacClient {
 
         let data = response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        Ok(data.ingest_certify_good.id)
+        Ok(data.ingest_certify_good)
     }
 
     pub async fn certify_good(
