@@ -1,6 +1,6 @@
 use crate::query::QueryConfig;
-use colored_json::ToColoredJson;
-use guac::client::GuacClient;
+// use colored_json::ToColoredJson;
+// use guac::client::GuacClient;
 use std::process::ExitCode;
 
 #[derive(clap::Args, Debug)]
