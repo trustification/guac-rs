@@ -1,14 +1,15 @@
 mod common;
 
-use common::GUAC_URL;
 use guac::client::intrinsic::has_sbom::HasSBOMInputSpec;
 use guac::client::GuacClient;
 use packageurl::PackageUrl;
 use std::str::FromStr;
 
+use crate::common::guac_url;
+
 #[tokio::test]
 async fn has_sbom() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg = PackageUrl::from_str("pkg:rpm/trustification-has-sbom@0.3.0")?;
 

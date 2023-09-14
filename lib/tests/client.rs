@@ -1,11 +1,12 @@
 use guac::client::GuacClient;
 
-use common::GUAC_URL;
+use crate::common::guac_url;
+
 mod common;
 
 #[tokio::test]
 async fn basic_client() {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     client.intrinsic();
     client.semantic();

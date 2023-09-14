@@ -2,14 +2,15 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
-use crate::common::GUAC_URL;
 use guac::client::GuacClient;
+
+use crate::common::guac_url;
 
 mod common;
 
 #[tokio::test]
 async fn ingest_packages() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg_030 = PackageUrl::from_str("pkg:rpm/trustification-test@0.3.0")?;
 
@@ -41,7 +42,7 @@ async fn ingest_packages() -> Result<(), anyhow::Error> {
 
 #[tokio::test]
 async fn query_packages() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     // ingest 29 versions of the same package.
     for i in 1..30 {

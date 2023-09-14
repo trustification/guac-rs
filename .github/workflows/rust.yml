@@ -21,7 +21,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install protobuf-compiler
     - name: Build
-      run: cargo build --verbose
-    # TODO: enable tests by starting guac
-    # - name: Run tests
-    #   run: cargo test --verbose
+      run: cargo build
+    - name: Run guac
+      run: docker compose -f example/compose/compose-guac.yaml up --detach --wait --wait-timeout 30
+    - name: Run tests
+      run: GUAC_URL=http://localhost:8085/query cargo test
