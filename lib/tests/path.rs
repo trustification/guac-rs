@@ -2,7 +2,6 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
-use common::GUAC_URL;
 use guac::client::graph::Edge;
 use guac::client::intrinsic::certify_vuln::ScanMetadata;
 use guac::client::intrinsic::is_dependency::{DependencyType, IsDependencyInputSpec};
@@ -10,11 +9,13 @@ use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 use guac::client::intrinsic::PkgMatchType;
 use guac::client::GuacClient;
 
+use crate::common::guac_url;
+
 mod common;
 
 #[tokio::test]
 async fn neighbor() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-neighbor-a@11.1")?;
     let pkg_b = PackageUrl::from_str("pkg:rpm/trustification-neighbor-b@022.2")?;
@@ -25,15 +26,15 @@ async fn neighbor() -> Result<(), anyhow::Error> {
         .intrinsic()
         .ingest_package(&pkg_a.clone().into())
         .await?;
-    let pkg_b_id = client
+    let _pkg_b_id = client
         .intrinsic()
         .ingest_package(&pkg_b.clone().into())
         .await?;
-    let pkg_c_id = client
+    let _pkg_c_id = client
         .intrinsic()
         .ingest_package(&pkg_c.clone().into())
         .await?;
-    let pkg_d_id = client
+    let _pkg_d_id = client
         .intrinsic()
         .ingest_package(&pkg_d.clone().into())
         .await?;
@@ -103,7 +104,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
         })
         .await?;
 
-    let vuln_a = client
+    let _vuln_a = client
         .intrinsic()
         .ingest_certify_vuln(
             &pkg_a.clone().into(),
@@ -131,7 +132,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
         })
         .await?;
 
-    let vuln_d = client
+    let _vuln_d = client
         .intrinsic()
         .ingest_certify_vuln(
             &pkg_d.clone().into(),
@@ -152,7 +153,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
         .await?;
 
     //println!("start {}", pkg_a_id);
-    let result = client
+    let _result = client
         .intrinsic()
         .neighbors(
             &pkg_a_id,
@@ -213,7 +214,7 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
         };
     }
 
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     add_dep!(client, "pkg:rpm/your-app@1.0", "pkg:rpm/log4j@1.0");
     add_dep!(client, "pkg:rpm/myapp@1.0", "pkg:rpm/component-a@1.0");
@@ -286,7 +287,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
         };
     }
 
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     add_dep!(client, "pkg:rpm/your-app@1.0", "pkg:rpm/log4j@1.0");
     add_dep!(client, "pkg:rpm/myapp@1.0", "pkg:rpm/component-a@1.0");

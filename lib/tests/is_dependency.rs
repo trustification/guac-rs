@@ -2,7 +2,6 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
-use common::GUAC_URL;
 use guac::client::intrinsic::is_dependency::{
     DependencyType, IsDependencyInputSpec, IsDependencySpec,
 };
@@ -10,11 +9,13 @@ use guac::client::intrinsic::PkgMatchType;
 use guac::client::semantic::ingest::HasDependency;
 use guac::client::GuacClient;
 
+use crate::common::guac_url;
+
 mod common;
 
 #[tokio::test]
 async fn is_dependency() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-pkg-is-dep-A@0.3.0")?;
 
@@ -71,7 +72,7 @@ async fn is_dependency() -> Result<(), anyhow::Error> {
 
 #[tokio::test]
 async fn ingest_has_dependency() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-semantic-pkg-A@0.3.0")?;
     let pkg_b = PackageUrl::from_str("pkg:rpm/trustification-semantic-pkg-B@0.3.0")?;
@@ -91,7 +92,7 @@ async fn ingest_has_dependency() -> Result<(), anyhow::Error> {
 
 #[tokio::test]
 async fn dependencies_of() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg_a = PackageUrl::from_str("pkg:rpm/trustification-pkg-A@0.3.0")?;
 

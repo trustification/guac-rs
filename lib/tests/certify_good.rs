@@ -2,17 +2,18 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
-use common::GUAC_URL;
 use guac::client::intrinsic::certify_good::{CertifyGoodInputSpec, CertifyGoodSpec};
 use guac::client::intrinsic::PackageSourceOrArtifact;
 use guac::client::intrinsic::PkgMatchType;
 use guac::client::GuacClient;
 
+use crate::common::guac_url;
+
 mod common;
 
 #[tokio::test]
 async fn certify_good() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg = PackageUrl::from_str("pkg:rpm/trustification-NOT-certify-good@0.3.0")?;
 

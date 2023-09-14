@@ -2,16 +2,17 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
-use common::GUAC_URL;
 use guac::client::intrinsic::certify_vuln::{CertifyVulnSpec, ScanMetadata};
 use guac::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
 use guac::client::GuacClient;
+
+use crate::common::guac_url;
 
 mod common;
 
 #[tokio::test]
 async fn certify_vuln() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(GUAC_URL);
+    let client = GuacClient::new(&guac_url());
 
     let pkg = PackageUrl::from_str("pkg:rpm/trustification-NOT-certify-vuln@0.3.0")?;
 
