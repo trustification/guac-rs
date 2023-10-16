@@ -38,6 +38,7 @@ async fn certify_good() -> Result<(), anyhow::Error> {
                 justification: "test-justification".to_string(),
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
+                known_since: Default::default(),
             },
         )
         .await?;
