@@ -29,6 +29,7 @@ async fn has_sbom() -> Result<(), anyhow::Error> {
                 download_location: "http://example.com/test-sbom".to_string(),
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
+                known_since: Default::default(),
             },
         )
         .await?;

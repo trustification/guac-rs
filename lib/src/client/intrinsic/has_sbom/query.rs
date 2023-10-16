@@ -10,8 +10,10 @@ use crate::client::intrinsic::package::{
     PkgSpec,
 };
 use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactSpec};
+use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
+type Time = chrono::DateTime<Utc>;
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/client/intrinsic/schema.json",
@@ -31,6 +33,7 @@ impl From<&HasSBOMSpec> for query_has_sbom::HasSBOMSpec {
             download_location: value.download_location.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            known_since: value.known_since,
         }
     }
 }
@@ -82,6 +85,7 @@ impl From<&query_has_sbom::allHasSBOMTree> for HasSBOM {
             download_location: value.download_location.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            known_since: None,
         }
     }
 }

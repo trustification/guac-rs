@@ -7,8 +7,11 @@ use crate::client::intrinsic::{
     IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec,
 };
 use crate::client::{Error, Id};
+use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
 use packageurl::PackageUrl;
+
+type Time = chrono::DateTime<Utc>;
 
 impl IntrinsicGuacClient {
     pub async fn ingest_has_sbom(
@@ -71,6 +74,7 @@ impl From<PackageUrl<'_>> for HasSBOMSpec {
             download_location: None,
             origin: None,
             collector: None,
+            known_since: None,
         }
     }
 }
@@ -85,6 +89,7 @@ pub struct HasSBOM {
     pub download_location: String,
     pub origin: String,
     pub collector: String,
+    pub known_since: Option<Time>,
 }
 
 #[derive(Clone, Debug)]
@@ -97,6 +102,7 @@ pub struct HasSBOMSpec {
     pub download_location: Option<String>,
     pub origin: Option<String>,
     pub collector: Option<String>,
+    pub known_since: Option<Time>,
 }
 
 #[derive(Clone, Debug)]
@@ -107,4 +113,5 @@ pub struct HasSBOMInputSpec {
     pub download_location: String,
     pub origin: String,
     pub collector: String,
+    pub known_since: Time,
 }

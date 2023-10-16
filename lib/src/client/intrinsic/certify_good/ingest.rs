@@ -1,9 +1,11 @@
+use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
 use crate::client::intrinsic::certify_good::CertifyGoodInputSpec;
 use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
 use crate::client::intrinsic::{MatchFlags, PackageSourceOrArtifactInput, PkgMatchType};
 
+type Time = chrono::DateTime<Utc>;
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = "src/client/intrinsic/schema.json",
@@ -36,6 +38,7 @@ impl From<&CertifyGoodInputSpec> for ingest_certify_good::CertifyGoodInputSpec {
             justification: value.justification.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            known_since: value.known_since,
         }
     }
 }

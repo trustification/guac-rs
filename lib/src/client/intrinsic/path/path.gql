@@ -25,7 +25,7 @@ fragment allIsDependencyTree on IsDependency {
     package {
         ... allPackageTree
     }
-    dependentPackage {
+    dependencyPackage {
         ... allPackageTree
     }
     dependencyType

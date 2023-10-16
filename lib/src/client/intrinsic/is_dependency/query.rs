@@ -18,7 +18,7 @@ impl From<&IsDependencySpec> for query_is_dependency::IsDependencySpec {
         Self {
             id: value.id.clone(),
             package: value.package.as_ref().map(|inner| inner.into()),
-            dependent_package: value.dependent_package.as_ref().map(|inner| inner.into()),
+            dependency_package: value.dependent_package.as_ref().map(|inner| inner.into()),
             version_range: value.version_range.clone(),
             dependency_type: value.dependency_type.as_ref().map(|inner| inner.into()),
             justification: value.justification.clone(),
@@ -70,7 +70,7 @@ impl From<&query_is_dependency::allIsDependencyTree> for IsDependency {
         Self {
             id: value.id.clone(),
             package: (&value.package).into(),
-            dependent_package: (&value.dependent_package).into(),
+            dependent_package: (&value.dependency_package).into(),
             version_range: value.version_range.clone(),
             dependency_type: (&value.dependency_type).into(),
             justification: value.justification.clone(),

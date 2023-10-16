@@ -1,3 +1,4 @@
+use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
 use packageurl::PackageUrl;
 use serde::{Deserialize, Serialize};
@@ -12,6 +13,8 @@ use crate::client::{Error, Id};
 
 mod ingest;
 mod query;
+
+type Time = chrono::DateTime<Utc>;
 
 impl IntrinsicGuacClient {
     pub async fn ingest_certify_bad<MF: Into<MatchFlags>>(
@@ -75,6 +78,7 @@ pub struct CertifyBad {
     pub justification: String,
     pub origin: String,
     pub collector: String,
+    pub known_since: Option<Time>,
 }
 
 #[derive(Default, Debug, Clone)]
@@ -84,6 +88,7 @@ pub struct CertifyBadSpec {
     pub justification: Option<String>,
     pub origin: Option<String>,
     pub collector: Option<String>,
+    pub known_since: Option<Time>,
 }
 
 impl From<&PackageUrl<'_>> for CertifyBadSpec {
@@ -102,4 +107,5 @@ pub struct CertifyBadInputSpec {
     pub justification: String,
     pub origin: String,
     pub collector: String,
+    pub known_since: Time,
 }

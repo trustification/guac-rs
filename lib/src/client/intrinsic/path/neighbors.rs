@@ -123,7 +123,7 @@ impl From<&neighbors::allIsDependencyTree> for IsDependency {
         Self {
             id: value.id.clone(),
             package: (&value.package).into(),
-            dependent_package: (&value.dependent_package).into(),
+            dependent_package: (&value.dependency_package).into(),
             version_range: value.version_range.clone(),
             dependency_type: (&value.dependency_type).into(),
             justification: value.justification.clone(),
