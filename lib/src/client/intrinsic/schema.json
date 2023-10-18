@@ -10317,6 +10317,53 @@
                 {
                   "defaultValue": null,
                   "description": null,
+                  "name": "vulnerabilityID",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "findTopLevelPackagesRelatedToVulnerability takes in a vulnerabilityID string\nand looks for top level packages (i.e. packages with an SBOM) related to the\ncorresponding vulnerability. findTopLevelPackagesRelatedToVulnerability\nreturns a list of Nodes, representing the path from the certify vulnerability\nto a top level package.\n\nAll that is asked in the implementation of this API is that it follows\nthe spirit of helping to retrieve the right nodes with best effort.\n\nWarning: This is an EXPERIMENTAL feature. This is subject to change.\nWarning: This is an OPTIONAL feature. Backends are not required to\nimplement this API.",
+              "isDeprecated": false,
+              "name": "findTopLevelPackagesRelatedToVulnerability",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "LIST",
+                      "name": null,
+                      "ofType": {
+                        "kind": "NON_NULL",
+                        "name": null,
+                        "ofType": {
+                          "kind": "UNION",
+                          "name": "Node",
+                          "ofType": null
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
                   "name": "sourceSpec",
                   "type": {
                     "kind": "NON_NULL",

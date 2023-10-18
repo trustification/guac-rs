@@ -1,0 +1,39 @@
+query QuerySpog($vulnerabilityID: String!) {
+  findTopLevelPackagesRelatedToVulnerability(
+    vulnerabilityID: $vulnerabilityID
+  ) {
+    __typename
+    ... on CertifyVEXStatement {
+      vulnerability {
+        vulnerabilityIDs {
+          vulnerabilityID
+        }
+      }
+      status
+    }
+    ... on Package {
+      id
+      type
+      namespaces {
+        id
+        namespace
+        names {
+          id
+          name
+          versions {
+            id
+            version
+            qualifiers {
+              key
+              value
+            }
+            subpath
+          }
+        }
+      }
+    }
+    ... on IsDependency {
+      dependencyType
+    }
+  }
+}
