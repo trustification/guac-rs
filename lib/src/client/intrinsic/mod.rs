@@ -15,6 +15,7 @@ pub mod package;
 pub mod path;
 pub mod vuln_metadata;
 pub mod vulnerability;
+pub mod spog;
 
 pub struct IntrinsicGuacClient {
     client: GuacClient,
