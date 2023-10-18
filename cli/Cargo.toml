@@ -17,7 +17,7 @@ serde_json = "1.0.56"
 colored_json = "3.0.1"
 clap = { version = "4.0.29", features = ["derive"] }
 nats = "0.24.0"
-exporter = { git = "https://github.com/trustification/trustification.git"}
+exporter = { git = "https://github.com/trustification/trustification.git", tag="v0.1.0-nightly.9382a428"}
 env_logger = "0.10"
 log = "0.4.14"
 humantime = "2.1.0"
