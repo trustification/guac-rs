@@ -1,0 +1,32 @@
+
+fragment allVulnMetadataTree on VulnerabilityMetadata {
+    id
+    vulnerability {
+        id
+        type
+        vulnerabilityIDs {
+            id
+            vulnerabilityID
+        }
+    }
+    scoreType
+    scoreValue
+    timestamp
+    origin
+    collector
+}
+
+mutation IngestVulnerabilityMetadata($vulnerability: VulnerabilityInputSpec!, $vulnerability_metadata: VulnerabilityMetadataInputSpec!) {
+    ingestVulnerabilityMetadata(
+        vulnerability: $vulnerability
+        vulnerabilityMetadata: $vulnerability_metadata
+    )
+}
+
+query QueryVulnerabilityMetadata($vulnerability_metadata_spec: VulnerabilityMetadataSpec!) {
+    vulnerabilityMetadata(
+        vulnerabilityMetadataSpec: $vulnerability_metadata_spec
+    ) {
+        ...allVulnMetadataTree
+    }
+}

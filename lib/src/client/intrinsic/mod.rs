@@ -14,6 +14,7 @@ pub mod is_dependency;
 pub mod package;
 pub mod path;
 pub mod vulnerability;
+pub mod vuln_metadata;
 
 pub struct IntrinsicGuacClient {
     client: GuacClient,
