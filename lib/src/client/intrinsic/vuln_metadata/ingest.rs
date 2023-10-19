@@ -1,7 +1,9 @@
+use crate::client::intrinsic::vuln_metadata::{
+    VulnerabilityMetadataInputSpec, VulnerabilityScoreType,
+};
+use crate::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
-use crate::client::intrinsic::vuln_metadata::{VulnerabilityMetadataInputSpec, VulnerabilityScoreType};
-use crate::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 
 type Time = chrono::DateTime<Utc>;
 
@@ -22,7 +24,9 @@ impl From<&VulnerabilityInputSpec> for ingest_vulnerability_metadata::Vulnerabil
     }
 }
 
-impl From<&VulnerabilityMetadataInputSpec> for ingest_vulnerability_metadata::VulnerabilityMetadataInputSpec {
+impl From<&VulnerabilityMetadataInputSpec>
+    for ingest_vulnerability_metadata::VulnerabilityMetadataInputSpec
+{
     fn from(value: &VulnerabilityMetadataInputSpec) -> Self {
         Self {
             score_type: (&value.score_type).into(),
@@ -37,35 +41,15 @@ impl From<&VulnerabilityMetadataInputSpec> for ingest_vulnerability_metadata::Vu
 impl From<&VulnerabilityScoreType> for ingest_vulnerability_metadata::VulnerabilityScoreType {
     fn from(value: &VulnerabilityScoreType) -> Self {
         match value {
-            VulnerabilityScoreType::CVSSv2 => {
-                Self::CVSSv2
-            }
-            VulnerabilityScoreType::CVSSv3 => {
-                Self::CVSSv3
-            }
-            VulnerabilityScoreType::CVSSv31 => {
-                Self::CVSSv31
-            }
-            VulnerabilityScoreType::CVSSv4 => {
-                Self::CVSSv4
-            }
-            VulnerabilityScoreType::EPSSv1 => {
-                Self::CVSSv4
-            }
-            VulnerabilityScoreType::EPSSv2 => {
-                Self::EPSSv2
-
-            }
-            VulnerabilityScoreType::OWASP => {
-                Self::OWASP
-            }
-            VulnerabilityScoreType::SSVC => {
-                Self::SSVC
-            }
-            VulnerabilityScoreType::Other(inner) => {
-                Self::Other(inner.clone())
-
-            }
+            VulnerabilityScoreType::CVSSv2 => Self::CVSSv2,
+            VulnerabilityScoreType::CVSSv3 => Self::CVSSv3,
+            VulnerabilityScoreType::CVSSv31 => Self::CVSSv31,
+            VulnerabilityScoreType::CVSSv4 => Self::CVSSv4,
+            VulnerabilityScoreType::EPSSv1 => Self::CVSSv4,
+            VulnerabilityScoreType::EPSSv2 => Self::EPSSv2,
+            VulnerabilityScoreType::OWASP => Self::OWASP,
+            VulnerabilityScoreType::SSVC => Self::SSVC,
+            VulnerabilityScoreType::Other(inner) => Self::Other(inner.clone()),
         }
     }
 }
