@@ -2,13 +2,10 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
-use guac::client::intrinsic::certify_good::{CertifyGoodInputSpec, CertifyGoodSpec};
 use guac::client::intrinsic::certify_vex_statement::{
     CertifyVexStatementSpec, VexJustification, VexStatementInputSpec, VexStatus,
 };
 use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
-use guac::client::intrinsic::PackageSourceOrArtifact;
-use guac::client::intrinsic::PkgMatchType;
 use guac::client::GuacClient;
 
 use crate::common::guac_url;
