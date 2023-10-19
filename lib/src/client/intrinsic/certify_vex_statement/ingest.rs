@@ -1,9 +1,11 @@
+use crate::client::intrinsic::certify_vex_statement::{
+    VexJustification, VexStatementInputSpec, VexStatus,
+};
+use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec};
+use crate::client::intrinsic::PackageOrArtifactInput;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
-use crate::client::intrinsic::certify_vex_statement::{VexJustification, VexStatementInputSpec, VexStatus};
-use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
-use crate::client::intrinsic::PackageOrArtifactInput;
-use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec};
 
 type Time = chrono::DateTime<Utc>;
 
@@ -19,7 +21,7 @@ impl From<&PackageOrArtifactInput> for ingest_certify_vex_statement::PackageOrAr
     fn from(value: &PackageOrArtifactInput) -> Self {
         Self {
             package: value.package.as_ref().map(|inner| inner.into()),
-            artifact: None
+            artifact: None,
         }
     }
 }
@@ -49,7 +51,6 @@ impl From<&VulnerabilityInputSpec> for ingest_certify_vex_statement::Vulnerabili
     }
 }
 
-
 impl From<&PackageQualifierInputSpec> for ingest_certify_vex_statement::PackageQualifierInputSpec {
     fn from(value: &PackageQualifierInputSpec) -> Self {
         Self {
@@ -76,15 +77,9 @@ impl From<&VexStatementInputSpec> for ingest_certify_vex_statement::VexStatement
 impl From<&VexStatus> for ingest_certify_vex_statement::VexStatus {
     fn from(value: &VexStatus) -> Self {
         match value {
-            VexStatus::NotAffected => {
-                ingest_certify_vex_statement::VexStatus::NOT_AFFECTED
-            }
-            VexStatus::Affected => {
-                ingest_certify_vex_statement::VexStatus::AFFECTED
-            }
-            VexStatus::Fixed => {
-                ingest_certify_vex_statement::VexStatus::FIXED
-            }
+            VexStatus::NotAffected => ingest_certify_vex_statement::VexStatus::NOT_AFFECTED,
+            VexStatus::Affected => ingest_certify_vex_statement::VexStatus::AFFECTED,
+            VexStatus::Fixed => ingest_certify_vex_statement::VexStatus::FIXED,
             VexStatus::UnderInvestigation => {
                 ingest_certify_vex_statement::VexStatus::UNDER_INVESTIGATION
             }

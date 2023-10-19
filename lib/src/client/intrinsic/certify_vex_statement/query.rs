@@ -1,19 +1,32 @@
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
-use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactSpec};
-use crate::client::intrinsic::certify_vex_statement::{CertifyVexStatement, CertifyVexStatementSpec, VexJustification, VexStatus};
-use crate::client::intrinsic::certify_vex_statement::query::query_certify_vex_statement::{AllCertifyVexStatementTreeSubject, AllCertifyVexStatementTreeSubjectOnPackage, AllCertifyVexStatementTreeSubjectOnPackageNamespaces, AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames, AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions, AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers, AllCertifyVexStatementTreeVulnerability, AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs};
-use crate::client::intrinsic::package::{Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec};
+use crate::client::intrinsic::certify_vex_statement::query::query_certify_vex_statement::{
+    AllCertifyVexStatementTreeSubject, AllCertifyVexStatementTreeSubjectOnPackage,
+    AllCertifyVexStatementTreeSubjectOnPackageNamespaces,
+    AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames,
+    AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions,
+    AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
+    AllCertifyVexStatementTreeVulnerability,
+    AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs,
+};
+use crate::client::intrinsic::certify_vex_statement::{
+    CertifyVexStatement, CertifyVexStatementSpec, VexJustification, VexStatus,
+};
+use crate::client::intrinsic::package::{
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
+    PkgSpec,
+};
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId, VulnerabilitySpec};
+use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactSpec};
 
 type Time = chrono::DateTime<Utc>;
 
 #[derive(GraphQLQuery)]
 #[graphql(
-schema_path = "src/client/intrinsic/schema.json",
-query_path = "src/client/intrinsic/certify_vex_statement/certify_vex_statement.gql",
-response_derives = "Debug, Serialize, Deserialize"
+    schema_path = "src/client/intrinsic/schema.json",
+    query_path = "src/client/intrinsic/certify_vex_statement/certify_vex_statement.gql",
+    response_derives = "Debug, Serialize, Deserialize"
 )]
 pub struct QueryCertifyVexStatement;
 
@@ -74,21 +87,13 @@ impl From<&VulnerabilitySpec> for query_certify_vex_statement::VulnerabilitySpec
 impl From<&VexStatus> for query_certify_vex_statement::VexStatus {
     fn from(value: &VexStatus) -> Self {
         match value {
-            VexStatus::NotAffected => {
-                query_certify_vex_statement::VexStatus::NOT_AFFECTED
-            }
-            VexStatus::Affected => {
-                query_certify_vex_statement::VexStatus::AFFECTED
-            }
-            VexStatus::Fixed => {
-                query_certify_vex_statement::VexStatus::FIXED
-            }
+            VexStatus::NotAffected => query_certify_vex_statement::VexStatus::NOT_AFFECTED,
+            VexStatus::Affected => query_certify_vex_statement::VexStatus::AFFECTED,
+            VexStatus::Fixed => query_certify_vex_statement::VexStatus::FIXED,
             VexStatus::UnderInvestigation => {
                 query_certify_vex_statement::VexStatus::UNDER_INVESTIGATION
             }
-            VexStatus::Other(inner) => {
-                query_certify_vex_statement::VexStatus::Other(inner.clone())
-            }
+            VexStatus::Other(inner) => query_certify_vex_statement::VexStatus::Other(inner.clone()),
         }
     }
 }
@@ -151,11 +156,7 @@ impl From<&PackageQualifierSpec> for query_certify_vex_statement::PackageQualifi
 impl From<&AllCertifyVexStatementTreeSubject> for PackageOrArtifact {
     fn from(value: &AllCertifyVexStatementTreeSubject) -> Self {
         match value {
-            AllCertifyVexStatementTreeSubject::Package(inner) => {
-                Self::Package(
-                    inner.into()
-                )
-            }
+            AllCertifyVexStatementTreeSubject::Package(inner) => Self::Package(inner.into()),
             AllCertifyVexStatementTreeSubject::Artifact(inner) => {
                 todo!("artifact not implemented")
             }
@@ -168,13 +169,16 @@ impl From<&AllCertifyVexStatementTreeVulnerability> for Vulnerability {
         Self {
             id: value.id.clone(),
             r#type: value.type_.clone(),
-            vulnerability_ids: value.vulnerability_i_ds.iter().map(|inner| inner.into()).collect(),
+            vulnerability_ids: value
+                .vulnerability_i_ds
+                .iter()
+                .map(|inner| inner.into())
+                .collect(),
         }
     }
 }
 
-impl From<&AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs> for VulnerabilityId
-{
+impl From<&AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs> for VulnerabilityId {
     fn from(value: &AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs) -> Self {
         Self {
             id: value.id.clone(),
@@ -213,8 +217,7 @@ impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames> for Packag
     }
 }
 
-impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions> for PackageVersion
-{
+impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions> for PackageVersion {
     fn from(value: &AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions) -> Self {
         Self {
             id: value.id.clone(),
@@ -226,9 +229,11 @@ impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions> fo
 }
 
 impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers>
-for PackageQualifier
+    for PackageQualifier
 {
-    fn from(value: &AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers) -> Self {
+    fn from(
+        value: &AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
+    ) -> Self {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),
@@ -239,21 +244,11 @@ for PackageQualifier
 impl From<&query_certify_vex_statement::VexStatus> for VexStatus {
     fn from(value: &query_certify_vex_statement::VexStatus) -> Self {
         match value {
-            query_certify_vex_statement::VexStatus::NOT_AFFECTED => {
-                Self::NotAffected
-            }
-            query_certify_vex_statement::VexStatus::AFFECTED => {
-                Self::Affected
-            }
-            query_certify_vex_statement::VexStatus::FIXED => {
-                Self::Fixed
-            }
-            query_certify_vex_statement::VexStatus::UNDER_INVESTIGATION => {
-                Self::UnderInvestigation
-            }
-            query_certify_vex_statement::VexStatus::Other(inner) => {
-                Self::Other(inner.clone())
-            }
+            query_certify_vex_statement::VexStatus::NOT_AFFECTED => Self::NotAffected,
+            query_certify_vex_statement::VexStatus::AFFECTED => Self::Affected,
+            query_certify_vex_statement::VexStatus::FIXED => Self::Fixed,
+            query_certify_vex_statement::VexStatus::UNDER_INVESTIGATION => Self::UnderInvestigation,
+            query_certify_vex_statement::VexStatus::Other(inner) => Self::Other(inner.clone()),
         }
     }
 }

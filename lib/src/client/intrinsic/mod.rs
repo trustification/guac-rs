@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 
 pub mod certify_bad;
 pub mod certify_good;
-pub mod certify_vuln;
 pub mod certify_vex_statement;
+pub mod certify_vuln;
 pub mod has_sbom;
 pub mod is_dependency;
 pub mod package;

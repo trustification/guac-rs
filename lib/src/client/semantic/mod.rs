@@ -2,12 +2,12 @@ use std::collections::HashMap;
 
 use packageurl::PackageUrl;
 
-use crate::client::{Error, GuacClient};
 use crate::client::intrinsic::certify_vuln::CertifyVulnSpec;
-use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::intrinsic::is_dependency::IsDependencySpec;
 use crate::client::intrinsic::vulnerability::VulnerabilitySpec;
+use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::semantic::ingest::{Predicate, Subject};
+use crate::client::{Error, GuacClient};
 
 pub mod ingest;
 
@@ -106,17 +106,13 @@ impl SemanticGuacClient {
                 //println!("VULN {:?}", vuln);
                 let first_order_affected = intrinsic
                     //.neighbors(&id.id, vec![Edge::VulnerabilityCertifyVuln])
-                    .certify_vuln(
-                        &CertifyVulnSpec {
-                            vulnerability: Some(
-                                VulnerabilitySpec {
-                                    id: Some(id.id.clone()),
-                                    ..Default::default()
-                                }
-                            ),
+                    .certify_vuln(&CertifyVulnSpec {
+                        vulnerability: Some(VulnerabilitySpec {
+                            id: Some(id.id.clone()),
                             ..Default::default()
-                        }
-                    )
+                        }),
+                        ..Default::default()
+                    })
                     .await?;
 
                 for each in first_order_affected {

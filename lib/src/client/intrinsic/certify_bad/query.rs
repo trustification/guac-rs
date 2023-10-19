@@ -74,7 +74,7 @@ impl From<&query_certify_bad::allCertifyBadTree> for CertifyBad {
             justification: value.justification.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
-            known_since: None
+            known_since: None,
         }
     }
 }
