@@ -1,14 +1,15 @@
-
 use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
 use guac::client::intrinsic::certify_good::{CertifyGoodInputSpec, CertifyGoodSpec};
+use guac::client::intrinsic::certify_vex_statement::{
+    CertifyVexStatementSpec, VexJustification, VexStatementInputSpec, VexStatus,
+};
+use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 use guac::client::intrinsic::PackageSourceOrArtifact;
 use guac::client::intrinsic::PkgMatchType;
 use guac::client::GuacClient;
-use guac::client::intrinsic::certify_vex_statement::{CertifyVexStatementSpec, VexJustification, VexStatementInputSpec, VexStatus};
-use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 
 use crate::common::guac_url;
 
@@ -20,19 +21,18 @@ async fn certify_vex_statement() -> Result<(), anyhow::Error> {
 
     let package = PackageUrl::from_str("pkg:maven/com/foo/vexed@1.2.3")?;
 
-    client.intrinsic().ingest_package(
-        &package.clone().into()
-    ).await?;
+    client
+        .intrinsic()
+        .ingest_package(&package.clone().into())
+        .await?;
 
     let vuln = VulnerabilityInputSpec {
         r#type: "cve".to_string(),
         vulnerability_id: "CVE-123".to_string(),
     };
 
-    client.intrinsic().ingest_vulnerability(
-        &vuln
-    ).await?;
-    
+    client.intrinsic().ingest_vulnerability(&vuln).await?;
+
     let vex = VexStatementInputSpec {
         status: VexStatus::Affected,
         vex_justification: VexJustification::NotProvided,
@@ -43,22 +43,20 @@ async fn certify_vex_statement() -> Result<(), anyhow::Error> {
         collector: "test-vex-collector".to_string(),
     };
 
-    client.intrinsic().ingest_certify_vex_statement(
-        &package.clone().into(),
-        &vuln,
-        &vex
-    ).await?;
+    client
+        .intrinsic()
+        .ingest_certify_vex_statement(&package.clone().into(), &vuln, &vex)
+        .await?;
 
-    let results = client.intrinsic().certify_vex_statement(
-        &CertifyVexStatementSpec {
-            subject: Some(
-                package.clone().into()
-            ),
+    let results = client
+        .intrinsic()
+        .certify_vex_statement(&CertifyVexStatementSpec {
+            subject: Some(package.clone().into()),
             ..Default::default()
-        }
-    ).await?;
+        })
+        .await?;
 
-    assert_eq!( 1, results.len());
+    assert_eq!(1, results.len());
 
     Ok(())
 }
