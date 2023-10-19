@@ -101,25 +101,26 @@ pub enum VexJustification {
 
 #[derive(Clone, Debug)]
 pub struct VexStatementInputSpec {
-    status: VexStatus,
-    vex_justification: VexJustification,
-    statement: String,
-    status_notes: String,
-    known_since: Time,
-    origin: String,
-    collector: String,
+    pub status: VexStatus,
+    pub vex_justification: VexJustification,
+    pub statement: String,
+    pub status_notes: String,
+    pub known_since: Time,
+    pub origin: String,
+    pub collector: String,
 }
 
 
+#[derive(Debug, Default)]
 pub struct CertifyVexStatementSpec {
-    id: Option<Id>,
-    subject: Option<PackageOrArtifactSpec>,
-    vulnerability: Option<VulnerabilitySpec>,
-    status: Option<VexStatus>,
-    vex_justification: Option<VexJustification>,
-    statement: Option<String>,
-    status_notes: Option<String>,
-    known_since: Option<Time>,
-    origin: Option<String>,
-    collector: Option<String>,
+    pub id: Option<Id>,
+    pub subject: Option<PackageOrArtifactSpec>,
+    pub vulnerability: Option<VulnerabilitySpec>,
+    pub status: Option<VexStatus>,
+    pub vex_justification: Option<VexJustification>,
+    pub statement: Option<String>,
+    pub status_notes: Option<String>,
+    pub known_since: Option<Time>,
+    pub origin: Option<String>,
+    pub collector: Option<String>,
 }
