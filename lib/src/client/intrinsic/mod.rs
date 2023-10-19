@@ -13,8 +13,8 @@ pub mod has_sbom;
 pub mod is_dependency;
 pub mod package;
 pub mod path;
-pub mod vulnerability;
 pub mod vuln_metadata;
+pub mod vulnerability;
 
 pub struct IntrinsicGuacClient {
     client: GuacClient,

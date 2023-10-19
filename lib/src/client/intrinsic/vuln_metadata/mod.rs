@@ -1,11 +1,13 @@
 use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
 
-use crate::client::{Error, Id};
-use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::intrinsic::vuln_metadata::ingest::IngestVulnerabilityMetadata;
-use crate::client::intrinsic::vuln_metadata::query::{query_vulnerability_metadata, QueryVulnerabilityMetadata};
+use crate::client::intrinsic::vuln_metadata::query::{
+    query_vulnerability_metadata, QueryVulnerabilityMetadata,
+};
 use crate::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
+use crate::client::intrinsic::IntrinsicGuacClient;
+use crate::client::{Error, Id};
 
 mod ingest;
 mod query;
@@ -40,12 +42,12 @@ impl IntrinsicGuacClient {
 
     pub async fn vuln_metadata(
         &self,
-        vulnerability_metadata_spec: &VulnerabilityMetadataSpec
-    ) -> Result<Vec<VulnerabilityMetadata>, Error>{
+        vulnerability_metadata_spec: &VulnerabilityMetadataSpec,
+    ) -> Result<Vec<VulnerabilityMetadata>, Error> {
         use self::query::query_vulnerability_metadata;
 
         let variables = query_vulnerability_metadata::Variables {
-            vulnerability_metadata_spec: vulnerability_metadata_spec.into()
+            vulnerability_metadata_spec: vulnerability_metadata_spec.into(),
         };
 
         let response_body =
