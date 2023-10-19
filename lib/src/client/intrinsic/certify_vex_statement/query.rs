@@ -40,7 +40,7 @@ impl From<&CertifyVexStatementSpec> for query_certify_vex_statement::CertifyVEXS
             vex_justification: value.vex_justification.as_ref().map(|inner| inner.into()),
             statement: value.statement.clone(),
             status_notes: value.status_notes.clone(),
-            known_since: value.known_since.clone(),
+            known_since: value.known_since,
             origin: value.origin.clone(),
             collector: value.collector.clone(),
         }
@@ -79,7 +79,7 @@ impl From<&VulnerabilitySpec> for query_certify_vex_statement::VulnerabilitySpec
             id: value.id.clone(),
             type_: value.r#type.clone(),
             vulnerability_id: value.vulnerability_id.clone(),
-            no_vuln: value.no_vuln.clone(),
+            no_vuln: value.no_vuln,
         }
     }
 }

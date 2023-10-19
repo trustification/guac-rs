@@ -1,8 +1,7 @@
 use guac::client::intrinsic::vuln_metadata::{
-    VulnerabilityMetadata, VulnerabilityMetadataInputSpec, VulnerabilityMetadataSpec,
-    VulnerabilityScoreType,
+    VulnerabilityMetadataInputSpec, VulnerabilityMetadataSpec, VulnerabilityScoreType,
 };
-use guac::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
+use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 use guac::client::GuacClient;
 
 use crate::common::guac_url;

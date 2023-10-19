@@ -22,7 +22,7 @@ impl From<&VulnerabilityMetadataSpec> for query_vulnerability_metadata::Vulnerab
             id: value.id.clone(),
             vulnerability: value.vulnerability.as_ref().map(|inner| inner.into()),
             score_type: value.score_type.as_ref().map(|inner| inner.into()),
-            score_value: value.score_value.clone(),
+            score_value: value.score_value,
             comparator: value.comparator.as_ref().map(|inner| inner.into()),
             timestamp: value.timestamp,
             origin: value.origin.clone(),
