@@ -1,0 +1,31 @@
+fragment allVulnEqualTree on VulnEqual {
+    id
+    vulnerabilities {
+        id
+        type
+        vulnerabilityIDs {
+            id
+            vulnerabilityID
+        }
+    }
+    justification
+    origin
+    collector
+}
+
+mutation IngestVulnEqual($vulnerability: VulnerabilityInputSpec!, $other_vulnerability: VulnerabilityInputSpec!, $vuln_equal: VulnEqualInputSpec!) {
+    ingestVulnEqual(
+        vulnerability: $vulnerability
+        otherVulnerability: $other_vulnerability
+        vulnEqual: $vuln_equal
+    )
+}
+
+query QueryVulnEqual($vuln_equal_spec: VulnEqualSpec!) {
+    vulnEqual(
+        vulnEqualSpec: $vuln_equal_spec
+    ) {
+        ...allVulnEqualTree
+    }
+
+}

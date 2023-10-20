@@ -9,7 +9,7 @@ use crate::common::guac_url;
 mod common;
 
 #[tokio::test]
-async fn vulnerability() -> Result<(), anyhow::Error> {
+async fn vuln_metadata() -> Result<(), anyhow::Error> {
     let client = GuacClient::new(&guac_url());
 
     let vuln = VulnerabilityInputSpec {

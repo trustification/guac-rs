@@ -4,7 +4,8 @@ use packageurl::PackageUrl;
 
 use crate::client::intrinsic::certify_vuln::CertifyVulnSpec;
 use crate::client::intrinsic::is_dependency::IsDependencySpec;
-use crate::client::intrinsic::vulnerability::VulnerabilitySpec;
+use crate::client::intrinsic::vuln_equal::VulnEqualSpec;
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilitySpec};
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::semantic::ingest::{Predicate, Subject};
 use crate::client::{Error, GuacClient};
@@ -103,7 +104,6 @@ impl SemanticGuacClient {
 
         for vuln in vulns {
             for id in &vuln.vulnerability_ids {
-                //println!("VULN {:?}", vuln);
                 let first_order_affected = intrinsic
                     //.neighbors(&id.id, vec![Edge::VulnerabilityCertifyVuln])
                     .certify_vuln(&CertifyVulnSpec {
@@ -116,7 +116,6 @@ impl SemanticGuacClient {
                     .await?;
 
                 for each in first_order_affected {
-                    println!("FIRST: {:?}", each);
                     let purls = each.package.try_as_purls()?;
 
                     for purl in &purls {
@@ -133,8 +132,6 @@ impl SemanticGuacClient {
         for root in roots {
             paths.extend_from_slice(&self.transitive_dependent_paths_of(&root).await?);
         }
-
-        //println!("roots {:?}", roots);
 
         Ok(paths)
     }
@@ -216,5 +213,46 @@ impl SemanticGuacClient {
         }
 
         Ok(dependents)
+    }
+
+    /// Locate all instances of a vulnerability and any equal vulnerabilities (aliases)
+    ///
+    /// Unlike GUAC's own VulnEqual, this function applies the transitive property of equality
+    /// so that if VulnEqual(A,B) and VulnEqual(B,C), searching for vulnerability(A) will
+    /// return all A, B, and C.
+    ///
+    /// By default, GUAC will only return non-transitively first-order equal vulnerabilities.
+    pub async fn vulnerabilities(&self, vuln_id: &str) -> Result<Vec<Vulnerability>, Error> {
+        let mut vulnerabilities = Vec::new();
+        let mut processed = Vec::new();
+        let mut queue = vec![vuln_id.to_lowercase().to_string()];
+
+        while let Some(next) = queue.pop() {
+            processed.push(next.clone());
+            for equal in self
+                .intrinsic()
+                .vuln_equal(&VulnEqualSpec {
+                    vulnerabilities: Some(vec![VulnerabilitySpec {
+                        vulnerability_id: Some(next),
+                        ..Default::default()
+                    }]),
+                    ..Default::default()
+                })
+                .await?
+            {
+                for vuln in equal.vulnerabilities {
+                    if !vulnerabilities.contains(&vuln) {
+                        vulnerabilities.push(vuln.clone())
+                    }
+                    for vuln_id in vuln.vulnerability_ids {
+                        if !processed.contains(&vuln_id.vulnerability_id) {
+                            queue.push(vuln_id.vulnerability_id)
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(vulnerabilities)
     }
 }
