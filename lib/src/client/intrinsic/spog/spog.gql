@@ -1,15 +1,59 @@
+fragment allCertifyVEXStatementTree on CertifyVEXStatement {
+    id
+    subject {
+        __typename
+        ... on Package {
+            id
+            type
+            namespaces {
+                id
+                namespace
+                names {
+                    id
+                    name
+                    versions {
+                        id
+                        version
+                        qualifiers {
+                            key
+                            value
+                        }
+                        subpath
+                    }
+                }
+            }
+        }
+        ... on Artifact {
+            id
+            algorithm
+            digest
+        }
+    }
+    vulnerability {
+        id
+        type
+        vulnerabilityIDs {
+            id
+            vulnerabilityID
+        }
+    }
+    status
+    vexJustification
+    statement
+    statusNotes
+    knownSince
+    origin
+    collector
+}
+
+
 query QuerySpog($vulnerabilityID: String!) {
   findTopLevelPackagesRelatedToVulnerability(
     vulnerabilityID: $vulnerabilityID
   ) {
     __typename
     ... on CertifyVEXStatement {
-      vulnerability {
-        vulnerabilityIDs {
-          vulnerabilityID
-        }
-      }
-      status
+      ...allCertifyVEXStatementTree
     }
     ... on Package {
       id

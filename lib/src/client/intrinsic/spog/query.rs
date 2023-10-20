@@ -1,6 +1,8 @@
+use crate::client::graph::Node;
+use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
-use crate::client::graph::Node;
+type Time = chrono::DateTime<Utc>;
 
 #[derive(GraphQLQuery)]
 #[graphql(
