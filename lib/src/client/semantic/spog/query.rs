@@ -1,24 +1,19 @@
-mod query;
-
 use crate::client::graph::Node;
-use crate::client::intrinsic::spog::query::QuerySpog;
+use chrono::Utc;
+use graphql_client::GraphQLQuery;
 
-use super::certify_vex_statement::{self, CertifyVexStatement, VexJustification, VexStatus};
-use super::vulnerability::{Vulnerability, VulnerabilityId};
+use crate::client::intrinsic::certify_vex_statement::{self, CertifyVexStatement, VexJustification, VexStatus};
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
 use crate::client::intrinsic::package::{
     Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
     PkgSpec,
 };
-use crate::client::intrinsic::spog::query::query_spog::allCertifyVEXStatementTree;
-use crate::client::intrinsic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerability as QS;
-use crate::client::intrinsic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerabilityOnPackage as QSPackage;
-use crate::client::intrinsic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerabilityOnPackageNamespaces as QSPackageNamespaces;
-use crate::client::intrinsic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerabilityOnPackageNamespacesNames as QSPackageNamespacesNames;
-use crate::client::intrinsic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerabilityOnPackageNamespacesNamesVersions as QSPackageNamespacesNamesVersions;
-use crate::client::intrinsic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerabilityOnPackageNamespacesNamesVersionsQualifiers as QSPackageNamespacesNamesVersionsQualifiers;
-use crate::client::intrinsic::spog::query::query_spog::VexJustification as QSVexJustification;
-use crate::client::intrinsic::spog::query::query_spog::VexStatus as QSVexStatus;
-use crate::client::intrinsic::spog::query::query_spog::{
+use crate::client::semantic::spog::query::query_spog::allCertifyVEXStatementTree;
+use crate::client::semantic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerability as QS;
+use crate::client::semantic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerabilityOnPackage as QSPackage;
+use crate::client::semantic::spog::query::query_spog::VexJustification as QSVexJustification;
+use crate::client::semantic::spog::query::query_spog::VexStatus as QSVexStatus;
+use crate::client::semantic::spog::query::query_spog::{
     AllCertifyVexStatementTreeSubject, AllCertifyVexStatementTreeSubjectOnPackage,
     AllCertifyVexStatementTreeSubjectOnPackageNamespaces,
     AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames,
@@ -26,73 +21,24 @@ use crate::client::intrinsic::spog::query::query_spog::{
     AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
     AllCertifyVexStatementTreeVulnerability,
     AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs,
+    AllPkgTreeNamespaces, AllPkgTreeNamespacesNames, AllPkgTreeNamespacesNamesVersions, AllPkgTreeNamespacesNamesVersionsQualifiers,
 };
 use crate::client::intrinsic::{
-    IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec,
+    PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec,
 };
-use crate::client::{Error, Id};
-use chrono::Utc;
-use graphql_client::reqwest::post_graphql;
-use graphql_client::GraphQLQuery;
-use packageurl::PackageUrl;
-use serde_json::json;
 
 type Time = chrono::DateTime<Utc>;
 
-impl IntrinsicGuacClient {
-    pub async fn product_by_cve(&self, vulnerability_id: &str) -> Result<Vec<ProductByCve>, Error> {
-        use self::query::query_spog;
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "src/client/intrinsic/schema.json",
+    query_path = "src/client/semantic/spog/spog.gql",
+    response_derives = "Debug, Serialize, Deserialize"
+)]
+pub struct QuerySpog;
 
-        let variables = query_spog::Variables {
-            vulnerability_id: vulnerability_id.to_string(),
-        };
-        let response_body =
-            post_graphql::<QuerySpog, _>(self.client(), self.url(), variables).await?;
 
-        if let Some(errors) = response_body.errors {
-            return Err(Error::GraphQL(errors));
-        }
 
-        let data: <QuerySpog as GraphQLQuery>::ResponseData =
-            response_body.data.ok_or(Error::GraphQL(vec![]))?;
-        let mut res = Vec::new();
-
-        for entry in &data.find_top_level_packages_related_to_vulnerability {
-            let len = entry.len();
-            let root = match &entry[len - 1] {
-                QS::Package(inner) => Package::from(inner),
-                _ => return Err(Error::GraphQL(vec![])),
-            };
-
-            let vex = match &entry[0] {
-                QS::CertifyVEXStatement(inner) => CertifyVexStatement::from(inner),
-                _ => return Err(Error::GraphQL(vec![])),
-            };
-            let mut path = Vec::new();
-            for value in &entry[1..len - 1] {
-                match value {
-                    QS::Package(inner) => {
-                        path.push(Package::from(inner));
-                    }
-                    val => {
-                        //skipping
-                    }
-                }
-            }
-            let item = ProductByCve { root, vex, path };
-            res.push(item);
-        }
-
-        Ok(res)
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct ProductByCve {
-    pub root: Package,
-    pub vex: CertifyVexStatement,
-    pub path: Vec<Package>,
-}
 
 impl From<&allCertifyVEXStatementTree> for CertifyVexStatement {
     fn from(value: &allCertifyVEXStatementTree) -> Self {
@@ -241,8 +187,8 @@ impl From<&QSPackage> for Package {
     }
 }
 
-impl From<&QSPackageNamespaces> for PackageNamespace {
-    fn from(value: &QSPackageNamespaces) -> Self {
+impl From<&AllPkgTreeNamespaces> for PackageNamespace {
+    fn from(value: &AllPkgTreeNamespaces) -> Self {
         Self {
             id: value.id.clone(),
             namespace: value.namespace.clone(),
@@ -251,8 +197,8 @@ impl From<&QSPackageNamespaces> for PackageNamespace {
     }
 }
 
-impl From<&QSPackageNamespacesNames> for PackageName {
-    fn from(value: &QSPackageNamespacesNames) -> Self {
+impl From<&AllPkgTreeNamespacesNames> for PackageName {
+    fn from(value: &AllPkgTreeNamespacesNames) -> Self {
         Self {
             id: value.id.clone(),
             name: value.name.clone(),
@@ -261,8 +207,8 @@ impl From<&QSPackageNamespacesNames> for PackageName {
     }
 }
 
-impl From<&QSPackageNamespacesNamesVersions> for PackageVersion {
-    fn from(value: &QSPackageNamespacesNamesVersions) -> Self {
+impl From<&AllPkgTreeNamespacesNamesVersions> for PackageVersion {
+    fn from(value: &AllPkgTreeNamespacesNamesVersions) -> Self {
         Self {
             id: value.id.clone(),
             version: value.version.clone(),
@@ -272,8 +218,8 @@ impl From<&QSPackageNamespacesNamesVersions> for PackageVersion {
     }
 }
 
-impl From<&QSPackageNamespacesNamesVersionsQualifiers> for PackageQualifier {
-    fn from(value: &QSPackageNamespacesNamesVersionsQualifiers) -> Self {
+impl From<&AllPkgTreeNamespacesNamesVersionsQualifiers> for PackageQualifier {
+    fn from(value: &AllPkgTreeNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),

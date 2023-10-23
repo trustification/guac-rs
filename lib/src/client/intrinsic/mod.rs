@@ -13,7 +13,6 @@ pub mod has_sbom;
 pub mod is_dependency;
 pub mod package;
 pub mod path;
-pub mod spog;
 pub mod vuln_equal;
 pub mod vuln_metadata;
 pub mod vulnerability;

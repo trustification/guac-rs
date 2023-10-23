@@ -11,6 +11,7 @@ use crate::client::semantic::ingest::{Predicate, Subject};
 use crate::client::{Error, GuacClient};
 
 pub mod ingest;
+pub mod spog;
 
 pub struct SemanticGuacClient {
     client: GuacClient,
