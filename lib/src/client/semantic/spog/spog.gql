@@ -1,3 +1,42 @@
+query QuerySpog($vulnerabilityID: String!) {
+  findTopLevelPackagesRelatedToVulnerability(
+    vulnerabilityID: $vulnerabilityID
+  ) {
+    __typename
+    ... on CertifyVEXStatement {
+      ...allCertifyVEXStatementTree
+    }
+    ... on Package {
+      ...allPkgTree
+    }
+    ... on IsDependency {
+      dependencyType
+    }
+  }
+}
+
+fragment allPkgTree on Package {
+  id
+  type
+  namespaces {
+    id
+    namespace
+    names {
+      id
+      name
+      versions {
+        id
+        version
+        qualifiers {
+          key
+          value
+        }
+        subpath
+      }
+    }
+  }
+}
+
 fragment allCertifyVEXStatementTree on CertifyVEXStatement {
     id
     subject {
@@ -44,40 +83,4 @@ fragment allCertifyVEXStatementTree on CertifyVEXStatement {
     knownSince
     origin
     collector
-}
-
-
-query QuerySpog($vulnerabilityID: String!) {
-  findTopLevelPackagesRelatedToVulnerability(
-    vulnerabilityID: $vulnerabilityID
-  ) {
-    __typename
-    ... on CertifyVEXStatement {
-      ...allCertifyVEXStatementTree
-    }
-    ... on Package {
-      id
-      type
-      namespaces {
-        id
-        namespace
-        names {
-          id
-          name
-          versions {
-            id
-            version
-            qualifiers {
-              key
-              value
-            }
-            subpath
-          }
-        }
-      }
-    }
-    ... on IsDependency {
-      dependencyType
-    }
-  }
 }
