@@ -97,6 +97,12 @@ impl SemanticGuacClient {
         .await?;
 
         if let Some(errors) = response_body.errors {
+            //TODO fix query not to return error in this case
+            for error in errors.clone().into_iter() {
+                if error.message == "failed to locate package based on purl" {
+                    return Ok(HashMap::new());
+                }
+            }
             return Err(Error::GraphQL(errors));
         }
 
