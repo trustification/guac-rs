@@ -1849,6 +1849,27 @@
           "possibleTypes": []
         },
         {
+          "description": "CertifyVulnOrCertifyVEXStatement is a union of CertifyVuln and CertifyVEXStatement.",
+          "enumValues": [],
+          "fields": [],
+          "inputFields": [],
+          "interfaces": [],
+          "kind": "UNION",
+          "name": "CertifyVulnOrCertifyVEXStatement",
+          "possibleTypes": [
+            {
+              "kind": "OBJECT",
+              "name": "CertifyVuln",
+              "ofType": null
+            },
+            {
+              "kind": "OBJECT",
+              "name": "CertifyVEXStatement",
+              "ofType": null
+            }
+          ]
+        },
+        {
           "description": "CertifyVulnSpec allows filtering the list of vulnerability certifications to\nreturn in a query.\n\nSpecifying just the package allows to query for all vulnerabilities associated\nwith the package.\n\nOnly one vulnerability (or NoVuln vulnerability type) may be\nspecified.",
           "enumValues": [],
           "fields": [],
@@ -10354,6 +10375,84 @@
                           "ofType": null
                         }
                       }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "purl",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all vulnerabilities related to a package.",
+              "isDeprecated": false,
+              "name": "findVulnerability",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "CertifyVulnOrCertifyVEXStatement",
+                      "ofType": null
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "args": [
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "cpe",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                }
+              ],
+              "deprecationReason": null,
+              "description": "Returns all vulnerabilities related to the package identified by the CPE",
+              "isDeprecated": false,
+              "name": "findVulnerabilityByCPE",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "UNION",
+                      "name": "CertifyVulnOrCertifyVEXStatement",
+                      "ofType": null
                     }
                   }
                 }
