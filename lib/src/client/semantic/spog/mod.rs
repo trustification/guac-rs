@@ -1,9 +1,10 @@
 mod find_vulnerability;
 mod query;
 
-use std::collections::HashMap;
+use std::collections::{BTreeSet, HashMap};
 
 use crate::client::graph::Node;
+use crate::client::intrinsic::certify_vuln::CertifyVuln;
 use crate::client::semantic::spog::find_vulnerability::FindVulnerability;
 use crate::client::semantic::spog::query::QuerySpog;
 
@@ -82,7 +83,7 @@ impl SemanticGuacClient {
     pub async fn find_vulnerability(
         &self,
         purl: &str,
-    ) -> Result<HashMap<String, Vec<String>>, Error> {
+    ) -> Result<HashMap<String, BTreeSet<String>>, Error> {
         use self::find_vulnerability::find_vulnerability;
 
         let variables = find_vulnerability::Variables {
@@ -102,7 +103,7 @@ impl SemanticGuacClient {
         let data: <FindVulnerability as GraphQLQuery>::ResponseData =
             response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        let mut result: HashMap<String, Vec<String>> = HashMap::new();
+        let mut result: HashMap<String, BTreeSet<String>> = HashMap::new();
 
         for entry in &data.find_vulnerability {
             match entry {
@@ -113,20 +114,33 @@ impl SemanticGuacClient {
                     match vex.subject {
                         SubjectPackage(inner) => {
                             for pkg in inner.try_as_purls()? {
-                                result.insert(
-                                    pkg.to_string(),
+                                let entry =
+                                    result.entry(pkg.to_string()).or_insert(BTreeSet::new());
+                                entry.extend(
                                     vex.vulnerability
                                         .vulnerability_ids
                                         .iter()
                                         .map(|v| v.vulnerability_id.clone())
-                                        .collect(),
+                                        .collect::<Vec<_>>(),
                                 );
                             }
                         }
                         _ => {}
                     };
                 }
-                _ => {}
+                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVuln(inner) => {
+                    let cert = CertifyVuln::from(inner);
+                    for pkg in cert.package.try_as_purls()? {
+                        let entry = result.entry(pkg.to_string()).or_insert(BTreeSet::new());
+                        entry.extend(
+                            cert.vulnerability
+                                .vulnerability_ids
+                                .iter()
+                                .map(|v| v.vulnerability_id.clone())
+                                .collect::<Vec<_>>(),
+                        );
+                    }
+                }
             }
         }
 
