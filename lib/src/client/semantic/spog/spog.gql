@@ -15,6 +15,15 @@ query QuerySpog($vulnerabilityID: String!) {
   }
 }
 
+query FindVulnerability($purl: String!) {
+  findVulnerability(purl: $purl) {
+    __typename
+    ... on CertifyVEXStatement {
+      ...allCertifyVEXStatementTree
+    }
+  }
+}
+
 fragment allPkgTree on Package {
   id
   type

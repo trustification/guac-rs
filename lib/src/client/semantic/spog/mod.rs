@@ -1,14 +1,21 @@
+mod find_vulnerability;
 mod query;
 
+use std::collections::HashMap;
+
 use crate::client::graph::Node;
+use crate::client::semantic::spog::find_vulnerability::FindVulnerability;
 use crate::client::semantic::spog::query::QuerySpog;
 
-use crate::client::intrinsic::certify_vex_statement::{self, CertifyVexStatement, VexJustification, VexStatus};
-use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
+use crate::client::intrinsic::certify_vex_statement::{
+    self, CertifyVexStatement, VexJustification, VexStatus,
+};
 use crate::client::intrinsic::package::{
     Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
     PkgSpec,
 };
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
+use crate::client::intrinsic::PackageOrArtifact::Package as SubjectPackage;
 use crate::client::semantic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerability as QS;
 use crate::client::semantic::SemanticGuacClient;
 
@@ -28,8 +35,12 @@ impl SemanticGuacClient {
         let variables = query_spog::Variables {
             vulnerability_id: vulnerability_id.to_string(),
         };
-        let response_body =
-            post_graphql::<QuerySpog, _>(self.intrinsic().client(), self.intrinsic().url(), variables).await?;
+        let response_body = post_graphql::<QuerySpog, _>(
+            self.intrinsic().client(),
+            self.intrinsic().url(),
+            variables,
+        )
+        .await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -66,6 +77,60 @@ impl SemanticGuacClient {
         }
 
         Ok(res)
+    }
+
+    pub async fn find_vulnerability(
+        &self,
+        purl: &str,
+    ) -> Result<HashMap<String, Vec<String>>, Error> {
+        use self::find_vulnerability::find_vulnerability;
+
+        let variables = find_vulnerability::Variables {
+            purl: purl.to_string(),
+        };
+        let response_body = post_graphql::<FindVulnerability, _>(
+            self.intrinsic().client(),
+            self.intrinsic().url(),
+            variables,
+        )
+        .await?;
+
+        if let Some(errors) = response_body.errors {
+            return Err(Error::GraphQL(errors));
+        }
+
+        let data: <FindVulnerability as GraphQLQuery>::ResponseData =
+            response_body.data.ok_or(Error::GraphQL(vec![]))?;
+
+        let mut result: HashMap<String, Vec<String>> = HashMap::new();
+
+        for entry in &data.find_vulnerability {
+            match entry {
+                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVEXStatement(
+                    inner,
+                ) => {
+                    let vex: CertifyVexStatement = CertifyVexStatement::from(inner);
+                    match vex.subject {
+                        SubjectPackage(inner) => {
+                            for pkg in inner.try_as_purls()? {
+                                result.insert(
+                                    pkg.to_string(),
+                                    vex.vulnerability
+                                        .vulnerability_ids
+                                        .iter()
+                                        .map(|v| v.vulnerability_id.clone())
+                                        .collect(),
+                                );
+                            }
+                        }
+                        _ => {}
+                    };
+                }
+                _ => {}
+            }
+        }
+
+        Ok(result)
     }
 }
 
