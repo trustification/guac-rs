@@ -21,6 +21,9 @@ query FindVulnerability($purl: String!) {
     ... on CertifyVEXStatement {
       ...allCertifyVEXStatementTree
     }
+    ... on CertifyVuln {
+      ...allCertifyVulnTree
+    }
   }
 }
 
@@ -92,4 +95,46 @@ fragment allCertifyVEXStatementTree on CertifyVEXStatement {
     knownSince
     origin
     collector
+}
+
+fragment allCertifyVulnTree on CertifyVuln {
+    id
+    package {
+        id
+        type
+        namespaces {
+            id
+            namespace
+            names {
+                id
+                name
+                versions {
+                    id
+                    version
+                    qualifiers {
+                        key
+                        value
+                    }
+                    subpath
+                }
+            }
+        }
+    }
+    vulnerability {
+        id
+        type
+        vulnerabilityIDs {
+            id
+            vulnerabilityID
+        }
+    }
+    metadata {
+        dbUri
+        dbVersion
+        scannerUri
+        scannerVersion
+        timeScanned
+        origin
+        collector
+    }
 }
