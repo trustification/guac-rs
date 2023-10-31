@@ -119,16 +119,10 @@ impl SemanticGuacClient {
                     let vex: CertifyVexStatement = CertifyVexStatement::from(inner);
                     match vex.subject {
                         SubjectPackage(inner) => {
-                            for pkg in inner.try_as_purls()? {
+                            for v in vex.vulnerability.vulnerability_ids {
                                 let entry =
-                                    result.entry(pkg.to_string()).or_insert(BTreeSet::new());
-                                entry.extend(
-                                    vex.vulnerability
-                                        .vulnerability_ids
-                                        .iter()
-                                        .map(|v| v.vulnerability_id.clone())
-                                        .collect::<Vec<_>>(),
-                                );
+                                    result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                                entry.extend(inner.try_as_purls()?.iter().map(|p| p.to_string()));
                             }
                         }
                         _ => {}
@@ -136,15 +130,9 @@ impl SemanticGuacClient {
                 }
                 find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVuln(inner) => {
                     let cert = CertifyVuln::from(inner);
-                    for pkg in cert.package.try_as_purls()? {
-                        let entry = result.entry(pkg.to_string()).or_insert(BTreeSet::new());
-                        entry.extend(
-                            cert.vulnerability
-                                .vulnerability_ids
-                                .iter()
-                                .map(|v| v.vulnerability_id.clone())
-                                .collect::<Vec<_>>(),
-                        );
+                    for v in cert.vulnerability.vulnerability_ids {
+                        let entry = result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                        entry.extend(cert.package.try_as_purls()?.iter().map(|p| p.to_string()));
                     }
                 }
             }
