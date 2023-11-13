@@ -15,8 +15,8 @@ query QuerySpog($vulnerabilityID: String!) {
   }
 }
 
-query FindVulnerability($purl: String!) {
-  findVulnerability(purl: $purl) {
+query FindVulnerability($purl: String!, $offset: Int, $limit: Int) {
+  findVulnerability(purl: $purl, offset: $offset, limit: $limit) {
     __typename
     ... on CertifyVEXStatement {
       ...allCertifyVEXStatementTree

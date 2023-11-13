@@ -26,7 +26,7 @@ async fn find_vulnerability() -> Result<(), anyhow::Error> {
 
     let result = client
         .semantic()
-        .find_vulnerability("pkg:guac/pkg/rhel-7.9.z@7.9.z")
+        .find_vulnerability("pkg:guac/pkg/rhel-7.9.z@7.9.z", Some(0), Some(20))
         .await?;
     println!("result {:?}", result);
 
