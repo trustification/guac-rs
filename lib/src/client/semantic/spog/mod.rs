@@ -83,11 +83,15 @@ impl SemanticGuacClient {
     pub async fn find_vulnerability(
         &self,
         purl: &str,
+        offset: Option<i64>,
+        limit: Option<i64>,
     ) -> Result<HashMap<String, BTreeSet<String>>, Error> {
         use self::find_vulnerability::find_vulnerability;
 
         let variables = find_vulnerability::Variables {
             purl: purl.to_string(),
+            offset,
+            limit,
         };
         let response_body = post_graphql::<FindVulnerability, _>(
             self.intrinsic().client(),

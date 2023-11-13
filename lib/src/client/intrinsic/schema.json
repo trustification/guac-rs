@@ -10395,6 +10395,26 @@
                       "ofType": null
                     }
                   }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "offset",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  }
+                },
+                {
+                  "defaultValue": null,
+                  "description": null,
+                  "name": "limit",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  }
                 }
               ],
               "deprecationReason": null,
