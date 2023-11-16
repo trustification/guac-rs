@@ -27,6 +27,18 @@ query FindVulnerability($purl: String!, $offset: Int, $limit: Int) {
   }
 }
 
+query FindVulnerabilityBySbomURI($sbomURI: String!, $offset: Int, $limit: Int) {
+ findVulnerabilityBySbomURI(sbomURI: $sbomURI, offset: $offset, limit: $limit) {
+		__typename
+    ... on CertifyVEXStatement {
+			...allCertifyVEXStatementTree
+    }
+    ... on CertifyVuln {
+			...allCertifyVulnTree
+    }
+ }
+}
+
 fragment allPkgTree on Package {
   id
   type

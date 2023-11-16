@@ -1,4 +1,5 @@
 mod find_vulnerability;
+mod find_vulnerability_by_sbom_uri;
 mod query;
 
 use std::collections::{BTreeSet, HashMap};
@@ -6,6 +7,7 @@ use std::collections::{BTreeSet, HashMap};
 use crate::client::graph::Node;
 use crate::client::intrinsic::certify_vuln::CertifyVuln;
 use crate::client::semantic::spog::find_vulnerability::FindVulnerability;
+use crate::client::semantic::spog::find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomURI;
 use crate::client::semantic::spog::query::QuerySpog;
 
 use crate::client::intrinsic::certify_vex_statement::{
@@ -144,7 +146,74 @@ impl SemanticGuacClient {
 
         Ok(result)
     }
+
+    pub async fn find_vulnerability_by_sbom_uri(
+        &self,
+        sbom_uri: &str,
+        offset: Option<i64>,
+        limit: Option<i64>,
+    ) -> Result<HashMap<String, BTreeSet<String>>, Error> {
+        use self::find_vulnerability_by_sbom_uri::find_vulnerability_by_sbom_uri;
+
+        let variables = find_vulnerability_by_sbom_uri::Variables {
+            sbom_uri: sbom_uri.to_string(),
+            offset,
+            limit,
+        };
+        let response_body: graphql_client::Response<<FindVulnerabilityBySbomURI as GraphQLQuery>::ResponseData> = post_graphql::<FindVulnerabilityBySbomURI, _>(
+            self.intrinsic().client(),
+            self.intrinsic().url(),
+            variables,
+        )
+        .await?;
+
+        if let Some(errors) = response_body.errors {
+            //TODO fix query not to return error in this case
+            for error in errors.clone().into_iter() {
+                if error.message == "failed to locate package based on purl" {
+                    return Ok(HashMap::new());
+                }
+            }
+            return Err(Error::GraphQL(errors));
+        }
+
+        let data: <FindVulnerabilityBySbomURI as GraphQLQuery>::ResponseData =
+            response_body.data.ok_or(Error::GraphQL(vec![]))?;
+
+        let mut result: HashMap<String, BTreeSet<String>> = HashMap::new();
+
+        for entry in &data.find_vulnerability_by_sbom_uri {
+            match entry {
+                find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomUriFindVulnerabilityBySbomUri::CertifyVEXStatement(
+                    inner,
+                ) => {
+                    let vex: CertifyVexStatement = CertifyVexStatement::from(inner);
+                    match vex.subject {
+                        SubjectPackage(inner) => {
+                            for v in vex.vulnerability.vulnerability_ids {
+                                let entry =
+                                    result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                                entry.extend(inner.try_as_purls()?.iter().map(|p| p.to_string()));
+                            }
+                        }
+                        _ => {}
+                    };
+                }
+                find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomUriFindVulnerabilityBySbomUri::CertifyVuln(inner) => {
+                    let cert = CertifyVuln::from(inner);
+                    for v in cert.vulnerability.vulnerability_ids {
+                        let entry = result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                        entry.extend(cert.package.try_as_purls()?.iter().map(|p| p.to_string()));
+                    }
+                }
+            }
+        }
+
+        Ok(result)
+    }
 }
+
+
 
 #[derive(Debug, Clone)]
 pub struct ProductByCve {

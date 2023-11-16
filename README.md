@@ -132,5 +132,5 @@ cargo run --bin guac collect file example/seedwing-java-example.bom
 
 ```
 cargo install graphql_client_cli --force
-graphql-client introspect-schema http://localhost:8080/query > lib/src/graphql/schema.json
+graphql-client introspect-schema http://localhost:8080/query > lib/src/client/intrinsic/schema.json
 ```
