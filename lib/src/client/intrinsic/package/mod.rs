@@ -65,7 +65,10 @@ impl Package {
 
         for ns in &self.namespaces {
             for name in &ns.names {
-                let purl = PackageUrl::new(self.r#type.clone(), name.name.clone())?;
+                let mut purl = PackageUrl::new(self.r#type.clone(), name.name.clone())?;
+                if !ns.namespace.is_empty() {
+                    purl.with_namespace(ns.namespace.clone());
+                }
                 if name.versions.is_empty() {
                     purls.push(purl);
                 } else {
