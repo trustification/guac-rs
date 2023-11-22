@@ -1,0 +1,26 @@
+query FindDependentProduct($purl: String!, $offset: Int, $limit: Int) {
+  findDependentProduct(purl: $purl, offset: $offset, limit: $limit) {
+    uri
+    subject {
+      __typename
+      ... on Package {
+      type
+      namespaces {
+        namespace
+        names {
+          name
+          versions {
+            id
+            version
+            qualifiers {
+              key
+              value
+            }
+            subpath
+            }
+        }
+      }
+    }
+    }
+  }
+}

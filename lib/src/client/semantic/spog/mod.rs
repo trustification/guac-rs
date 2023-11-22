@@ -1,11 +1,13 @@
 mod find_vulnerability;
 mod find_vulnerability_by_sbom_uri;
 mod query;
+mod dependent_product;
 
 use std::collections::{BTreeSet, HashMap};
 
 use crate::client::graph::Node;
 use crate::client::intrinsic::certify_vuln::CertifyVuln;
+use crate::client::semantic::spog::dependent_product::FindDependentProduct;
 use crate::client::semantic::spog::find_vulnerability::FindVulnerability;
 use crate::client::semantic::spog::find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomURI;
 use crate::client::semantic::spog::query::QuerySpog;
@@ -208,6 +210,38 @@ impl SemanticGuacClient {
                 }
             }
         }
+
+        Ok(result)
+    }
+
+    pub async fn find_dependent_product(
+        &self,
+        purl: &str,
+        offset: Option<i64>,
+        limit: Option<i64>,
+    ) -> Result<Vec<String>, Error> {
+        use self::dependent_product::find_dependent_product;
+
+        let variables = find_dependent_product::Variables {
+            purl: purl.to_string(),
+            offset,
+            limit,
+        };
+        let response_body: graphql_client::Response<<FindDependentProduct as GraphQLQuery>::ResponseData> = post_graphql::<FindDependentProduct, _>(
+            self.intrinsic().client(),
+            self.intrinsic().url(),
+            variables,
+        )
+        .await?;
+
+        if let Some(errors) = response_body.errors {
+            return Err(Error::GraphQL(errors));
+        }
+
+        let data: <FindDependentProduct as GraphQLQuery>::ResponseData =
+            response_body.data.ok_or(Error::GraphQL(vec![]))?;
+
+        let result = data.find_dependent_product.iter().map(|entry| entry.uri.clone()).collect();
 
         Ok(result)
     }
