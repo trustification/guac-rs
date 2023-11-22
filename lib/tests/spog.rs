@@ -49,3 +49,19 @@ async fn find_vulnerability_by_sbom_uri() -> Result<(), anyhow::Error> {
 
     Ok(())
 }
+
+//TODO do proper testing
+//use ds1 data set
+#[ignore]
+#[tokio::test]
+async fn find_dependent_product() -> Result<(), anyhow::Error> {
+    let client = GuacClient::new(&"http://localhost:8085/query");
+
+    let result = client
+        .semantic()
+        .find_dependent_product("pkg:maven/org.xerial.snappy/snappy-java@1.1.8.4-redhat-00003?repository_url=https://maven.repository.redhat.com/ga/&type=jar", Some(0), Some(20))
+        .await?;
+    println!("{}", serde_json::to_string_pretty(&result).unwrap());
+
+    Ok(())
+}
