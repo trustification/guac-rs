@@ -1,0 +1,103 @@
+query findVulnerabilityBySbomURI {
+ #findVulnerabilityBySbomURI(sbomURI: "https://access.redhat.com/security/data/sbom/beta/spdx/rhel-7.9.z-c98403ce-5e02-4278-98ec-b36ecd1f46a5") {
+ findVulnerabilityBySbomURI(sbomURI: "https://access.redhat.com/security/data/sbom/beta/spdx/quarkus-bom-b52acd7c-3a3f-441e-aef0-bbdaa1ec8acf") {  
+		__typename
+  	... on CertifyVEXStatement {
+			...allCertifyVEXStatementTree
+    }
+  	... on CertifyVuln {
+			...allCertifyVulnTree
+    }
+ }
+}
+
+fragment allCertifyVulnTree on CertifyVuln {
+    id
+    package {
+        id
+        type
+        namespaces {
+            id
+            namespace
+            names {
+                id
+                name
+                versions {
+                    id
+                    version
+                    qualifiers {
+                        key
+                        value
+                    }
+                    subpath
+                }
+            }
+        }
+    }
+    vulnerability {
+        id
+        type
+        vulnerabilityIDs {
+            id
+            vulnerabilityID
+        }
+    }
+    metadata {
+        dbUri
+        dbVersion
+        scannerUri
+        scannerVersion
+        timeScanned
+        origin
+        collector
+    }
+}
+
+
+fragment allCertifyVEXStatementTree on CertifyVEXStatement {
+    id
+    subject {
+        __typename
+        ... on Package {
+            id
+            type
+            namespaces {
+                id
+                namespace
+                names {
+                    id
+                    name
+                    versions {
+                        id
+                        version
+                        qualifiers {
+                            key
+                            value
+                        }
+                        subpath
+                    }
+                }
+            }
+        }
+        ... on Artifact {
+            id
+            algorithm
+            digest
+        }
+    }
+    vulnerability {
+        id
+        type
+        vulnerabilityIDs {
+            id
+            vulnerabilityID
+        }
+    }
+    status
+    vexJustification
+    statement
+    statusNotes
+    knownSince
+    origin
+    collector
+}

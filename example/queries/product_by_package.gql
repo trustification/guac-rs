@@ -1,0 +1,55 @@
+query dependentProductQuarkus {
+  findDependentProduct(
+    purl: "pkg:maven/org.xerial.snappy/snappy-java@1.1.8.4-redhat-00003"
+  ) {
+    uri
+    subject {
+      ... on Package {
+      type
+      namespaces {
+        namespace
+        names {
+          name
+          versions {
+            id
+            version
+            qualifiers {
+              key
+              value
+            }
+            subpath
+            }
+        }
+      }
+    }
+    }
+  }
+}
+
+query dependentProductUBI8 {
+  findDependentProduct(
+    purl: "pkg:rpm/redhat/libuuid@2.32.1-42.el8_8?arch=x86_64", offset: 0, limit: 10
+  ) {
+    uri
+    subject {
+      ... on Package {
+      type
+      namespaces {
+        namespace
+        names {
+          name
+          versions {
+            id
+            version
+            qualifiers {
+              key
+              value
+            }
+            subpath
+            }
+        }
+      }
+    }
+    }
+  }
+}
