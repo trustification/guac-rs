@@ -88,7 +88,7 @@ pub struct CertifyVexStatement {
     pub collector: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum VexStatus {
     NotAffected,
     Affected,

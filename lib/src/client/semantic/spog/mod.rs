@@ -1,7 +1,7 @@
+mod dependent_product;
 mod find_vulnerability;
 mod find_vulnerability_by_sbom_uri;
 mod query;
-mod dependent_product;
 
 use std::collections::{BTreeSet, HashMap};
 
@@ -162,7 +162,9 @@ impl SemanticGuacClient {
             offset,
             limit,
         };
-        let response_body: graphql_client::Response<<FindVulnerabilityBySbomURI as GraphQLQuery>::ResponseData> = post_graphql::<FindVulnerabilityBySbomURI, _>(
+        let response_body: graphql_client::Response<
+            <FindVulnerabilityBySbomURI as GraphQLQuery>::ResponseData,
+        > = post_graphql::<FindVulnerabilityBySbomURI, _>(
             self.intrinsic().client(),
             self.intrinsic().url(),
             variables,
@@ -190,16 +192,19 @@ impl SemanticGuacClient {
                     inner,
                 ) => {
                     let vex: CertifyVexStatement = CertifyVexStatement::from(inner);
-                    match vex.subject {
-                        SubjectPackage(inner) => {
-                            for v in vex.vulnerability.vulnerability_ids {
-                                let entry =
-                                    result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
-                                entry.extend(inner.try_as_purls()?.iter().map(|p| p.to_string()));
+                    // TODO make status filter list configurable
+                    if vex.status == VexStatus::Affected {
+                        match vex.subject {
+                            SubjectPackage(inner) => {
+                                for v in vex.vulnerability.vulnerability_ids {
+                                    let entry =
+                                        result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                                    entry.extend(inner.try_as_purls()?.iter().map(|p| p.to_string()));
+                                }
                             }
-                        }
-                        _ => {}
-                    };
+                            _ => {}
+                        };
+                    }
                 }
                 find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomUriFindVulnerabilityBySbomUri::CertifyVuln(inner) => {
                     let cert = CertifyVuln::from(inner);
@@ -227,7 +232,9 @@ impl SemanticGuacClient {
             offset,
             limit,
         };
-        let response_body: graphql_client::Response<<FindDependentProduct as GraphQLQuery>::ResponseData> = post_graphql::<FindDependentProduct, _>(
+        let response_body: graphql_client::Response<
+            <FindDependentProduct as GraphQLQuery>::ResponseData,
+        > = post_graphql::<FindDependentProduct, _>(
             self.intrinsic().client(),
             self.intrinsic().url(),
             variables,
@@ -241,13 +248,15 @@ impl SemanticGuacClient {
         let data: <FindDependentProduct as GraphQLQuery>::ResponseData =
             response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        let result = data.find_dependent_product.iter().map(|entry| entry.uri.clone()).collect();
+        let result = data
+            .find_dependent_product
+            .iter()
+            .map(|entry| entry.uri.clone())
+            .collect();
 
         Ok(result)
     }
 }
-
-
 
 #[derive(Debug, Clone)]
 pub struct ProductByCve {
