@@ -68,3 +68,17 @@ $ TOKEN=$(curl -s -d "client_id=walker" -d "client_secret=ZVzq9AMOVUdMY1lSohpx1j
   'http://localhost:8090/realms/chicken/protocol/openid-connect/token' | jq -r .access_token)
 $ curl -v -X GET --oauth2-bearer $TOKEN "http://localhost:8083/api/v1/cve/cve-2023-34454/related-products" | jq
 ```
+
+* You can also create Guac image manually and use it with trustification
+
+```
+$ [guac] make container
+$ [trustification/deploy/compose] GUAC_IMAGE=local-organic-guac docker-compose -f compose.yaml -f compose-guac.yaml up --force-recreate
+```
+
+* You can even start it manually locally, for that you need to comment out `guac-graphql` service in `compose-guac.yaml` file and run something like
+
+```
+$ [guac] bin/guacgql --gql-backend ent --db-address "postgres://guac@localhost:5432/guac?sslmode=disable" --db-driver postgres --db-debug true --gql-debug true --gql-listen-port 8085
+```
+The rest of the system should work the same.
