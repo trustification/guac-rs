@@ -35,6 +35,12 @@ $ [trustification] RUST_LOG=info cargo run -p trust bombastic walker --sink http
 $ [trustification] RUST_LOG=info cargo run -p trust -- vexination walker --devmode -3 --sink http://localhost:8081/api/v1/vex --source ./data/ds1/csaf
 ```
 
+* Run v11y walker
+
+```
+RUST_LOG=info cargo run -p trust -- v11y walker --devmode --source ../cvelistV5/
+```
+
 * After this Trustification and Guac should be properly configured and populated with the test dataset
 * You can access [Guac GraphQL explorer](http://localhost:8085)
 * Some example generic queries to run can be found [here](https://github.com/guacsec/guac/tree/main/pkg/assembler/graphql/examples)
