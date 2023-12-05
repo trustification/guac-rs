@@ -29,6 +29,7 @@ use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
 use graphql_client::GraphQLQuery;
 use packageurl::PackageUrl;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 
 type Time = chrono::DateTime<Utc>;
@@ -82,6 +83,76 @@ impl SemanticGuacClient {
         }
 
         Ok(res)
+    }
+
+    pub async fn find_vulnerability_statuses(
+        &self,
+        purl: &str,
+        offset: Option<i64>,
+        limit: Option<i64>,
+    ) -> Result<Vec<VulnerabilityStatus>, Error> {
+        use self::find_vulnerability::find_vulnerability;
+
+        let variables = find_vulnerability::Variables {
+            purl: purl.to_string(),
+            offset,
+            limit,
+        };
+        let response_body = post_graphql::<FindVulnerability, _>(
+            self.intrinsic().client(),
+            self.intrinsic().url(),
+            variables,
+        )
+        .await?;
+
+        if let Some(errors) = response_body.errors {
+            //TODO fix query not to return error in this case
+            for error in errors.clone().into_iter() {
+                if error.message == "failed to locate package based on purl" {
+                    return Ok(Vec::new());
+                }
+            }
+            return Err(Error::GraphQL(errors));
+        }
+
+        let data: <FindVulnerability as GraphQLQuery>::ResponseData =
+            response_body.data.ok_or(Error::GraphQL(vec![]))?;
+
+        let mut result = Vec::new();
+
+        for entry in &data.find_vulnerability {
+            match entry {
+                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVEXStatement(
+                    inner,
+                ) => {
+                    let vex: CertifyVexStatement = CertifyVexStatement::from(inner);
+                    match vex.subject {
+                        SubjectPackage(inner) => {
+                            for v in vex.vulnerability.vulnerability_ids {
+                                result.push(VulnerabilityStatus {
+                                    id: v.vulnerability_id.clone(),
+                                    status: Some(vex.status.clone()),
+                                    justification: Some(vex.vex_justification.clone()),
+                                });
+                            }
+                        }
+                        _ => {}
+                    };
+                }
+                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVuln(inner) => {
+                    let cert = CertifyVuln::from(inner);
+                    for v in cert.vulnerability.vulnerability_ids {
+                        result.push(VulnerabilityStatus {
+                            id: v.vulnerability_id.clone(),
+                            status: None,
+                            justification: None,
+                        });
+                    }
+                }
+            }
+        }
+
+        Ok(result)
     }
 
     pub async fn find_vulnerability(
@@ -263,4 +334,13 @@ pub struct ProductByCve {
     pub root: Package,
     pub vex: CertifyVexStatement,
     pub path: Vec<Package>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct VulnerabilityStatus {
+    pub id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<VexStatus>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub justification: Option<VexJustification>,
 }

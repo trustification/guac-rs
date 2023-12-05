@@ -13,6 +13,7 @@ use crate::client::intrinsic::{
 use crate::client::{Error, Id};
 use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
+use serde::{Deserialize, Serialize};
 
 type Time = chrono::DateTime<Utc>;
 
@@ -88,7 +89,7 @@ pub struct CertifyVexStatement {
     pub collector: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum VexStatus {
     NotAffected,
     Affected,
@@ -97,7 +98,7 @@ pub enum VexStatus {
     Other(String),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum VexJustification {
     ComponentNotPresent,
     VulnerableCodeNotPresent,
