@@ -7,7 +7,7 @@ use std::collections::{BTreeSet, HashMap};
 use std::str::FromStr;
 
 use crate::client::graph::Node;
-use crate::client::intrinsic::certify_vuln::CertifyVuln;
+use crate::client::intrinsic::certify_vuln::{CertifyVuln, CertifyVulnSpec};
 use crate::client::intrinsic::PackageOrArtifactSpec;
 use crate::client::semantic::spog::dependent_product::FindDependentProduct;
 use crate::client::semantic::spog::find_vulnerability::FindVulnerability;
@@ -96,14 +96,15 @@ impl SemanticGuacClient {
         let purl = PackageUrl::from_str(purl)?;
         let intrinsic = self.intrinsic();
         let subject: PackageOrArtifactSpec = purl.clone().into();
-        println!("subject {:?}", subject);
-        let results = intrinsic
+
+        // vexes
+        let certify_vex = intrinsic
             .certify_vex_statement(&CertifyVexStatementSpec {
                 subject: Some(purl.clone().into()),
                 ..Default::default()
             })
             .await?;
-        let result = results
+        let mut result = certify_vex
             .iter()
             .flat_map(|vex| {
                 vex.vulnerability
@@ -117,6 +118,29 @@ impl SemanticGuacClient {
                     .collect::<Vec<VulnerabilityStatus>>()
             })
             .collect::<Vec<VulnerabilityStatus>>();
+
+        // vulns
+        let certify_vuln = intrinsic
+            .certify_vuln(&CertifyVulnSpec {
+                package: Some(purl.clone().into()),
+                ..Default::default()
+            })
+            .await?;
+        let vuln_result = certify_vuln
+            .iter()
+            .flat_map(|vuln| {
+                vuln.vulnerability
+                    .vulnerability_ids
+                    .iter()
+                    .map(|id| VulnerabilityStatus {
+                        id: id.vulnerability_id.clone(),
+                        status: None,
+                        justification: None,
+                    })
+                    .collect::<Vec<VulnerabilityStatus>>()
+            })
+            .collect::<Vec<VulnerabilityStatus>>();
+        result.extend(vuln_result);
 
         Ok(result)
     }
