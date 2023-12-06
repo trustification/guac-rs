@@ -4,16 +4,18 @@ mod find_vulnerability_by_sbom_uri;
 mod query;
 
 use std::collections::{BTreeSet, HashMap};
+use std::str::FromStr;
 
 use crate::client::graph::Node;
 use crate::client::intrinsic::certify_vuln::CertifyVuln;
+use crate::client::intrinsic::PackageOrArtifactSpec;
 use crate::client::semantic::spog::dependent_product::FindDependentProduct;
 use crate::client::semantic::spog::find_vulnerability::FindVulnerability;
 use crate::client::semantic::spog::find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomURI;
 use crate::client::semantic::spog::query::QuerySpog;
 
 use crate::client::intrinsic::certify_vex_statement::{
-    self, CertifyVexStatement, VexJustification, VexStatus,
+    self, CertifyVexStatement, CertifyVexStatementSpec, VexJustification, VexStatus,
 };
 use crate::client::intrinsic::package::{
     Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
@@ -91,66 +93,30 @@ impl SemanticGuacClient {
         offset: Option<i64>,
         limit: Option<i64>,
     ) -> Result<Vec<VulnerabilityStatus>, Error> {
-        use self::find_vulnerability::find_vulnerability;
-
-        let variables = find_vulnerability::Variables {
-            purl: purl.to_string(),
-            offset,
-            limit,
-        };
-        let response_body = post_graphql::<FindVulnerability, _>(
-            self.intrinsic().client(),
-            self.intrinsic().url(),
-            variables,
-        )
-        .await?;
-
-        if let Some(errors) = response_body.errors {
-            //TODO fix query not to return error in this case
-            for error in errors.clone().into_iter() {
-                if error.message == "failed to locate package based on purl" {
-                    return Ok(Vec::new());
-                }
-            }
-            return Err(Error::GraphQL(errors));
-        }
-
-        let data: <FindVulnerability as GraphQLQuery>::ResponseData =
-            response_body.data.ok_or(Error::GraphQL(vec![]))?;
-
-        let mut result = Vec::new();
-
-        for entry in &data.find_vulnerability {
-            match entry {
-                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVEXStatement(
-                    inner,
-                ) => {
-                    let vex: CertifyVexStatement = CertifyVexStatement::from(inner);
-                    match vex.subject {
-                        SubjectPackage(inner) => {
-                            for v in vex.vulnerability.vulnerability_ids {
-                                result.push(VulnerabilityStatus {
-                                    id: v.vulnerability_id.clone(),
-                                    status: Some(vex.status.clone()),
-                                    justification: Some(vex.vex_justification.clone()),
-                                });
-                            }
-                        }
-                        _ => {}
-                    };
-                }
-                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVuln(inner) => {
-                    let cert = CertifyVuln::from(inner);
-                    for v in cert.vulnerability.vulnerability_ids {
-                        result.push(VulnerabilityStatus {
-                            id: v.vulnerability_id.clone(),
-                            status: None,
-                            justification: None,
-                        });
-                    }
-                }
-            }
-        }
+        let purl = PackageUrl::from_str(purl)?;
+        let intrinsic = self.intrinsic();
+        let subject: PackageOrArtifactSpec = purl.clone().into();
+        println!("subject {:?}", subject);
+        let results = intrinsic
+            .certify_vex_statement(&CertifyVexStatementSpec {
+                subject: Some(purl.clone().into()),
+                ..Default::default()
+            })
+            .await?;
+        let result = results
+            .iter()
+            .flat_map(|vex| {
+                vex.vulnerability
+                    .vulnerability_ids
+                    .iter()
+                    .map(|id| VulnerabilityStatus {
+                        id: id.vulnerability_id.clone(),
+                        status: Some(vex.status.clone()),
+                        justification: Some(vex.vex_justification.clone()),
+                    })
+                    .collect::<Vec<VulnerabilityStatus>>()
+            })
+            .collect::<Vec<VulnerabilityStatus>>();
 
         Ok(result)
     }
