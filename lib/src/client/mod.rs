@@ -38,6 +38,10 @@ impl GuacClient {
         }
     }
 
+    pub fn with_client(url: String, client: reqwest::Client) -> Self {
+        Self { client, url }
+    }
+
     pub fn semantic(&self) -> SemanticGuacClient {
         SemanticGuacClient::new(self)
     }
