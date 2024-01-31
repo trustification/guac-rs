@@ -5,14 +5,14 @@ This library provides toolkit for working with [Guac](https://guac.sh) from Rust
 ## Prerequisites
 
 In order to use this library and CLI, you need to have a running Guac instance (and preferably ingest some data into it).
-Following [Guac Docker Compose guide](https://github.com/guacsec/guac/blob/main/docs/Compose.md) might be the easiest way to 
+Following [Guac Docker Compose guide](https://github.com/guacsec/guac/blob/main/docs/Compose.md) might be the easiest way to
 get you started.
 
 ## Install
 
 To install CLI, run
 
-```
+```shell
 cargo install --path=cli
 ```
 
@@ -30,7 +30,7 @@ The following are examples of query commands that CLI (and thus the library as w
 
 Returns purls of all known dependencies of the provided purl.
 
-```
+```shell
 $ guac query dependencies pkg:maven/io.vertx/vertx-web@4.3.7
 [
   "pkg:maven/io.vertx/vertx-web-common@4.3.7",
@@ -44,7 +44,7 @@ $ guac query dependencies pkg:maven/io.vertx/vertx-web@4.3.7
 
 Returns purls of all known dependents for the provided purl.
 
-```
+```shell
 $ guac query dependents pkg:maven/io.vertx/vertx-web@4.3.7
 [
   "pkg:maven/io.seedwing/seedwing-java-example@1.0.0-SNAPSHOT?type=jar",
@@ -59,7 +59,7 @@ $ guac query dependents pkg:maven/io.vertx/vertx-web@4.3.7
 
 Returns list of all known vulnerabilities for the provided purl
 
-```
+```shell
 $ guac query vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
 [
   {
@@ -78,7 +78,7 @@ $ guac query vulnerabilities pkg:rpm/redhat/openssl@1.1.1k-7.el8_6
 
 Returns list of all versions for the given package purl
 
-```
+```shell
 $ guac query packages pkg:maven/io.vertx/vertx-web
 [
   "pkg:maven/io.vertx/vertx-web@4.3.7?type=jar",
@@ -130,7 +130,7 @@ cargo run --bin guac collect file example/seedwing-java-example.bom
 
 ### Update schema
 
-```
+```shell
 cargo install graphql_client_cli --force
 graphql-client introspect-schema http://localhost:8080/query > lib/src/client/intrinsic/schema.json
 ```
