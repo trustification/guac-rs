@@ -1,5 +1,7 @@
 # Guac Rust library
 
+[![Rust](https://github.com/trustification/guac-rs/actions/workflows/rust.yml/badge.svg?branch=main)](https://github.com/trustification/guac-rs/actions/workflows/rust.yml)
+
 This library provides toolkit for working with [Guac](https://guac.sh) from Rust. It can be used for querying data using GraphQL API and ingesting data with collectors. It also contains a command-line interface (CLI) that exposes query API and collectors.
 
 ## Prerequisites
