@@ -234,7 +234,7 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
 
     for path in paths {
         for segment in path {
-            print!("{} ", segment.to_string());
+            print!("{} ", segment);
         }
         println!()
     }
@@ -245,7 +245,7 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
         .await?;
 
     for dependent in dependents {
-        println!("{}", dependent.to_string())
+        println!("{}", dependent)
     }
 
     Ok(())
@@ -335,7 +335,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
 
     for path in paths {
         for segment in path {
-            print!("{} ", segment.to_string());
+            print!("{} ", segment);
         }
         println!()
     }
@@ -346,7 +346,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
         .await?;
 
     for affected in affected {
-        println!("{}", affected.to_string())
+        println!("{}", affected)
     }
 
     Ok(())
