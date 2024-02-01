@@ -8,7 +8,7 @@ use guac::client::GuacClient;
 #[ignore]
 #[tokio::test]
 async fn product_by_cve() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(&"http://localhost:8085/query");
+    let client = GuacClient::new("http://localhost:8085/query");
 
     let result = client.semantic().product_by_cve("cve-2022-2284").await?;
     println!("result {:?}", result);
@@ -22,7 +22,7 @@ async fn product_by_cve() -> Result<(), anyhow::Error> {
 #[ignore]
 #[tokio::test]
 async fn find_vulnerability() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(&"http://localhost:8085/query");
+    let client = GuacClient::new("http://localhost:8085/query");
 
     let result = client
         .semantic()
@@ -39,7 +39,7 @@ async fn find_vulnerability() -> Result<(), anyhow::Error> {
 #[ignore]
 #[tokio::test]
 async fn find_vulnerability_by_sbom_uri() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(&"http://localhost:8085/query");
+    let client = GuacClient::new("http://localhost:8085/query");
 
     let result = client
         .semantic()
@@ -55,7 +55,7 @@ async fn find_vulnerability_by_sbom_uri() -> Result<(), anyhow::Error> {
 #[ignore]
 #[tokio::test]
 async fn find_dependent_product() -> Result<(), anyhow::Error> {
-    let client = GuacClient::new(&"http://localhost:8085/query");
+    let client = GuacClient::new("http://localhost:8085/query");
 
     let result = client
         .semantic()
