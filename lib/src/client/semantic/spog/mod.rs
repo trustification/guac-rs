@@ -190,17 +190,17 @@ impl SemanticGuacClient {
                         SubjectPackage(inner) => {
                             for v in vex.vulnerability.vulnerability_ids {
                                 let entry =
-                                    result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                                    result.entry(v.vulnerability_id).or_default();
                                 entry.extend(inner.try_as_purls()?.iter().map(|p| p.to_string()));
                             }
                         }
-                        _ => {}
+                        _ => { println!("vex.subject was not matched.") }
                     };
                 }
                 find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVuln(inner) => {
                     let cert = CertifyVuln::from(inner);
                     for v in cert.vulnerability.vulnerability_ids {
-                        let entry = result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                        let entry = result.entry(v.vulnerability_id).or_default();
                         entry.extend(cert.package.try_as_purls()?.iter().map(|p| p.to_string()));
                     }
                 }
@@ -259,18 +259,18 @@ impl SemanticGuacClient {
                             SubjectPackage(inner) => {
                                 for v in vex.vulnerability.vulnerability_ids {
                                     let entry =
-                                        result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                                        result.entry(v.vulnerability_id).or_default();
                                     entry.extend(inner.try_as_purls()?.iter().map(|p| p.to_string()));
                                 }
                             }
-                            _ => {}
+                            _ => { println!("vex.subject was not matched.") }
                         };
                     }
                 }
                 find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomUriFindVulnerabilityBySbomUri::CertifyVuln(inner) => {
                     let cert = CertifyVuln::from(inner);
                     for v in cert.vulnerability.vulnerability_ids {
-                        let entry = result.entry(v.vulnerability_id).or_insert(BTreeSet::new());
+                        let entry = result.entry(v.vulnerability_id).or_default();
                         entry.extend(cert.package.try_as_purls()?.iter().map(|p| p.to_string()));
                     }
                 }
