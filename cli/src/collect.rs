@@ -11,7 +11,7 @@ use clap::Subcommand;
 #[derive(Subcommand, Debug)]
 pub enum CollectCommand {
     File(FileCommand),
-    S3(exporter::Run),
+    S3(Box<exporter::Run>),
 }
 
 impl CollectCommand {
