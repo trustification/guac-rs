@@ -130,19 +130,7 @@ cargo run --bin guac collect file example/seedwing-java-example.bom
 
 ## Contribute
 
-### Running the tests locally
-
-Open a terminal and run
-
-```shell
-docker compose -f example/compose/compose-guac.yaml up --wait --wait-timeout 30
-```
-
-Then run the tests
-
-```shell
-cargo test
-```
+See [contributing guide](./CONTRIBUTING.md).
 
 ### Update schema
 
