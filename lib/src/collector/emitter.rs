@@ -1,4 +1,4 @@
-use async_nats::Client;
+use async_nats::{Client, Subject};
 use async_trait::async_trait;
 use serde_json::json;
 
@@ -34,8 +34,9 @@ impl NatsEmitter {
 #[async_trait]
 impl Emitter for NatsEmitter {
     async fn send(&self, subject: &str, data: Vec<u8>) -> Result<(), anyhow::Error> {
+        let sub = Subject::from(subject);
         self.client
-            .publish(subject.into(), data.into())
+            .publish(sub, data.into())
             .await
             .map_err(|e| anyhow::anyhow!(e))?;
         self.client.flush().await.map_err(|e| anyhow::anyhow!(e))
