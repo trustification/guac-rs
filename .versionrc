@@ -1,0 +1,4 @@
+host: https://github.com
+owner: trustification
+repository: guac-rs
+linkReferences: true
