@@ -6,8 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::client::intrinsic::certify_bad::ingest::IngestCertifyBad;
 use crate::client::intrinsic::certify_bad::query::QueryCertifyBad;
 use crate::client::intrinsic::{
-    IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput,
-    PackageSourceOrArtifactSpec,
+    IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput, PackageSourceOrArtifactSpec,
 };
 use crate::client::{Error, Id};
 
@@ -31,8 +30,7 @@ impl IntrinsicGuacClient {
             certify_bad: certify_bad.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestCertifyBad, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<IngestCertifyBad, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -43,17 +41,13 @@ impl IntrinsicGuacClient {
         Ok(data.ingest_certify_bad)
     }
 
-    pub async fn certify_bad(
-        &self,
-        certify_bad_spec: &CertifyBadSpec,
-    ) -> Result<Vec<CertifyBad>, Error> {
+    pub async fn certify_bad(&self, certify_bad_spec: &CertifyBadSpec) -> Result<Vec<CertifyBad>, Error> {
         use self::query::query_certify_bad;
 
         let variables = query_certify_bad::Variables {
             certify_bad_spec: certify_bad_spec.into(),
         };
-        let response_body =
-            post_graphql::<QueryCertifyBad, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<QueryCertifyBad, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

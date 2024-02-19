@@ -1,6 +1,5 @@
 use crate::client::intrinsic::vuln_equal::query::query_vuln_equal::{
-    allVulnEqualTree, AllVulnEqualTreeVulnerabilities,
-    AllVulnEqualTreeVulnerabilitiesVulnerabilityIDs,
+    allVulnEqualTree, AllVulnEqualTreeVulnerabilities, AllVulnEqualTreeVulnerabilitiesVulnerabilityIDs,
 };
 use crate::client::intrinsic::vuln_equal::{VulnEqual, VulnEqualSpec};
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId, VulnerabilitySpec};
@@ -44,11 +43,7 @@ impl From<&query_vuln_equal::allVulnEqualTree> for VulnEqual {
     fn from(value: &allVulnEqualTree) -> Self {
         Self {
             id: value.id.clone(),
-            vulnerabilities: value
-                .vulnerabilities
-                .iter()
-                .map(|each| each.into())
-                .collect(),
+            vulnerabilities: value.vulnerabilities.iter().map(|each| each.into()).collect(),
             justification: value.justification.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
@@ -61,11 +56,7 @@ impl From<&query_vuln_equal::AllVulnEqualTreeVulnerabilities> for Vulnerability 
         Self {
             id: value.id.clone(),
             r#type: value.type_.clone(),
-            vulnerability_ids: value
-                .vulnerability_i_ds
-                .iter()
-                .map(|each| each.into())
-                .collect(),
+            vulnerability_ids: value.vulnerability_i_ds.iter().map(|each| each.into()).collect(),
         }
     }
 }

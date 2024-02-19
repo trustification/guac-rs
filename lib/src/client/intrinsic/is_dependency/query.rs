@@ -1,7 +1,6 @@
 use crate::client::intrinsic::is_dependency::{DependencyType, IsDependency, IsDependencySpec};
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use graphql_client::GraphQLQuery;
 
@@ -132,9 +131,7 @@ impl From<&query_is_dependency::AllPackageTreeNamespacesNamesVersions> for Packa
     }
 }
 
-impl From<&query_is_dependency::AllPackageTreeNamespacesNamesVersionsQualifiers>
-    for PackageQualifier
-{
+impl From<&query_is_dependency::AllPackageTreeNamespacesNamesVersionsQualifiers> for PackageQualifier {
     fn from(value: &query_is_dependency::AllPackageTreeNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),

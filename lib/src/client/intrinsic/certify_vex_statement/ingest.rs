@@ -1,6 +1,4 @@
-use crate::client::intrinsic::certify_vex_statement::{
-    VexJustification, VexStatementInputSpec, VexStatus,
-};
+use crate::client::intrinsic::certify_vex_statement::{VexJustification, VexStatementInputSpec, VexStatus};
 use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec};
 use crate::client::intrinsic::PackageOrArtifactInput;
@@ -80,12 +78,8 @@ impl From<&VexStatus> for ingest_certify_vex_statement::VexStatus {
             VexStatus::NotAffected => ingest_certify_vex_statement::VexStatus::NOT_AFFECTED,
             VexStatus::Affected => ingest_certify_vex_statement::VexStatus::AFFECTED,
             VexStatus::Fixed => ingest_certify_vex_statement::VexStatus::FIXED,
-            VexStatus::UnderInvestigation => {
-                ingest_certify_vex_statement::VexStatus::UNDER_INVESTIGATION
-            }
-            VexStatus::Other(inner) => {
-                ingest_certify_vex_statement::VexStatus::Other(inner.clone())
-            }
+            VexStatus::UnderInvestigation => ingest_certify_vex_statement::VexStatus::UNDER_INVESTIGATION,
+            VexStatus::Other(inner) => ingest_certify_vex_statement::VexStatus::Other(inner.clone()),
         }
     }
 }
@@ -108,12 +102,8 @@ impl From<&VexJustification> for ingest_certify_vex_statement::VexJustification 
             VexJustification::InlineMitigationsAlreadyExist => {
                 ingest_certify_vex_statement::VexJustification::INLINE_MITIGATIONS_ALREADY_EXIST
             }
-            VexJustification::NotProvided => {
-                ingest_certify_vex_statement::VexJustification::NOT_PROVIDED
-            }
-            VexJustification::Other(inner) => {
-                ingest_certify_vex_statement::VexJustification::Other(inner.clone())
-            }
+            VexJustification::NotProvided => ingest_certify_vex_statement::VexJustification::NOT_PROVIDED,
+            VexJustification::Other(inner) => ingest_certify_vex_statement::VexJustification::Other(inner.clone()),
         }
     }
 }

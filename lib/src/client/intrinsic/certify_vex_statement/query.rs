@@ -3,19 +3,16 @@ use graphql_client::GraphQLQuery;
 
 use crate::client::intrinsic::certify_vex_statement::query::query_certify_vex_statement::{
     AllCertifyVexStatementTreeSubject, AllCertifyVexStatementTreeSubjectOnPackage,
-    AllCertifyVexStatementTreeSubjectOnPackageNamespaces,
-    AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames,
+    AllCertifyVexStatementTreeSubjectOnPackageNamespaces, AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames,
     AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions,
     AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
-    AllCertifyVexStatementTreeVulnerability,
-    AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs,
+    AllCertifyVexStatementTreeVulnerability, AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs,
 };
 use crate::client::intrinsic::certify_vex_statement::{
     CertifyVexStatement, CertifyVexStatementSpec, VexJustification, VexStatus,
 };
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId, VulnerabilitySpec};
 use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactSpec};
@@ -90,9 +87,7 @@ impl From<&VexStatus> for query_certify_vex_statement::VexStatus {
             VexStatus::NotAffected => query_certify_vex_statement::VexStatus::NOT_AFFECTED,
             VexStatus::Affected => query_certify_vex_statement::VexStatus::AFFECTED,
             VexStatus::Fixed => query_certify_vex_statement::VexStatus::FIXED,
-            VexStatus::UnderInvestigation => {
-                query_certify_vex_statement::VexStatus::UNDER_INVESTIGATION
-            }
+            VexStatus::UnderInvestigation => query_certify_vex_statement::VexStatus::UNDER_INVESTIGATION,
             VexStatus::Other(inner) => query_certify_vex_statement::VexStatus::Other(inner.clone()),
         }
     }
@@ -116,12 +111,8 @@ impl From<&VexJustification> for query_certify_vex_statement::VexJustification {
             VexJustification::InlineMitigationsAlreadyExist => {
                 query_certify_vex_statement::VexJustification::INLINE_MITIGATIONS_ALREADY_EXIST
             }
-            VexJustification::NotProvided => {
-                query_certify_vex_statement::VexJustification::NOT_PROVIDED
-            }
-            VexJustification::Other(inner) => {
-                query_certify_vex_statement::VexJustification::Other(inner.clone())
-            }
+            VexJustification::NotProvided => query_certify_vex_statement::VexJustification::NOT_PROVIDED,
+            VexJustification::Other(inner) => query_certify_vex_statement::VexJustification::Other(inner.clone()),
         }
     }
 }
@@ -169,11 +160,7 @@ impl From<&AllCertifyVexStatementTreeVulnerability> for Vulnerability {
         Self {
             id: value.id.clone(),
             r#type: value.type_.clone(),
-            vulnerability_ids: value
-                .vulnerability_i_ds
-                .iter()
-                .map(|inner| inner.into())
-                .collect(),
+            vulnerability_ids: value.vulnerability_i_ds.iter().map(|inner| inner.into()).collect(),
         }
     }
 }
@@ -228,12 +215,8 @@ impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions> fo
     }
 }
 
-impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers>
-    for PackageQualifier
-{
-    fn from(
-        value: &AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
-    ) -> Self {
+impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers> for PackageQualifier {
+    fn from(value: &AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),
@@ -256,9 +239,7 @@ impl From<&query_certify_vex_statement::VexStatus> for VexStatus {
 impl From<&query_certify_vex_statement::VexJustification> for VexJustification {
     fn from(value: &query_certify_vex_statement::VexJustification) -> Self {
         match value {
-            query_certify_vex_statement::VexJustification::COMPONENT_NOT_PRESENT => {
-                Self::ComponentNotPresent
-            }
+            query_certify_vex_statement::VexJustification::COMPONENT_NOT_PRESENT => Self::ComponentNotPresent,
             query_certify_vex_statement::VexJustification::VULNERABLE_CODE_NOT_PRESENT => {
                 Self::VulnerableCodeNotPresent
             }
@@ -271,12 +252,8 @@ impl From<&query_certify_vex_statement::VexJustification> for VexJustification {
             query_certify_vex_statement::VexJustification::INLINE_MITIGATIONS_ALREADY_EXIST => {
                 Self::InlineMitigationsAlreadyExist
             }
-            query_certify_vex_statement::VexJustification::NOT_PROVIDED => {
-                Self::NotProvided
-            }
-            query_certify_vex_statement::VexJustification::Other(inner) => {
-                Self::Other(inner.clone())
-            }
+            query_certify_vex_statement::VexJustification::NOT_PROVIDED => Self::NotProvided,
+            query_certify_vex_statement::VexJustification::Other(inner) => Self::Other(inner.clone()),
         }
     }
 }

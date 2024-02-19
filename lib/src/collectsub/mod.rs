@@ -77,18 +77,11 @@ pub struct CollectSubClient {
 impl CollectSubClient {
     pub async fn new(url: String) -> anyhow::Result<Self> {
         Ok(Self {
-            client: grpc::colect_subscriber_service_client::ColectSubscriberServiceClient::connect(
-                url,
-            )
-            .await?,
+            client: grpc::colect_subscriber_service_client::ColectSubscriberServiceClient::connect(url).await?,
         })
     }
 
-    pub async fn get(
-        &mut self,
-        filters: Vec<Filter>,
-        since: SystemTime,
-    ) -> anyhow::Result<Vec<Entry>> {
+    pub async fn get(&mut self, filters: Vec<Filter>, since: SystemTime) -> anyhow::Result<Vec<Entry>> {
         let filters = filters.iter().map(|e| e.into()).collect();
 
         let since = (since
@@ -102,12 +95,7 @@ impl CollectSubClient {
         };
 
         let results = if let Ok(response) = self.client.get_collect_entries(request).await {
-            response
-                .get_ref()
-                .entries
-                .iter()
-                .map(|e| e.into())
-                .collect()
+            response.get_ref().entries.iter().map(|e| e.into()).collect()
         } else {
             vec![]
         };

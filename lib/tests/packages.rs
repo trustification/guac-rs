@@ -14,10 +14,7 @@ async fn ingest_packages() -> Result<(), anyhow::Error> {
 
     let pkg_030 = PackageUrl::from_str("pkg:rpm/trustification-test@0.3.0")?;
 
-    let _ = client
-        .intrinsic()
-        .ingest_package(&pkg_030.clone().into())
-        .await?;
+    let _ = client.intrinsic().ingest_package(&pkg_030.clone().into()).await?;
 
     let result = client.intrinsic().packages(&pkg_030.clone().into()).await?;
     assert_eq!(1, result.len());
@@ -26,10 +23,7 @@ async fn ingest_packages() -> Result<(), anyhow::Error> {
 
     let pkg_031 = PackageUrl::from_str("pkg:rpm/trustification-test@0.3.1")?;
 
-    let _ = client
-        .intrinsic()
-        .ingest_package(&pkg_031.clone().into())
-        .await?;
+    let _ = client.intrinsic().ingest_package(&pkg_031.clone().into()).await?;
 
     let result = client.intrinsic().packages(&pkg_031.clone().into()).await?;
     assert_eq!(1, result.len());
@@ -46,13 +40,9 @@ async fn query_packages() -> Result<(), anyhow::Error> {
 
     // ingest 29 versions of the same package.
     for i in 1..30 {
-        let pkg =
-            PackageUrl::from_str(format!("pkg:rpm/trustification-test-query@0.3.{}", i).as_str())?;
+        let pkg = PackageUrl::from_str(format!("pkg:rpm/trustification-test-query@0.3.{}", i).as_str())?;
 
-        let _ = client
-            .intrinsic()
-            .ingest_package(&pkg.clone().into())
-            .await?;
+        let _ = client.intrinsic().ingest_package(&pkg.clone().into()).await?;
     }
 
     // query packages without a version
@@ -73,8 +63,7 @@ async fn query_packages() -> Result<(), anyhow::Error> {
     assert_eq!(29, purls.len());
 
     for i in 1..30 {
-        let purl =
-            PackageUrl::from_str(format!("pkg:rpm/trustification-test-query@0.3.{}", i).as_str())?;
+        let purl = PackageUrl::from_str(format!("pkg:rpm/trustification-test-query@0.3.{}", i).as_str())?;
 
         // ensure each purl is present
         assert!(purls.contains(&purl))

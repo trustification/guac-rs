@@ -49,10 +49,7 @@ impl From<&PkgInputSpec> for ingest_certify_bad::PkgInputSpec {
             namespace: value.namespace.clone(),
             name: value.name.clone(),
             version: value.version.clone(),
-            qualifiers: value
-                .qualifiers
-                .as_ref()
-                .map(|e| e.iter().map(|e| e.into()).collect()),
+            qualifiers: value.qualifiers.as_ref().map(|e| e.iter().map(|e| e.into()).collect()),
             subpath: value.subpath.clone(),
         }
     }

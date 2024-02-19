@@ -22,22 +22,10 @@ async fn neighbor() -> Result<(), anyhow::Error> {
     let pkg_c = PackageUrl::from_str("pkg:rpm/trustification-neighbor-c@33.3")?;
     let pkg_d = PackageUrl::from_str("pkg:rpm/trustification-neighbor-d@044.4")?;
 
-    let pkg_a_id = client
-        .intrinsic()
-        .ingest_package(&pkg_a.clone().into())
-        .await?;
-    let _pkg_b_id = client
-        .intrinsic()
-        .ingest_package(&pkg_b.clone().into())
-        .await?;
-    let _pkg_c_id = client
-        .intrinsic()
-        .ingest_package(&pkg_c.clone().into())
-        .await?;
-    let _pkg_d_id = client
-        .intrinsic()
-        .ingest_package(&pkg_d.clone().into())
-        .await?;
+    let pkg_a_id = client.intrinsic().ingest_package(&pkg_a.clone().into()).await?;
+    let _pkg_b_id = client.intrinsic().ingest_package(&pkg_b.clone().into()).await?;
+    let _pkg_c_id = client.intrinsic().ingest_package(&pkg_c.clone().into()).await?;
+    let _pkg_d_id = client.intrinsic().ingest_package(&pkg_d.clone().into()).await?;
 
     // A -> B
     //   -> C -> D
@@ -184,17 +172,11 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
         ($client: ident, $a: literal, $b:literal) => {
             let pkg_a = PackageUrl::from_str($a)?;
 
-            $client
-                .intrinsic()
-                .ingest_package(&pkg_a.clone().into())
-                .await?;
+            $client.intrinsic().ingest_package(&pkg_a.clone().into()).await?;
 
             let pkg_b = PackageUrl::from_str($b)?;
 
-            $client
-                .intrinsic()
-                .ingest_package(&pkg_b.clone().into())
-                .await?;
+            $client.intrinsic().ingest_package(&pkg_b.clone().into()).await?;
 
             $client
                 .intrinsic()
@@ -257,17 +239,11 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
         ($client: ident, $a: literal, $b:literal) => {
             let pkg_a = PackageUrl::from_str($a)?;
 
-            $client
-                .intrinsic()
-                .ingest_package(&pkg_a.clone().into())
-                .await?;
+            $client.intrinsic().ingest_package(&pkg_a.clone().into()).await?;
 
             let pkg_b = PackageUrl::from_str($b)?;
 
-            $client
-                .intrinsic()
-                .ingest_package(&pkg_b.clone().into())
-                .await?;
+            $client.intrinsic().ingest_package(&pkg_b.clone().into()).await?;
 
             $client
                 .intrinsic()
@@ -328,10 +304,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
         )
         .await?;
 
-    let paths = client
-        .semantic()
-        .transitive_affected_paths_of("cve-log4shell")
-        .await?;
+    let paths = client.semantic().transitive_affected_paths_of("cve-log4shell").await?;
 
     for path in paths {
         for segment in path {
@@ -340,10 +313,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
         println!()
     }
 
-    let affected = client
-        .semantic()
-        .transitive_affected_of("cve-log4shell")
-        .await?;
+    let affected = client.semantic().transitive_affected_of("cve-log4shell").await?;
 
     for affected in affected {
         println!("{}", affected)

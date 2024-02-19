@@ -6,8 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::client::intrinsic::certify_good::ingest::IngestCertifyGood;
 use crate::client::intrinsic::certify_good::query::QueryCertifyGood;
 use crate::client::intrinsic::{
-    IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput,
-    PackageSourceOrArtifactSpec,
+    IntrinsicGuacClient, MatchFlags, PackageSourceOrArtifact, PackageSourceOrArtifactInput, PackageSourceOrArtifactSpec,
 };
 use crate::client::{Error, Id};
 
@@ -31,8 +30,7 @@ impl IntrinsicGuacClient {
             certify_good: certify_good.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestCertifyGood, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<IngestCertifyGood, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -43,17 +41,13 @@ impl IntrinsicGuacClient {
         Ok(data.ingest_certify_good)
     }
 
-    pub async fn certify_good(
-        &self,
-        certify_good_spec: &CertifyGoodSpec,
-    ) -> Result<Vec<CertifyGood>, Error> {
+    pub async fn certify_good(&self, certify_good_spec: &CertifyGoodSpec) -> Result<Vec<CertifyGood>, Error> {
         use self::query::query_certify_good;
 
         let variables = query_certify_good::Variables {
             certify_good_spec: certify_good_spec.into(),
         };
-        let response_body =
-            post_graphql::<QueryCertifyGood, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<QueryCertifyGood, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

@@ -28,18 +28,12 @@ impl<'a> HasDependency<'a> {
 
 #[async_trait]
 impl Predicate<PackageUrl<'_>> for HasDependency<'_> {
-    async fn apply<'a>(
-        &'a self,
-        client: &GuacClient,
-        subject: &'a PackageUrl<'a>,
-    ) -> Result<(), Error> {
+    async fn apply<'a>(&'a self, client: &GuacClient, subject: &'a PackageUrl<'a>) -> Result<(), Error> {
         let intrinsic = client.intrinsic();
 
         intrinsic.ingest_package(&subject.clone().into()).await?;
 
-        intrinsic
-            .ingest_package(&self.dependent.clone().into())
-            .await?;
+        intrinsic.ingest_package(&self.dependent.clone().into()).await?;
 
         intrinsic
             .ingest_is_dependency(

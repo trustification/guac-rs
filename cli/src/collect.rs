@@ -33,10 +33,7 @@ pub struct FileConfig {
 }
 
 #[derive(clap::Args, Debug)]
-#[command(
-    about = "Run the file collector",
-    args_conflicts_with_subcommands = true
-)]
+#[command(about = "Run the file collector", args_conflicts_with_subcommands = true)]
 pub struct FileCommand {
     #[command(flatten)]
     pub(crate) config: FileConfig,
@@ -47,9 +44,7 @@ impl FileCommand {
         println!("Collecting file {:?}", self.config.path);
         let emitter = NatsEmitter::new(&self.config.nats_url).await?;
 
-        let collector = FileCollector {
-            path: self.config.path,
-        };
+        let collector = FileCollector { path: self.config.path };
 
         collector.run(emitter).await?;
         Ok(ExitCode::SUCCESS)

@@ -1,6 +1,4 @@
-use crate::client::intrinsic::vuln_metadata::{
-    VulnerabilityMetadataInputSpec, VulnerabilityScoreType,
-};
+use crate::client::intrinsic::vuln_metadata::{VulnerabilityMetadataInputSpec, VulnerabilityScoreType};
 use crate::client::intrinsic::vulnerability::VulnerabilityInputSpec;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
@@ -24,9 +22,7 @@ impl From<&VulnerabilityInputSpec> for ingest_vulnerability_metadata::Vulnerabil
     }
 }
 
-impl From<&VulnerabilityMetadataInputSpec>
-    for ingest_vulnerability_metadata::VulnerabilityMetadataInputSpec
-{
+impl From<&VulnerabilityMetadataInputSpec> for ingest_vulnerability_metadata::VulnerabilityMetadataInputSpec {
     fn from(value: &VulnerabilityMetadataInputSpec) -> Self {
         Self {
             score_type: (&value.score_type).into(),

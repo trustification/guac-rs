@@ -2,12 +2,9 @@ use crate::client::graph::Node;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
-use crate::client::intrinsic::certify_vex_statement::{
-    self, CertifyVexStatement, VexJustification, VexStatus,
-};
+use crate::client::intrinsic::certify_vex_statement::{self, CertifyVexStatement, VexJustification, VexStatus};
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
 use crate::client::semantic::spog::query::query_spog::allCertifyVEXStatementTree;
@@ -17,13 +14,11 @@ use crate::client::semantic::spog::query::query_spog::VexJustification as QSVexJ
 use crate::client::semantic::spog::query::query_spog::VexStatus as QSVexStatus;
 use crate::client::semantic::spog::query::query_spog::{
     AllCertifyVexStatementTreeSubject, AllCertifyVexStatementTreeSubjectOnPackage,
-    AllCertifyVexStatementTreeSubjectOnPackageNamespaces,
-    AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames,
+    AllCertifyVexStatementTreeSubjectOnPackageNamespaces, AllCertifyVexStatementTreeSubjectOnPackageNamespacesNames,
     AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions,
     AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
-    AllCertifyVexStatementTreeVulnerability,
-    AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs, AllPkgTreeNamespaces,
-    AllPkgTreeNamespacesNames, AllPkgTreeNamespacesNamesVersions,
+    AllCertifyVexStatementTreeVulnerability, AllCertifyVexStatementTreeVulnerabilityVulnerabilityIDs,
+    AllPkgTreeNamespaces, AllPkgTreeNamespacesNames, AllPkgTreeNamespacesNamesVersions,
     AllPkgTreeNamespacesNamesVersionsQualifiers,
 };
 
@@ -73,11 +68,7 @@ impl From<&AllCertifyVexStatementTreeVulnerability> for Vulnerability {
         Self {
             id: value.id.clone(),
             r#type: value.type_.clone(),
-            vulnerability_ids: value
-                .vulnerability_i_ds
-                .iter()
-                .map(|inner| inner.into())
-                .collect(),
+            vulnerability_ids: value.vulnerability_i_ds.iter().map(|inner| inner.into()).collect(),
         }
     }
 }
@@ -143,12 +134,8 @@ impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersions> fo
     }
 }
 
-impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers>
-    for PackageQualifier
-{
-    fn from(
-        value: &AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
-    ) -> Self {
+impl From<&AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers> for PackageQualifier {
+    fn from(value: &AllCertifyVexStatementTreeSubjectOnPackageNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),
@@ -161,15 +148,11 @@ impl From<&QSVexJustification> for VexJustification {
         match value {
             QSVexJustification::COMPONENT_NOT_PRESENT => Self::ComponentNotPresent,
             QSVexJustification::VULNERABLE_CODE_NOT_PRESENT => Self::VulnerableCodeNotPresent,
-            QSVexJustification::VULNERABLE_CODE_NOT_IN_EXECUTE_PATH => {
-                Self::VulnerableCodeNotInExecutePath
-            }
+            QSVexJustification::VULNERABLE_CODE_NOT_IN_EXECUTE_PATH => Self::VulnerableCodeNotInExecutePath,
             QSVexJustification::VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY => {
                 Self::VulnerableCodeCannotBeControlledByAdversary
             }
-            QSVexJustification::INLINE_MITIGATIONS_ALREADY_EXIST => {
-                Self::InlineMitigationsAlreadyExist
-            }
+            QSVexJustification::INLINE_MITIGATIONS_ALREADY_EXIST => Self::InlineMitigationsAlreadyExist,
             QSVexJustification::NOT_PROVIDED => Self::NotProvided,
             QSVexJustification::Other(inner) => Self::Other(inner.clone()),
         }

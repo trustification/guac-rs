@@ -20,8 +20,7 @@ impl GoodCommand {
         let guac = GuacClient::new(&self.config.guac_url);
         let spec = (&PackageUrl::from_str(&self.config.purl)?).into();
         let good = guac.intrinsic().certify_good(&spec).await?;
-        let out =
-            serde_json::to_string(&good)?.to_colored_json(crate::color_mode(self.config.color))?;
+        let out = serde_json::to_string(&good)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
 
         Ok(ExitCode::SUCCESS)

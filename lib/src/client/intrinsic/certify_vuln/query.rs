@@ -1,14 +1,12 @@
 use crate::client::intrinsic::certify_vuln::query::query_certify_vuln::{
-    allCertifyVulnTree, AllCertifyVulnTreeMetadata, AllCertifyVulnTreePackage,
-    AllCertifyVulnTreePackageNamespaces, AllCertifyVulnTreePackageNamespacesNames,
-    AllCertifyVulnTreePackageNamespacesNamesVersions,
+    allCertifyVulnTree, AllCertifyVulnTreeMetadata, AllCertifyVulnTreePackage, AllCertifyVulnTreePackageNamespaces,
+    AllCertifyVulnTreePackageNamespacesNames, AllCertifyVulnTreePackageNamespacesNamesVersions,
     AllCertifyVulnTreePackageNamespacesNamesVersionsQualifiers, AllCertifyVulnTreeVulnerability,
     AllCertifyVulnTreeVulnerabilityVulnerabilityIDs,
 };
 use crate::client::intrinsic::certify_vuln::{CertifyVuln, CertifyVulnSpec, ScanMetadata};
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId, VulnerabilitySpec};
 use graphql_client::GraphQLQuery;
@@ -137,9 +135,7 @@ impl From<&query_certify_vuln::AllCertifyVulnTreePackageNamespaces> for PackageN
     }
 }
 
-impl From<&query_certify_vuln::AllCertifyVulnTreeVulnerabilityVulnerabilityIDs>
-    for VulnerabilityId
-{
+impl From<&query_certify_vuln::AllCertifyVulnTreeVulnerabilityVulnerabilityIDs> for VulnerabilityId {
     fn from(value: &AllCertifyVulnTreeVulnerabilityVulnerabilityIDs) -> Self {
         Self {
             id: value.id.clone(),
@@ -158,9 +154,7 @@ impl From<&query_certify_vuln::AllCertifyVulnTreePackageNamespacesNames> for Pac
     }
 }
 
-impl From<&query_certify_vuln::AllCertifyVulnTreePackageNamespacesNamesVersions>
-    for PackageVersion
-{
+impl From<&query_certify_vuln::AllCertifyVulnTreePackageNamespacesNamesVersions> for PackageVersion {
     fn from(value: &AllCertifyVulnTreePackageNamespacesNamesVersions) -> Self {
         Self {
             id: value.id.clone(),
@@ -171,9 +165,7 @@ impl From<&query_certify_vuln::AllCertifyVulnTreePackageNamespacesNamesVersions>
     }
 }
 
-impl From<&query_certify_vuln::AllCertifyVulnTreePackageNamespacesNamesVersionsQualifiers>
-    for PackageQualifier
-{
+impl From<&query_certify_vuln::AllCertifyVulnTreePackageNamespacesNamesVersionsQualifiers> for PackageQualifier {
     fn from(value: &AllCertifyVulnTreePackageNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),

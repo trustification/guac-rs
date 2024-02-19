@@ -3,13 +3,9 @@ mod query;
 
 use super::vulnerability::Vulnerability;
 use crate::client::intrinsic::certify_vex_statement::ingest::IngestCertifyVexStatement;
-use crate::client::intrinsic::certify_vex_statement::query::{
-    query_certify_vex_statement, QueryCertifyVexStatement,
-};
+use crate::client::intrinsic::certify_vex_statement::query::{query_certify_vex_statement, QueryCertifyVexStatement};
 use crate::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
-use crate::client::intrinsic::{
-    IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec,
-};
+use crate::client::intrinsic::{IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec};
 use crate::client::{Error, Id};
 use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
@@ -32,9 +28,7 @@ impl IntrinsicGuacClient {
             vex_statement: vex_statement.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestCertifyVexStatement, _>(self.client(), self.url(), variables)
-                .await?;
+        let response_body = post_graphql::<IngestCertifyVexStatement, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -55,9 +49,7 @@ impl IntrinsicGuacClient {
             certify_vex_statement_spec: certify_vex_statement_spec.into(),
         };
 
-        let response_body =
-            post_graphql::<QueryCertifyVexStatement, _>(self.client(), self.url(), variables)
-                .await?;
+        let response_body = post_graphql::<QueryCertifyVexStatement, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

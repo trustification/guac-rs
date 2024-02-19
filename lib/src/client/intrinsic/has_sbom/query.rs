@@ -1,13 +1,11 @@
 use crate::client::intrinsic::has_sbom::query::query_has_sbom::{
-    allHasSBOMTree, AllHasSbomTreeSubject, AllHasSbomTreeSubjectOnPackage,
-    AllHasSbomTreeSubjectOnPackageNamespaces, AllHasSbomTreeSubjectOnPackageNamespacesNames,
-    AllHasSbomTreeSubjectOnPackageNamespacesNamesVersions,
+    allHasSBOMTree, AllHasSbomTreeSubject, AllHasSbomTreeSubjectOnPackage, AllHasSbomTreeSubjectOnPackageNamespaces,
+    AllHasSbomTreeSubjectOnPackageNamespacesNames, AllHasSbomTreeSubjectOnPackageNamespacesNamesVersions,
     AllHasSbomTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
 };
 use crate::client::intrinsic::has_sbom::{HasSBOM, HasSBOMSpec};
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactSpec};
 use chrono::Utc;

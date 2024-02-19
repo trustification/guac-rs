@@ -20,17 +20,14 @@ impl GetCommand {
 
         let since = if let Some(since) = self.config.since {
             println!("using duration {:?}", since);
-            SystemTime::now()
-                .checked_sub(*since)
-                .expect("invalid `since`")
+            SystemTime::now().checked_sub(*since).expect("invalid `since`")
         } else {
             SystemTime::UNIX_EPOCH
         };
 
         let result = csub.get(vec![Filter::Purl("*".into())], since).await?;
 
-        let out = serde_json::to_string(&result)?
-            .to_colored_json(crate::color_mode(self.config.color))?;
+        let out = serde_json::to_string(&result)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
         Ok(ExitCode::SUCCESS)
     }

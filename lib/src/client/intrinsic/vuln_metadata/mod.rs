@@ -2,9 +2,7 @@ use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
 
 use crate::client::intrinsic::vuln_metadata::ingest::IngestVulnerabilityMetadata;
-use crate::client::intrinsic::vuln_metadata::query::{
-    query_vulnerability_metadata, QueryVulnerabilityMetadata,
-};
+use crate::client::intrinsic::vuln_metadata::query::{query_vulnerability_metadata, QueryVulnerabilityMetadata};
 use crate::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::{Error, Id};
@@ -28,8 +26,7 @@ impl IntrinsicGuacClient {
         };
 
         let response_body =
-            post_graphql::<IngestVulnerabilityMetadata, _>(self.client(), self.url(), variables)
-                .await?;
+            post_graphql::<IngestVulnerabilityMetadata, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -50,9 +47,7 @@ impl IntrinsicGuacClient {
             vulnerability_metadata_spec: vulnerability_metadata_spec.into(),
         };
 
-        let response_body =
-            post_graphql::<QueryVulnerabilityMetadata, _>(self.client(), self.url(), variables)
-                .await?;
+        let response_body = post_graphql::<QueryVulnerabilityMetadata, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

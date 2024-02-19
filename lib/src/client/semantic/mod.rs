@@ -19,27 +19,18 @@ pub struct SemanticGuacClient {
 
 impl SemanticGuacClient {
     pub(crate) fn new(client: &GuacClient) -> Self {
-        Self {
-            client: client.clone(),
-        }
+        Self { client: client.clone() }
     }
 
     pub fn intrinsic(&self) -> IntrinsicGuacClient {
         IntrinsicGuacClient::new(&self.client)
     }
 
-    pub async fn ingest<S: Subject, P: Predicate<S>>(
-        &self,
-        subject: &S,
-        predicate: &P,
-    ) -> Result<(), Error> {
+    pub async fn ingest<S: Subject, P: Predicate<S>>(&self, subject: &S, predicate: &P) -> Result<(), Error> {
         predicate.apply(&self.client, subject).await
     }
 
-    pub async fn dependencies_of<'a, 'b>(
-        &self,
-        package: &PackageUrl<'a>,
-    ) -> Result<Vec<PackageUrl<'b>>, Error> {
+    pub async fn dependencies_of<'a, 'b>(&self, package: &PackageUrl<'a>) -> Result<Vec<PackageUrl<'b>>, Error> {
         let is_dependencies = self
             .intrinsic()
             .is_dependency(&IsDependencySpec {
@@ -61,10 +52,7 @@ impl SemanticGuacClient {
         Ok(dependencies)
     }
 
-    pub async fn dependents_of<'a, 'b>(
-        &self,
-        package: &PackageUrl<'a>,
-    ) -> Result<Vec<PackageUrl<'b>>, Error> {
+    pub async fn dependents_of<'a, 'b>(&self, package: &PackageUrl<'a>) -> Result<Vec<PackageUrl<'b>>, Error> {
         let is_dependencies = self
             .intrinsic()
             .is_dependency(&IsDependencySpec {
@@ -86,10 +74,7 @@ impl SemanticGuacClient {
         Ok(dependents)
     }
 
-    pub async fn transitive_affected_paths_of<'a>(
-        &self,
-        vuln_id: &str,
-    ) -> Result<Vec<Vec<PackageUrl<'a>>>, Error> {
+    pub async fn transitive_affected_paths_of<'a>(&self, vuln_id: &str) -> Result<Vec<Vec<PackageUrl<'a>>>, Error> {
         let intrinsic = self.intrinsic();
 
         let vulns = intrinsic
@@ -137,10 +122,7 @@ impl SemanticGuacClient {
         Ok(paths)
     }
 
-    pub async fn transitive_affected_of<'a>(
-        &self,
-        vuln_id: &str,
-    ) -> Result<Vec<PackageUrl<'a>>, Error> {
+    pub async fn transitive_affected_of<'a>(&self, vuln_id: &str) -> Result<Vec<PackageUrl<'a>>, Error> {
         let mut affected = Vec::new();
 
         let paths = self.transitive_affected_paths_of(vuln_id).await?;
@@ -199,10 +181,7 @@ impl SemanticGuacClient {
         Ok(paths)
     }
 
-    pub async fn transitive_dependents_of<'a>(
-        &self,
-        package: &PackageUrl<'a>,
-    ) -> Result<Vec<PackageUrl<'a>>, Error> {
+    pub async fn transitive_dependents_of<'a>(&self, package: &PackageUrl<'a>) -> Result<Vec<PackageUrl<'a>>, Error> {
         let mut dependents = Vec::new();
 
         for path in self.transitive_dependent_paths_of(package).await? {

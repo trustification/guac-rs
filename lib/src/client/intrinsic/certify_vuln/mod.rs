@@ -5,9 +5,7 @@ use graphql_client::reqwest::post_graphql;
 use self::ingest::IngestCertifyVuln;
 use crate::client::intrinsic::certify_vuln::query::{query_certify_vuln, QueryCertifyVuln};
 use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
-use crate::client::intrinsic::vulnerability::{
-    Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec,
-};
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec};
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::{Error, Id};
 use serde::{Deserialize, Serialize};
@@ -33,8 +31,7 @@ impl IntrinsicGuacClient {
             meta: meta.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestCertifyVuln, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<IngestCertifyVuln, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -45,18 +42,14 @@ impl IntrinsicGuacClient {
         Ok(data.ingest_certify_vuln)
     }
 
-    pub async fn certify_vuln(
-        &self,
-        certify_vuln_spec: &CertifyVulnSpec,
-    ) -> Result<Vec<CertifyVuln>, Error> {
+    pub async fn certify_vuln(&self, certify_vuln_spec: &CertifyVulnSpec) -> Result<Vec<CertifyVuln>, Error> {
         use self::query::query_certify_vuln;
 
         let variables = query_certify_vuln::Variables {
             certify_vuln_spec: certify_vuln_spec.into(),
         };
 
-        let response_body =
-            post_graphql::<QueryCertifyVuln, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<QueryCertifyVuln, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

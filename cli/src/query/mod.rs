@@ -30,11 +30,7 @@ pub enum QueryCommand {
 #[derive(Clone, Debug, clap::Parser)]
 #[command(rename_all_env = "SCREAMING_SNAKE_CASE")]
 pub struct QueryConfig {
-    #[arg(
-        short = 'g',
-        long = "guac",
-        default_value = "http://localhost:8080/query"
-    )]
+    #[arg(short = 'g', long = "guac", default_value = "http://localhost:8080/query")]
     pub(crate) guac_url: String,
 
     #[arg(short = 'c', long = "color", default_value = "auto")]
