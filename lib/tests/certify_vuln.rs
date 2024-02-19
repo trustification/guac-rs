@@ -16,17 +16,11 @@ async fn certify_vuln() -> Result<(), anyhow::Error> {
 
     let pkg = PackageUrl::from_str("pkg:rpm/trustification-NOT-certify-vuln@0.3.0")?;
 
-    let _ = client
-        .intrinsic()
-        .ingest_package(&pkg.clone().into())
-        .await?;
+    let _ = client.intrinsic().ingest_package(&pkg.clone().into()).await?;
 
     let pkg = PackageUrl::from_str("pkg:rpm/trustification-certify-vuln@0.3.0")?;
 
-    let _ = client
-        .intrinsic()
-        .ingest_package(&pkg.clone().into())
-        .await?;
+    let _ = client.intrinsic().ingest_package(&pkg.clone().into()).await?;
 
     client
         .intrinsic()

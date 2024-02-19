@@ -17,8 +17,7 @@ impl IntrinsicGuacClient {
             using_only: using_only.iter().map(|e| e.into()).collect(),
         };
 
-        let response_body =
-            post_graphql::<Neighbors, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<Neighbors, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

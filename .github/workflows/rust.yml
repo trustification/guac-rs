@@ -15,13 +15,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install protobuf
       run: |
         sudo apt-get update
         sudo apt-get install protobuf-compiler
-    - name: Build
-      run: cargo build
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
+      with:
+        components: clippy,rustfmt
+    - uses: actions-rust-lang/rustfmt@v1
+    - name: Clippy
+      run: cargo clippy --all-targets --all-features -- -D warnings
     - name: Run guac
       run: docker compose -f example/compose/compose-guac.yaml up --detach --wait --wait-timeout 30
     - name: Run tests

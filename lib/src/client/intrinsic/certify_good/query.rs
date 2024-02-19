@@ -3,8 +3,7 @@ use graphql_client::GraphQLQuery;
 
 use crate::client::intrinsic::certify_good::{CertifyGood, CertifyGoodSpec};
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use crate::client::intrinsic::{PackageSourceOrArtifact, PackageSourceOrArtifactSpec};
 
@@ -83,9 +82,7 @@ impl From<&query_certify_good::allCertifyGoodTree> for CertifyGood {
 impl From<&query_certify_good::AllCertifyGoodTreeSubject> for PackageSourceOrArtifact {
     fn from(value: &query_certify_good::AllCertifyGoodTreeSubject) -> Self {
         match value {
-            query_certify_good::AllCertifyGoodTreeSubject::Package(inner) => {
-                Self::Package(inner.into())
-            }
+            query_certify_good::AllCertifyGoodTreeSubject::Package(inner) => Self::Package(inner.into()),
             query_certify_good::AllCertifyGoodTreeSubject::Source(_inner) => {
                 todo!()
             }
@@ -126,12 +123,8 @@ impl From<&query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNames
     }
 }
 
-impl From<&query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNamesVersions>
-    for PackageVersion
-{
-    fn from(
-        value: &query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNamesVersions,
-    ) -> Self {
+impl From<&query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNamesVersions> for PackageVersion {
+    fn from(value: &query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNamesVersions) -> Self {
         Self {
             id: value.id.clone(),
             version: value.version.clone(),
@@ -144,9 +137,7 @@ impl From<&query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNames
 impl From<&query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNamesVersionsQualifiers>
     for PackageQualifier
 {
-    fn from(
-        value: &query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
-    ) -> Self {
+    fn from(value: &query_certify_good::AllCertifyGoodTreeSubjectOnPackageNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),

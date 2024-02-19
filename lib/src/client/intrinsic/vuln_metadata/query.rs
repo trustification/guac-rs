@@ -70,9 +70,7 @@ impl From<&VulnerabilitySpec> for query_vulnerability_metadata::VulnerabilitySpe
     }
 }
 
-impl From<&query_vulnerability_metadata::QueryVulnerabilityMetadataVulnerabilityMetadata>
-    for VulnerabilityMetadata
-{
+impl From<&query_vulnerability_metadata::QueryVulnerabilityMetadataVulnerabilityMetadata> for VulnerabilityMetadata {
     fn from(value: &QueryVulnerabilityMetadataVulnerabilityMetadata) -> Self {
         Self {
             id: value.id.clone(),
@@ -96,9 +94,7 @@ impl From<&query_vulnerability_metadata::VulnerabilityScoreType> for Vulnerabili
             query_vulnerability_metadata::VulnerabilityScoreType::CVSSv4 => Self::CVSSv4,
             query_vulnerability_metadata::VulnerabilityScoreType::OWASP => Self::OWASP,
             query_vulnerability_metadata::VulnerabilityScoreType::SSVC => Self::SSVC,
-            query_vulnerability_metadata::VulnerabilityScoreType::Other(other) => {
-                Self::Other(other.clone())
-            }
+            query_vulnerability_metadata::VulnerabilityScoreType::Other(other) => Self::Other(other.clone()),
         }
     }
 }

@@ -20,8 +20,7 @@ impl PackagesCommand {
         let guac = GuacClient::new(&self.config.guac_url);
         let purl = PackageUrl::from_str(&self.config.purl)?;
         let pkgs = guac.intrinsic().packages(&purl.into()).await?;
-        let out =
-            serde_json::to_string(&pkgs)?.to_colored_json(crate::color_mode(self.config.color))?;
+        let out = serde_json::to_string(&pkgs)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
 
         Ok(ExitCode::SUCCESS)

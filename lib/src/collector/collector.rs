@@ -2,9 +2,7 @@ use std::fs;
 
 use async_trait::async_trait;
 
-use super::{
-    emitter::Emitter, Document, DocumentType, EncodingType, FormatType, SourceInformation,
-};
+use super::{emitter::Emitter, Document, DocumentType, EncodingType, FormatType, SourceInformation};
 
 #[async_trait]
 pub trait Collector {

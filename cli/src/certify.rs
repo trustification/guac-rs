@@ -24,11 +24,7 @@ impl CertifyCommand {
     args_conflicts_with_subcommands = true
 )]
 pub struct CertifyGoodCommand {
-    #[arg(
-        short = 'g',
-        long = "guac",
-        default_value = "http://localhost:8080/query"
-    )]
+    #[arg(short = 'g', long = "guac", default_value = "http://localhost:8080/query")]
     pub(crate) guac_url: String,
 
     #[arg(short = 'C', long = "color", default_value = "auto")]
@@ -65,11 +61,7 @@ impl CertifyGoodCommand {
     args_conflicts_with_subcommands = true
 )]
 pub struct CertifyBadCommand {
-    #[arg(
-        short = 'g',
-        long = "guac",
-        default_value = "http://localhost:8080/query"
-    )]
+    #[arg(short = 'g', long = "guac", default_value = "http://localhost:8080/query")]
     pub(crate) guac_url: String,
 
     #[arg(short = 'C', long = "color", default_value = "auto")]

@@ -20,8 +20,7 @@ impl DependenciesCommand {
         let guac = GuacClient::new(&self.config.guac_url);
         let purl = PackageUrl::from_str(&self.config.purl)?;
         let deps = guac.semantic().dependents_of(&purl).await?;
-        let out =
-            serde_json::to_string(&deps)?.to_colored_json(crate::color_mode(self.config.color))?;
+        let out = serde_json::to_string(&deps)?.to_colored_json(crate::color_mode(self.config.color))?;
         println!("{}", out);
 
         Ok(ExitCode::SUCCESS)

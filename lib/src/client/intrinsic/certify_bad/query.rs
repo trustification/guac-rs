@@ -1,7 +1,6 @@
 use crate::client::intrinsic::certify_bad::{CertifyBad, CertifyBadSpec};
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use crate::client::intrinsic::{PackageSourceOrArtifact, PackageSourceOrArtifactSpec};
 use chrono::Utc;
@@ -82,9 +81,7 @@ impl From<&query_certify_bad::allCertifyBadTree> for CertifyBad {
 impl From<&query_certify_bad::AllCertifyBadTreeSubject> for PackageSourceOrArtifact {
     fn from(value: &query_certify_bad::AllCertifyBadTreeSubject) -> Self {
         match value {
-            query_certify_bad::AllCertifyBadTreeSubject::Package(inner) => {
-                Self::Package(inner.into())
-            }
+            query_certify_bad::AllCertifyBadTreeSubject::Package(inner) => Self::Package(inner.into()),
             query_certify_bad::AllCertifyBadTreeSubject::Source(_inner) => {
                 todo!()
             }
@@ -125,12 +122,8 @@ impl From<&query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNames> 
     }
 }
 
-impl From<&query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersions>
-    for PackageVersion
-{
-    fn from(
-        value: &query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersions,
-    ) -> Self {
+impl From<&query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersions> for PackageVersion {
+    fn from(value: &query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersions) -> Self {
         Self {
             id: value.id.clone(),
             version: value.version.clone(),
@@ -140,12 +133,8 @@ impl From<&query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVe
     }
 }
 
-impl From<&query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersionsQualifiers>
-    for PackageQualifier
-{
-    fn from(
-        value: &query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
-    ) -> Self {
+impl From<&query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersionsQualifiers> for PackageQualifier {
+    fn from(value: &query_certify_bad::AllCertifyBadTreeSubjectOnPackageNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),

@@ -52,14 +52,17 @@ pub mod find_dependent_product {
     #[derive(Deserialize, Debug)]
     pub struct FindDependentProductFindDependentProductSubjectOnPackageNamespacesNames {
         pub name: String,
-        pub versions:
-            Vec<FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersions>,
+        pub versions: Vec<FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersions>,
     }
     #[derive(Deserialize, Debug)]
-    pub struct FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersions { pub id : ID , pub version : String , pub qualifiers : Vec < FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersionsQualifiers > , pub subpath : String , }
+    pub struct FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersions {
+        pub id: ID,
+        pub version: String,
+        pub qualifiers: Vec<FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersionsQualifiers>,
+        pub subpath: String,
+    }
     #[derive(Deserialize, Debug)]
-    pub struct FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersionsQualifiers
-    {
+    pub struct FindDependentProductFindDependentProductSubjectOnPackageNamespacesNamesVersionsQualifiers {
         pub key: String,
         pub value: String,
     }

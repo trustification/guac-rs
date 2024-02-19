@@ -13,10 +13,7 @@ async fn has_sbom() -> Result<(), anyhow::Error> {
 
     let pkg = PackageUrl::from_str("pkg:rpm/trustification-has-sbom@0.3.0")?;
 
-    client
-        .intrinsic()
-        .ingest_package(&pkg.clone().into())
-        .await?;
+    client.intrinsic().ingest_package(&pkg.clone().into()).await?;
 
     client
         .intrinsic()

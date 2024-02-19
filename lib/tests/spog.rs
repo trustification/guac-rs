@@ -43,7 +43,11 @@ async fn find_vulnerability_by_sbom_uri() -> Result<(), anyhow::Error> {
 
     let result = client
         .semantic()
-        .find_vulnerability_by_sbom_uri("https://access.redhat.com/security/data/sbom/beta/spdx/rhel-7.9.z-c98403ce-5e02-4278-98ec-b36ecd1f46a5", Some(0), Some(20))
+        .find_vulnerability_by_sbom_uri(
+            "https://access.redhat.com/security/data/sbom/beta/spdx/rhel-7.9.z-c98403ce-5e02-4278-98ec-b36ecd1f46a5",
+            Some(0),
+            Some(20),
+        )
         .await?;
     println!("{}", serde_json::to_string_pretty(&result).unwrap());
 

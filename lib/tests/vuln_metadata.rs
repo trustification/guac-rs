@@ -27,10 +27,7 @@ async fn vuln_metadata() -> Result<(), anyhow::Error> {
         collector: "test-collector".to_string(),
     };
 
-    client
-        .intrinsic()
-        .ingest_vuln_metadata(&vuln, &metadata)
-        .await?;
+    client.intrinsic().ingest_vuln_metadata(&vuln, &metadata).await?;
 
     let result = client
         .intrinsic()

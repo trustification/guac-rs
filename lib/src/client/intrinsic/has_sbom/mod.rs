@@ -3,9 +3,7 @@ mod query;
 
 use crate::client::intrinsic::has_sbom::ingest::IngestHasSBOM;
 use crate::client::intrinsic::has_sbom::query::QueryHasSBOM;
-use crate::client::intrinsic::{
-    IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec,
-};
+use crate::client::intrinsic::{IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec};
 use crate::client::{Error, Id};
 use chrono::Utc;
 use graphql_client::reqwest::post_graphql;
@@ -26,8 +24,7 @@ impl IntrinsicGuacClient {
             has_sbom: has_sbom.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestHasSBOM, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<IngestHasSBOM, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -44,8 +41,7 @@ impl IntrinsicGuacClient {
         let variables = query_has_sbom::Variables {
             has_sbom_spec: has_sbom_spec.into(),
         };
-        let response_body =
-            post_graphql::<QueryHasSBOM, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<QueryHasSBOM, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

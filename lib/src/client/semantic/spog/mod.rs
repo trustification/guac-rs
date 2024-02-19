@@ -18,8 +18,7 @@ use crate::client::intrinsic::certify_vex_statement::{
     self, CertifyVexStatement, CertifyVexStatementSpec, VexJustification, VexStatus,
 };
 use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion,
-    PkgSpec,
+    Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
 use crate::client::intrinsic::PackageOrArtifact::Package as SubjectPackage;
@@ -43,19 +42,14 @@ impl SemanticGuacClient {
         let variables = query_spog::Variables {
             vulnerability_id: vulnerability_id.to_string(),
         };
-        let response_body = post_graphql::<QuerySpog, _>(
-            self.intrinsic().client(),
-            self.intrinsic().url(),
-            variables,
-        )
-        .await?;
+        let response_body =
+            post_graphql::<QuerySpog, _>(self.intrinsic().client(), self.intrinsic().url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
         }
 
-        let data: <QuerySpog as GraphQLQuery>::ResponseData =
-            response_body.data.ok_or(Error::GraphQL(vec![]))?;
+        let data: <QuerySpog as GraphQLQuery>::ResponseData = response_body.data.ok_or(Error::GraphQL(vec![]))?;
         let mut res = Vec::new();
 
         for entry in &data.find_top_level_packages_related_to_vulnerability {
@@ -158,12 +152,8 @@ impl SemanticGuacClient {
             offset,
             limit,
         };
-        let response_body = post_graphql::<FindVulnerability, _>(
-            self.intrinsic().client(),
-            self.intrinsic().url(),
-            variables,
-        )
-        .await?;
+        let response_body =
+            post_graphql::<FindVulnerability, _>(self.intrinsic().client(), self.intrinsic().url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             //TODO fix query not to return error in this case
@@ -182,19 +172,18 @@ impl SemanticGuacClient {
 
         for entry in &data.find_vulnerability {
             match entry {
-                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVEXStatement(
-                    inner,
-                ) => {
+                find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVEXStatement(inner) => {
                     let vex: CertifyVexStatement = CertifyVexStatement::from(inner);
                     match vex.subject {
                         SubjectPackage(inner) => {
                             for v in vex.vulnerability.vulnerability_ids {
-                                let entry =
-                                    result.entry(v.vulnerability_id).or_default();
+                                let entry = result.entry(v.vulnerability_id).or_default();
                                 entry.extend(inner.try_as_purls()?.iter().map(|p| p.to_string()));
                             }
                         }
-                        _ => { println!("vex.subject was not matched.") }
+                        _ => {
+                            println!("vex.subject was not matched.")
+                        }
                     };
                 }
                 find_vulnerability::FindVulnerabilityFindVulnerability::CertifyVuln(inner) => {
@@ -223,14 +212,9 @@ impl SemanticGuacClient {
             offset,
             limit,
         };
-        let response_body: graphql_client::Response<
-            <FindVulnerabilityBySbomURI as GraphQLQuery>::ResponseData,
-        > = post_graphql::<FindVulnerabilityBySbomURI, _>(
-            self.intrinsic().client(),
-            self.intrinsic().url(),
-            variables,
-        )
-        .await?;
+        let response_body: graphql_client::Response<<FindVulnerabilityBySbomURI as GraphQLQuery>::ResponseData> =
+            post_graphql::<FindVulnerabilityBySbomURI, _>(self.intrinsic().client(), self.intrinsic().url(), variables)
+                .await?;
 
         if let Some(errors) = response_body.errors {
             //TODO fix query not to return error in this case
@@ -293,14 +277,9 @@ impl SemanticGuacClient {
             offset,
             limit,
         };
-        let response_body: graphql_client::Response<
-            <FindDependentProduct as GraphQLQuery>::ResponseData,
-        > = post_graphql::<FindDependentProduct, _>(
-            self.intrinsic().client(),
-            self.intrinsic().url(),
-            variables,
-        )
-        .await?;
+        let response_body: graphql_client::Response<<FindDependentProduct as GraphQLQuery>::ResponseData> =
+            post_graphql::<FindDependentProduct, _>(self.intrinsic().client(), self.intrinsic().url(), variables)
+                .await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

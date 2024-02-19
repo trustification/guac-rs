@@ -20,11 +20,7 @@ pub enum CollectSubCommand {
 #[derive(Clone, Debug, clap::Parser)]
 #[command(rename_all_env = "SCREAMING_SNAKE_CASE")]
 pub struct CollectSubConfig {
-    #[arg(
-        short = 'u',
-        long = "csub-url",
-        default_value = "http://localhost:2782/"
-    )]
+    #[arg(short = 'u', long = "csub-url", default_value = "http://localhost:2782/")]
     pub(crate) csub_url: String,
 
     #[arg(short = 'c', long = "color", default_value = "auto")]

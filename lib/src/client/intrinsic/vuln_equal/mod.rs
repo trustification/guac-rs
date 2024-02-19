@@ -1,8 +1,6 @@
 use crate::client::intrinsic::vuln_equal::ingest::{ingest_vuln_equal, IngestVulnEqual};
 use crate::client::intrinsic::vuln_equal::query::QueryVulnEqual;
-use crate::client::intrinsic::vulnerability::{
-    Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec,
-};
+use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec};
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::{Error, Id};
 use graphql_client::reqwest::post_graphql;
@@ -25,8 +23,7 @@ impl IntrinsicGuacClient {
             vuln_equal: vuln_equal.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestVulnEqual, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<IngestVulnEqual, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -37,18 +34,14 @@ impl IntrinsicGuacClient {
         Ok(data.ingest_vuln_equal)
     }
 
-    pub async fn vuln_equal(
-        &self,
-        vuln_equal_spec: &VulnEqualSpec,
-    ) -> Result<Vec<VulnEqual>, Error> {
+    pub async fn vuln_equal(&self, vuln_equal_spec: &VulnEqualSpec) -> Result<Vec<VulnEqual>, Error> {
         use self::query::query_vuln_equal;
 
         let variables = query_vuln_equal::Variables {
             vuln_equal_spec: vuln_equal_spec.into(),
         };
 
-        let response_body =
-            post_graphql::<QueryVulnEqual, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<QueryVulnEqual, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

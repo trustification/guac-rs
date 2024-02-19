@@ -1,9 +1,7 @@
 use crate::client::graph::{Edge, Node};
 use crate::client::intrinsic::certify_vuln::{CertifyVuln, ScanMetadata};
 use crate::client::intrinsic::is_dependency::{DependencyType, IsDependency};
-use crate::client::intrinsic::package::{
-    Package, PackageName, PackageNamespace, PackageQualifier, PackageVersion,
-};
+use crate::client::intrinsic::package::{Package, PackageName, PackageNamespace, PackageQualifier, PackageVersion};
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
 use chrono::Utc;
 use graphql_client::GraphQLQuery;

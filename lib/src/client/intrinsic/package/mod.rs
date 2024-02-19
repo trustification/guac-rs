@@ -19,8 +19,7 @@ impl IntrinsicGuacClient {
             package: package.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestPackage, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<IngestPackage, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -37,8 +36,7 @@ impl IntrinsicGuacClient {
             package: package.into(),
         };
 
-        let response_body =
-            post_graphql::<QueryPackages, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<QueryPackages, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

@@ -18,10 +18,7 @@ async fn certify_vex_statement() -> Result<(), anyhow::Error> {
 
     let package = PackageUrl::from_str("pkg:maven/com/foo/vexed@1.2.3")?;
 
-    client
-        .intrinsic()
-        .ingest_package(&package.clone().into())
-        .await?;
+    client.intrinsic().ingest_package(&package.clone().into()).await?;
 
     let vuln = VulnerabilityInputSpec {
         r#type: "cve".to_string(),

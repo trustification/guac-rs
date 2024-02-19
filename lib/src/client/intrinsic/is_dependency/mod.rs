@@ -27,8 +27,7 @@ impl IntrinsicGuacClient {
             dependency: dependency.into(),
         };
 
-        let response_body =
-            post_graphql::<IngestDependency, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<IngestDependency, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));
@@ -39,18 +38,14 @@ impl IntrinsicGuacClient {
         Ok(data.ingest_dependency)
     }
 
-    pub async fn is_dependency(
-        &self,
-        is_dependency_spec: &IsDependencySpec,
-    ) -> Result<Vec<IsDependency>, Error> {
+    pub async fn is_dependency(&self, is_dependency_spec: &IsDependencySpec) -> Result<Vec<IsDependency>, Error> {
         use self::query::query_is_dependency;
 
         let variables = query_is_dependency::Variables {
             is_dependency_spec: is_dependency_spec.into(),
         };
 
-        let response_body =
-            post_graphql::<QueryIsDependency, _>(self.client(), self.url(), variables).await?;
+        let response_body = post_graphql::<QueryIsDependency, _>(self.client(), self.url(), variables).await?;
 
         if let Some(errors) = response_body.errors {
             return Err(Error::GraphQL(errors));

@@ -23,9 +23,7 @@ pub struct IntrinsicGuacClient {
 
 impl IntrinsicGuacClient {
     pub(crate) fn new(client: &GuacClient) -> Self {
-        Self {
-            client: client.clone(),
-        }
+        Self { client: client.clone() }
     }
 
     pub(crate) fn client(&self) -> &Client {
@@ -57,9 +55,7 @@ pub struct PackageSourceOrArtifactSpec {
 
 impl From<PkgSpec> for PackageSourceOrArtifactSpec {
     fn from(package: PkgSpec) -> Self {
-        Self {
-            package: Some(package),
-        }
+        Self { package: Some(package) }
     }
 }
 
@@ -79,9 +75,7 @@ pub struct PackageSourceOrArtifactInput {
 
 impl From<PkgInputSpec> for PackageSourceOrArtifactInput {
     fn from(package: PkgInputSpec) -> Self {
-        Self {
-            package: Some(package),
-        }
+        Self { package: Some(package) }
     }
 }
 
