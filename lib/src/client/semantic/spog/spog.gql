@@ -1,64 +1,67 @@
 query QuerySpog($vulnerabilityID: String!) {
-  findTopLevelPackagesRelatedToVulnerability(
-    vulnerabilityID: $vulnerabilityID
-  ) {
-    __typename
-    ... on CertifyVEXStatement {
-      ...allCertifyVEXStatementTree
+    findTopLevelPackagesRelatedToVulnerability(
+        vulnerabilityID: $vulnerabilityID
+    ) {
+        __typename
+        ... on CertifyVEXStatement {
+            ...allCertifyVEXStatementTree
+        }
+        ... on CertifyVuln {
+            ...allCertifyVulnTree
+        }
+        ... on Package {
+            ...allPkgTree
+        }
+        ... on IsDependency {
+            dependencyType
+        }
     }
-    ... on Package {
-      ...allPkgTree
-    }
-    ... on IsDependency {
-      dependencyType
-    }
-  }
 }
 
 query FindVulnerability($purl: String!, $offset: Int, $limit: Int) {
-  findVulnerability(purl: $purl, offset: $offset, limit: $limit) {
-    __typename
-    ... on CertifyVEXStatement {
-      ...allCertifyVEXStatementTree
+    findVulnerability(purl: $purl, offset: $offset, limit: $limit) {
+        __typename
+        ... on CertifyVEXStatement {
+            ...allCertifyVEXStatementTree
+        }
+        ... on CertifyVuln {
+            ...allCertifyVulnTree
+        }
     }
-    ... on CertifyVuln {
-      ...allCertifyVulnTree
-    }
-  }
 }
 
 query FindVulnerabilityBySbomURI($sbomURI: String!, $offset: Int, $limit: Int) {
- findVulnerabilityBySbomURI(sbomURI: $sbomURI, offset: $offset, limit: $limit) {
-		__typename
-    ... on CertifyVEXStatement {
-			...allCertifyVEXStatementTree
+    findVulnerabilityBySbomURI(sbomURI: $sbomURI, offset: $offset, limit: $limit) {
+        __typename
+        ... on CertifyVEXStatement {
+            ...allCertifyVEXStatementTree
+        }
+        ... on CertifyVuln {
+            ...allCertifyVulnTree
+        }
     }
-    ... on CertifyVuln {
-			...allCertifyVulnTree
-    }
- }
 }
 
 fragment allPkgTree on Package {
-  id
-  type
-  namespaces {
     id
-    namespace
-    names {
-      id
-      name
-      versions {
+    type
+    namespaces {
         id
-        version
-        qualifiers {
-          key
-          value
+        namespace
+        names {
+            id
+            name
+            versions {
+                id
+                version
+                qualifiers {
+                    key
+                    value
+                }
+                subpath
+            }
         }
-        subpath
-      }
     }
-  }
 }
 
 fragment allCertifyVEXStatementTree on CertifyVEXStatement {
