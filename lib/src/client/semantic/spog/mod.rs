@@ -8,7 +8,7 @@ use std::str::FromStr;
 
 use crate::client::graph::Node;
 use crate::client::intrinsic::certify_vuln::{CertifyVuln, CertifyVulnSpec};
-use crate::client::intrinsic::PackageOrArtifactSpec;
+use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactSpec};
 use crate::client::semantic::spog::dependent_product::FindDependentProduct;
 use crate::client::semantic::spog::find_vulnerability::FindVulnerability;
 use crate::client::semantic::spog::find_vulnerability_by_sbom_uri::FindVulnerabilityBySbomURI;
@@ -61,6 +61,18 @@ impl SemanticGuacClient {
 
             let vex = match &entry[0] {
                 QS::CertifyVEXStatement(inner) => CertifyVexStatement::from(inner),
+                QS::CertifyVuln(certify_vuln) => CertifyVexStatement {
+                    id: certify_vuln.id.to_string(),
+                    subject: PackageOrArtifact::Package(Package::from(&certify_vuln.package)),
+                    vulnerability: Vulnerability::from(&certify_vuln.vulnerability),
+                    status: VexStatus::Affected,
+                    vex_justification: VexJustification::NotProvided,
+                    statement: "N/A".to_string(),
+                    status_notes: "N/A".to_string(),
+                    known_since: certify_vuln.metadata.time_scanned, //Default::default(),
+                    origin: certify_vuln.metadata.origin.to_string(),
+                    collector: certify_vuln.metadata.collector.to_string(),
+                },
                 _ => return Err(Error::GraphQL(vec![])),
             };
             let mut path = Vec::new();

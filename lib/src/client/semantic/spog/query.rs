@@ -8,6 +8,7 @@ use crate::client::intrinsic::package::{
 };
 use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityId};
 use crate::client::semantic::spog::query::query_spog::allCertifyVEXStatementTree;
+use crate::client::semantic::spog::query::query_spog::allCertifyVulnTree;
 use crate::client::semantic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerability as QS;
 use crate::client::semantic::spog::query::query_spog::QuerySpogFindTopLevelPackagesRelatedToVulnerabilityOnPackage as QSPackage;
 use crate::client::semantic::spog::query::query_spog::VexJustification as QSVexJustification;
@@ -22,7 +23,14 @@ use crate::client::semantic::spog::query::query_spog::{
     AllPkgTreeNamespacesNamesVersionsQualifiers,
 };
 
+use crate::client::intrinsic::certify_vuln::{CertifyVuln, ScanMetadata};
 use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec};
+use crate::client::semantic::spog::query::query_spog::{
+    AllCertifyVulnTreeMetadata, AllCertifyVulnTreePackage, AllCertifyVulnTreePackageNamespaces,
+    AllCertifyVulnTreePackageNamespacesNames, AllCertifyVulnTreePackageNamespacesNamesVersions,
+    AllCertifyVulnTreePackageNamespacesNamesVersionsQualifiers, AllCertifyVulnTreeVulnerability,
+    AllCertifyVulnTreeVulnerabilityVulnerabilityIDs,
+};
 
 type Time = chrono::DateTime<Utc>;
 
@@ -202,6 +210,102 @@ impl From<&AllPkgTreeNamespacesNamesVersions> for PackageVersion {
 
 impl From<&AllPkgTreeNamespacesNamesVersionsQualifiers> for PackageQualifier {
     fn from(value: &AllPkgTreeNamespacesNamesVersionsQualifiers) -> Self {
+        Self {
+            key: value.key.clone(),
+            value: value.value.clone(),
+        }
+    }
+}
+
+// VULN
+
+impl From<&allCertifyVulnTree> for CertifyVuln {
+    fn from(value: &allCertifyVulnTree) -> Self {
+        Self {
+            id: value.id.clone(),
+            package: (&value.package).into(),
+            vulnerability: (&value.vulnerability).into(),
+            metadata: (&value.metadata).into(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreePackage> for Package {
+    fn from(value: &AllCertifyVulnTreePackage) -> Self {
+        Self {
+            id: value.id.clone(),
+            r#type: value.type_.clone(),
+            namespaces: value.namespaces.iter().map(|e| e.into()).collect(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreeVulnerability> for Vulnerability {
+    fn from(value: &AllCertifyVulnTreeVulnerability) -> Self {
+        Self {
+            id: value.id.clone(),
+            r#type: value.type_.clone(),
+            vulnerability_ids: value.vulnerability_i_ds.iter().map(|e| e.into()).collect(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreeMetadata> for ScanMetadata {
+    fn from(value: &AllCertifyVulnTreeMetadata) -> Self {
+        Self {
+            db_uri: value.db_uri.clone(),
+            db_version: value.db_version.clone(),
+            scanner_uri: value.scanner_uri.clone(),
+            scanner_version: value.scanner_version.clone(),
+            time_scanned: value.time_scanned,
+            origin: value.origin.clone(),
+            collector: value.collector.clone(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreePackageNamespaces> for PackageNamespace {
+    fn from(value: &AllCertifyVulnTreePackageNamespaces) -> Self {
+        Self {
+            id: value.id.clone(),
+            namespace: value.namespace.clone(),
+            names: value.names.iter().map(|e| e.into()).collect(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreeVulnerabilityVulnerabilityIDs> for VulnerabilityId {
+    fn from(value: &AllCertifyVulnTreeVulnerabilityVulnerabilityIDs) -> Self {
+        Self {
+            id: value.id.clone(),
+            vulnerability_id: value.vulnerability_id.clone(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreePackageNamespacesNames> for PackageName {
+    fn from(value: &AllCertifyVulnTreePackageNamespacesNames) -> Self {
+        Self {
+            id: value.id.clone(),
+            name: value.name.clone(),
+            versions: value.versions.iter().map(|e| e.into()).collect(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreePackageNamespacesNamesVersions> for PackageVersion {
+    fn from(value: &AllCertifyVulnTreePackageNamespacesNamesVersions) -> Self {
+        Self {
+            id: value.id.clone(),
+            version: value.version.clone(),
+            qualifiers: value.qualifiers.iter().map(|e| e.into()).collect(),
+            subpath: value.subpath.clone(),
+        }
+    }
+}
+
+impl From<&AllCertifyVulnTreePackageNamespacesNamesVersionsQualifiers> for PackageQualifier {
+    fn from(value: &AllCertifyVulnTreePackageNamespacesNamesVersionsQualifiers) -> Self {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),
