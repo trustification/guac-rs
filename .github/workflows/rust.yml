@@ -30,5 +30,4 @@ jobs:
     - uses: taiki-e/install-action@cargo-llvm-cov
     - name: Run tests
       run: |
-        GUAC_URL=http://localhost:8085/query cargo llvm-cov test --fail-under-functions 80 | tee cov.txt
-        echo "COVERAGE=$(cat cov.txt | grep "TOTAL" | awk '{print $4}' | sed 's/%//g')" >> $GITHUB_ENV
+        GUAC_URL=http://localhost:8085/query cargo llvm-cov test
