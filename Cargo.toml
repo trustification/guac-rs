@@ -16,7 +16,7 @@ env_logger = "0.11.1"
 exporter = { git = "https://github.com/trustification/trustification.git", tag = "v0.1.0-nightly.9382a428" }
 graphql_client = "0.14.0"
 humantime = "2.1.0"
-packageurl = "0.4.0"
+packageurl = "0.3.0"
 prost = "0.12.3"
 reqwest = "0.11"
 serde = "1.0.114"
