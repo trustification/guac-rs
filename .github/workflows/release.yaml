@@ -1,0 +1,112 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: write
+
+jobs:
+
+  init:
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{steps.version.outputs.version}}
+      prerelease: ${{steps.state.outputs.prerelease}}
+    steps:
+      - name: Evaluate pre-release state
+        id: state
+        env:
+          HEAD_REF: ${{github.head_ref}}
+        run: |
+          test -z "${HEAD_REF}" && (echo 'do-publish=true' >> $GITHUB_OUTPUT)
+          if [[ "${{ github.event.ref }}" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo release=true >> $GITHUB_OUTPUT
+              echo release=true >> $GITHUB_ENV
+          elif [[ "${{ github.event.ref }}" =~ ^refs/tags/v.*$ ]]; then
+              echo prerelease=true >> $GITHUB_OUTPUT
+              echo prerelease=true >> $GITHUB_ENV
+          fi
+      - name: Set version
+        id: version
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          [ "$VERSION" == "main" ] && VERSION=latest
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_ENV
+      - name: Show result
+        run: |
+          echo "Version: $version"
+          echo "Release: $release"
+          echo "Pre-release: $prerelease"
+
+  # ensure that the version of the tag is the version of the crates
+  ensure-version:
+    runs-on: ubuntu-22.04
+    needs:
+      - init
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup cargo-binstall
+        run: |
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+      - name: Setup cargo-workspaces
+        run: |
+          cargo binstall -y cargo-workspaces
+      - name: Set version
+        run: |
+          cargo ws version custom ${{ needs.init.outputs.version }} --all --no-git-commit --force "*" --yes
+      - name: Ensure this did not change anything
+        run: |
+          git diff --exit-code
+          if [ $? -gt 0 ]; then
+              echo "::error::Uncommitted changes after setting the version. This indicates that the version of the tag does not align with the version of the crates."
+              exit 1
+          fi
+
+  publish:
+    needs: [ init, ensure-version ]
+    runs-on: ubuntu-22.04
+
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      attestations: write
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install convco
+        run: |
+          curl -sLO https://github.com/convco/convco/releases/download/v0.5.1/convco-ubuntu.zip
+          unzip convco-ubuntu.zip
+          sudo install convco /usr/local/bin
+
+      - name: Generate changelog
+        run: |
+          convco changelog -s --max-majors=1 --max-minors=1 --max-patches=1 -n > /tmp/changelog.md
+
+
+      # Final step, create the GitHub release, attaching the files
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: v${{ needs.init.outputs.version }}
+        run: |
+          OPTS=""
+
+          if [[ "${{ needs.init.outputs.prerelease }}" == "true" ]]; then
+            OPTS="${OPTS} -p"
+          fi
+
+          gh release create ${OPTS} --title "${{ needs.init.outputs.version }}" -F /tmp/changelog.md ${TAG} \
+            $(find staging -type f)

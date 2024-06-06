@@ -14,7 +14,7 @@ tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 serde_json = { workspace = true }
 colored_json = { workspace = true }
 clap = { workspace = true, features = ["derive"] }
-exporter = { workspace = true }
+exporter = { git = "https://github.com/trustification/trustification.git", tag = "v0.1.0-nightly.9382a428" }
 env_logger = { workspace = true }
 humantime = { workspace = true }
 packageurl = { workspace = true }
