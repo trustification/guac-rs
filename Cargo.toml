@@ -24,7 +24,7 @@ strum = "0.26.1"
 strum_macros = "0.26.1"
 thiserror = "1"
 tokio = "1.36.0"
-tonic = "0.11.0"
+tonic = { version = "0.11.0", features = ["tls"] }
 tonic-build = "0.11.0"
 
 # Do not generate debuginfo for dependencies in `dev` and `test` profiles. This

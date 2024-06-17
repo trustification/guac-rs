@@ -1,7 +1,8 @@
+use std::path::Path;
 use std::time::SystemTime;
 
 use serde::Serialize;
-use tonic::transport::Channel;
+use tonic::transport::{Certificate, Channel, ClientTlsConfig};
 
 use grpc::colect_subscriber_service_client::ColectSubscriberServiceClient;
 use grpc::CollectDataType;
@@ -78,6 +79,17 @@ impl CollectSubClient {
     pub async fn new(url: String) -> anyhow::Result<Self> {
         Ok(Self {
             client: grpc::colect_subscriber_service_client::ColectSubscriberServiceClient::connect(url).await?,
+        })
+    }
+
+    pub async fn new_with_ca_certificate(url: String, ca_certificate_pem_path: String) -> anyhow::Result<Self> {
+        let cert = std::fs::read_to_string(ca_certificate_pem_path)?;
+        Ok(Self {
+            client: grpc::colect_subscriber_service_client::ColectSubscriberServiceClient::connect(
+                tonic::transport::Endpoint::new(url)?
+                    .tls_config(ClientTlsConfig::new().ca_certificate(Certificate::from_pem(cert)))?,
+            )
+            .await?,
         })
     }
 
