@@ -2,11 +2,11 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
-use guac::client::intrinsic::certify_vuln::{CertifyVulnSpec, ScanMetadata};
-use guac::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
-use guac::client::GuacClient;
-
 use crate::common::guac_url;
+use guac::client::intrinsic::certify_vuln::{CertifyVulnSpec, ScanMetadata};
+use guac::client::intrinsic::package::IDorPkgInput;
+use guac::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilityInputSpec, VulnerabilitySpec};
+use guac::client::GuacClient;
 
 mod common;
 
@@ -24,19 +24,33 @@ async fn certify_vuln() -> Result<(), anyhow::Error> {
 
     client
         .intrinsic()
-        .ingest_vulnerability(&VulnerabilityInputSpec {
-            r#type: "osv".to_string(),
-            vulnerability_id: "ghsa-eieio-42".to_string(),
+        .ingest_vulnerability(&IDorVulnerabilityInput {
+            vulnerability_input: Some(VulnerabilityInputSpec {
+                r#type: "osv".to_string(),
+                vulnerability_id: "ghsa-eieio-42".to_string(),
+            }),
+            vulnerability_type_id: None,
+            vulnerability_node_id: None,
         })
         .await?;
 
     client
         .intrinsic()
         .ingest_certify_vuln(
-            &pkg.clone().into(),
-            &VulnerabilityInputSpec {
-                r#type: "osv".to_string(),
-                vulnerability_id: "ghsa-eieio-42".to_string(),
+            &IDorPkgInput {
+                package_type_id: None,
+                package_namespace_id: None,
+                package_name_id: None,
+                package_version_id: None,
+                package_input: Some(pkg.clone().into()),
+            },
+            &IDorVulnerabilityInput {
+                vulnerability_input: Some(VulnerabilityInputSpec {
+                    r#type: "osv".to_string(),
+                    vulnerability_id: "ghsa-eieio-42".to_string(),
+                }),
+                vulnerability_type_id: None,
+                vulnerability_node_id: None,
             },
             &ScanMetadata {
                 db_uri: "test-db-uri".to_string(),
@@ -46,6 +60,7 @@ async fn certify_vuln() -> Result<(), anyhow::Error> {
                 time_scanned: Default::default(),
                 origin: "test-vuln-origin".to_string(),
                 collector: "test-vuln-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;

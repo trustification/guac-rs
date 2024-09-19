@@ -1,6 +1,8 @@
 use crate::client::intrinsic::vuln_equal::ingest::{ingest_vuln_equal, IngestVulnEqual};
 use crate::client::intrinsic::vuln_equal::query::QueryVulnEqual;
-use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec};
+use crate::client::intrinsic::vulnerability::{
+    IDorVulnerabilityInput, Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec,
+};
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::{Error, Id};
 use graphql_client::reqwest::post_graphql;
@@ -11,8 +13,8 @@ mod query;
 impl IntrinsicGuacClient {
     pub async fn ingest_vuln_equal(
         &self,
-        vulnerability: &VulnerabilityInputSpec,
-        other_vulnerability: &VulnerabilityInputSpec,
+        vulnerability: &IDorVulnerabilityInput,
+        other_vulnerability: &IDorVulnerabilityInput,
         vuln_equal: &VulnEqualInputSpec,
     ) -> Result<Id, Error> {
         use self::ingest::ingest_vuln_equal;
@@ -75,6 +77,7 @@ pub struct VulnEqualSpec {
     pub justification: Option<String>,
     pub origin: Option<String>,
     pub collector: Option<String>,
+    pub document_ref: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -82,4 +85,5 @@ pub struct VulnEqualInputSpec {
     pub justification: String,
     pub origin: String,
     pub collector: String,
+    pub document_ref: String,
 }

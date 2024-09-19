@@ -39,6 +39,7 @@ async fn is_dependency() -> Result<(), anyhow::Error> {
                 justification: "dep-justification".to_string(),
                 origin: "dep-origin".to_string(),
                 collector: "dep-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;
@@ -104,6 +105,7 @@ async fn dependencies_of() -> Result<(), anyhow::Error> {
                 justification: "dep-justification".to_string(),
                 origin: "dep-origin".to_string(),
                 collector: "dep-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;

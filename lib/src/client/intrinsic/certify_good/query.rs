@@ -25,6 +25,7 @@ impl From<&CertifyGoodSpec> for query_certify_good::CertifyGoodSpec {
             origin: value.origin.clone(),
             collector: value.collector.clone(),
             known_since: value.known_since,
+            document_ref: value.document_ref.clone(),
         }
     }
 }

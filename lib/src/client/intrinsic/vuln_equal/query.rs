@@ -24,6 +24,7 @@ impl From<&VulnEqualSpec> for query_vuln_equal::VulnEqualSpec {
             justification: value.justification.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }

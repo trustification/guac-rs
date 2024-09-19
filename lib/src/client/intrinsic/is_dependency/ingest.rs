@@ -1,5 +1,5 @@
 use crate::client::intrinsic::is_dependency::{DependencyType, IsDependencyInputSpec};
-use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
+use crate::client::intrinsic::package::{IDorPkgInput, PackageQualifierInputSpec, PkgInputSpec};
 use crate::client::intrinsic::{MatchFlags, PkgMatchType};
 use graphql_client::GraphQLQuery;
 
@@ -58,6 +58,7 @@ impl From<&IsDependencyInputSpec> for ingest_dependency::IsDependencyInputSpec {
             justification: value.justification.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }
@@ -68,6 +69,18 @@ impl From<&DependencyType> for ingest_dependency::DependencyType {
             DependencyType::Direct => Self::DIRECT,
             DependencyType::Indirect => Self::INDIRECT,
             DependencyType::Unknown => Self::UNKNOWN,
+        }
+    }
+}
+
+impl From<&IDorPkgInput> for ingest_dependency::IDorPkgInput {
+    fn from(value: &IDorPkgInput) -> Self {
+        Self {
+            package_type_id: value.package_type_id.clone(),
+            package_namespace_id: value.package_namespace_id.clone(),
+            package_name_id: value.package_name_id.clone(),
+            package_version_id: value.package_version_id.clone(),
+            package_input: value.package_input.as_ref().map(|pkg| pkg.into()),
         }
     }
 }

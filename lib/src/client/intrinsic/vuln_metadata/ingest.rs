@@ -1,5 +1,5 @@
 use crate::client::intrinsic::vuln_metadata::{VulnerabilityMetadataInputSpec, VulnerabilityScoreType};
-use crate::client::intrinsic::vulnerability::VulnerabilityInputSpec;
+use crate::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilityInputSpec};
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
@@ -30,6 +30,7 @@ impl From<&VulnerabilityMetadataInputSpec> for ingest_vulnerability_metadata::Vu
             timestamp: value.timestamp,
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }
@@ -46,6 +47,16 @@ impl From<&VulnerabilityScoreType> for ingest_vulnerability_metadata::Vulnerabil
             VulnerabilityScoreType::OWASP => Self::OWASP,
             VulnerabilityScoreType::SSVC => Self::SSVC,
             VulnerabilityScoreType::Other(inner) => Self::Other(inner.clone()),
+        }
+    }
+}
+
+impl From<&IDorVulnerabilityInput> for ingest_vulnerability_metadata::IDorVulnerabilityInput {
+    fn from(vuln: &IDorVulnerabilityInput) -> Self {
+        Self {
+            vulnerability_input: vuln.vulnerability_input.as_ref().map(|vuln| vuln.into()),
+            vulnerability_node_id: vuln.vulnerability_node_id.clone(),
+            vulnerability_type_id: vuln.vulnerability_type_id.clone(),
         }
     }
 }

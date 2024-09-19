@@ -27,6 +27,7 @@ impl From<&VulnerabilityMetadataSpec> for query_vulnerability_metadata::Vulnerab
             timestamp: value.timestamp,
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }

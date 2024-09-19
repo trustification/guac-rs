@@ -13,7 +13,7 @@ fragment allVulnEqualTree on VulnEqual {
     collector
 }
 
-mutation IngestVulnEqual($vulnerability: VulnerabilityInputSpec!, $other_vulnerability: VulnerabilityInputSpec!, $vuln_equal: VulnEqualInputSpec!) {
+mutation IngestVulnEqual($vulnerability: IDorVulnerabilityInput!, $other_vulnerability: IDorVulnerabilityInput!, $vuln_equal: VulnEqualInputSpec!) {
     ingestVulnEqual(
         vulnerability: $vulnerability
         otherVulnerability: $other_vulnerability

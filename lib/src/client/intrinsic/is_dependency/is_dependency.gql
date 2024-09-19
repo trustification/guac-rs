@@ -1,67 +1,67 @@
 fragment allPackageTree on Package {
-  id
-  type
-  namespaces {
     id
-    namespace
-    names {
-      id
-      name
-      versions {
+    type
+    namespaces {
         id
-        version
-        qualifiers {
-          key
-          value
+        namespace
+        names {
+            id
+            name
+            versions {
+                id
+                version
+                qualifiers {
+                    key
+                    value
+                }
+                subpath
+            }
         }
-        subpath
-      }
     }
-  }
 }
 
 fragment allIsDependencyTree on IsDependency {
-  id
-  package {
-    ... allPackageTree
-  }
-  dependencyPackage {
-    ... allPackageTree
-  }
-  dependencyType
-  versionRange
-  justification
-  origin
-  collector
+    id
+    package {
+        ... allPackageTree
+    }
+    dependencyPackage {
+        ... allPackageTree
+    }
+    dependencyType
+    versionRange
+    justification
+    origin
+    collector
 }
 
 #query QueryDependencies($package: PkgSpec) {
-  #IsDependency(isDependencySpec: {package: $package}) {
-    #...allIsDependencyTree
-  #}
+#IsDependency(isDependencySpec: {package: $package}) {
+#...allIsDependencyTree
+#}
 #}
 #
 #query QueryDependents($package: PkgSpec, $version: String) {
-  #IsDependency(isDependencySpec: {dependentPackage: $package, versionRange: $version}) {
-    #...allIsDependencyTree
-  #}
+#IsDependency(isDependencySpec: {dependentPackage: $package, versionRange: $version}) {
+#...allIsDependencyTree
+#}
 #}
 
 query QueryIsDependency($isDependencySpec: IsDependencySpec!) {
     IsDependency( isDependencySpec: $isDependencySpec) {
-      ...allIsDependencyTree
+        ...allIsDependencyTree
     }
 }
 
 mutation IngestDependency(
-  $pkg: PkgInputSpec!,
-  $depPkg: PkgInputSpec!,
-  $depPkgMatchType: MatchFlags!,
-  $dependency: IsDependencyInputSpec!
+    $pkg: IDorPkgInput!,
+    $depPkg: IDorPkgInput!,
+    $depPkgMatchType: MatchFlags!,
+    $dependency: IsDependencyInputSpec!
 ) {
-  ingestDependency(
-    pkg: $pkg,
-    depPkg: $depPkg,
-    depPkgMatchType: $depPkgMatchType,
-    dependency: $dependency)
+    ingestDependency(
+        pkg: $pkg,
+        depPkg: $depPkg,
+        depPkgMatchType: $depPkgMatchType,
+        dependency: $dependency)
 }

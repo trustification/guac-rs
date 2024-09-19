@@ -3,7 +3,7 @@ use std::str::FromStr;
 
 use crate::client::intrinsic::is_dependency::ingest::IngestDependency;
 use crate::client::intrinsic::is_dependency::query::QueryIsDependency;
-use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
+use crate::client::intrinsic::package::{IDorPkgInput, Package, PkgInputSpec, PkgSpec};
 use crate::client::intrinsic::{IntrinsicGuacClient, MatchFlags};
 use crate::client::{Error, Id};
 
@@ -13,8 +13,8 @@ pub mod query;
 impl IntrinsicGuacClient {
     pub async fn ingest_is_dependency<MF: Into<MatchFlags>>(
         &self,
-        pkg: &PkgInputSpec,
-        dep_pkg: &PkgInputSpec,
+        pkg: &IDorPkgInput,
+        dep_pkg: &IDorPkgInput,
         dep_pkg_match_type: MF,
         dependency: &IsDependencyInputSpec,
     ) -> Result<Id, Error> {
@@ -86,6 +86,7 @@ pub struct IsDependencySpec {
     pub justification: Option<String>,
     pub origin: Option<String>,
     pub collector: Option<String>,
+    pub document_ref: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -95,4 +96,5 @@ pub struct IsDependencyInputSpec {
     pub justification: String,
     pub origin: String,
     pub collector: String,
+    pub document_ref: String,
 }

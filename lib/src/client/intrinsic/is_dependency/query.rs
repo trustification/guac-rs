@@ -23,6 +23,7 @@ impl From<&IsDependencySpec> for query_is_dependency::IsDependencySpec {
             justification: value.justification.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }

@@ -4,7 +4,7 @@ mod query;
 use super::vulnerability::Vulnerability;
 use crate::client::intrinsic::certify_vex_statement::ingest::IngestCertifyVexStatement;
 use crate::client::intrinsic::certify_vex_statement::query::{query_certify_vex_statement, QueryCertifyVexStatement};
-use crate::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
+use crate::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilitySpec};
 use crate::client::intrinsic::{IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec};
 use crate::client::{Error, Id};
 use chrono::Utc;
@@ -17,7 +17,7 @@ impl IntrinsicGuacClient {
     pub async fn ingest_certify_vex_statement(
         &self,
         subject: &PackageOrArtifactInput,
-        vulnerability: &VulnerabilityInputSpec,
+        vulnerability: &IDorVulnerabilityInput,
         vex_statement: &VexStatementInputSpec,
     ) -> Result<Id, Error> {
         use self::ingest::ingest_certify_vex_statement;
@@ -110,6 +110,7 @@ pub struct VexStatementInputSpec {
     pub known_since: Time,
     pub origin: String,
     pub collector: String,
+    pub document_ref: String,
 }
 
 #[derive(Debug, Default)]
@@ -124,4 +125,5 @@ pub struct CertifyVexStatementSpec {
     pub known_since: Option<Time>,
     pub origin: Option<String>,
     pub collector: Option<String>,
+    pub document_ref: Option<String>,
 }

@@ -38,6 +38,7 @@ impl From<&CertifyVulnSpec> for query_certify_vuln::CertifyVulnSpec {
             scanner_version: value.scanner_version.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }
@@ -121,6 +122,7 @@ impl From<&query_certify_vuln::AllCertifyVulnTreeMetadata> for ScanMetadata {
             time_scanned: value.time_scanned,
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }

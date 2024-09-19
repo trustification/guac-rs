@@ -3,6 +3,8 @@ mod query;
 
 use crate::client::intrinsic::has_sbom::ingest::IngestHasSBOM;
 use crate::client::intrinsic::has_sbom::query::QueryHasSBOM;
+use crate::client::intrinsic::is_dependency::IsDependencySpec;
+use crate::client::intrinsic::is_occurence::IsOccurrenceSpec;
 use crate::client::intrinsic::{IntrinsicGuacClient, PackageOrArtifact, PackageOrArtifactInput, PackageOrArtifactSpec};
 use crate::client::{Error, Id};
 use chrono::Utc;
@@ -16,12 +18,14 @@ impl IntrinsicGuacClient {
         &self,
         subject: &PackageOrArtifactInput,
         has_sbom: &HasSBOMInputSpec,
+        includes: &HasSBOMIncludesInputSpec,
     ) -> Result<Id, Error> {
         use self::ingest::ingest_has_sbom;
 
         let variables = ingest_has_sbom::Variables {
             subject: subject.into(),
             has_sbom: has_sbom.into(),
+            includes: includes.into(),
         };
 
         let response_body = post_graphql::<IngestHasSBOM, _>(self.client(), self.url(), variables).await?;
@@ -66,11 +70,15 @@ impl From<PackageUrl<'_>> for HasSBOMSpec {
             subject: Some(value.into()),
             uri: None,
             algorithm: None,
-            digist: None,
+            digest: None,
             download_location: None,
             origin: None,
             collector: None,
             known_since: None,
+            document_ref: None,
+            included_dependencies: None,
+            included_occurrences: None,
+            included_software: None,
         }
     }
 }
@@ -94,11 +102,15 @@ pub struct HasSBOMSpec {
     pub subject: Option<PackageOrArtifactSpec>,
     pub uri: Option<String>,
     pub algorithm: Option<String>,
-    pub digist: Option<String>,
+    pub digest: Option<String>,
     pub download_location: Option<String>,
     pub origin: Option<String>,
     pub collector: Option<String>,
     pub known_since: Option<Time>,
+    pub document_ref: Option<String>,
+    pub included_dependencies: Option<Vec<IsDependencySpec>>,
+    pub included_occurrences: Option<Vec<IsOccurrenceSpec>>,
+    pub included_software: Option<Vec<PackageOrArtifactSpec>>,
 }
 
 #[derive(Clone, Debug)]
@@ -110,4 +122,13 @@ pub struct HasSBOMInputSpec {
     pub origin: String,
     pub collector: String,
     pub known_since: Time,
+    pub document_ref: String,
+}
+
+#[derive(Clone, Debug)]
+pub struct HasSBOMIncludesInputSpec {
+    pub packages: Vec<Id>,
+    pub artifacts: Vec<Id>,
+    pub dependencies: Vec<Id>,
+    pub occurrences: Vec<Id>,
 }
