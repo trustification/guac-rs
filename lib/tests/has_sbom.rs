@@ -1,6 +1,6 @@
 mod common;
 
-use guac::client::intrinsic::has_sbom::HasSBOMInputSpec;
+use guac::client::intrinsic::has_sbom::{HasSBOMIncludesInputSpec, HasSBOMInputSpec};
 use guac::client::GuacClient;
 use packageurl::PackageUrl;
 use std::str::FromStr;
@@ -13,7 +13,7 @@ async fn has_sbom() -> Result<(), anyhow::Error> {
 
     let pkg = PackageUrl::from_str("pkg:rpm/trustification-has-sbom@0.3.0")?;
 
-    client.intrinsic().ingest_package(&pkg.clone().into()).await?;
+    let package_ids = client.intrinsic().ingest_package(&pkg.clone().into()).await?;
 
     client
         .intrinsic()
@@ -27,6 +27,13 @@ async fn has_sbom() -> Result<(), anyhow::Error> {
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
                 known_since: Default::default(),
+                document_ref: "test-document-ref".to_string(),
+            },
+            &HasSBOMIncludesInputSpec {
+                packages: vec![package_ids.package_version_id],
+                artifacts: vec![],
+                dependencies: vec![],
+                occurrences: vec![],
             },
         )
         .await?;

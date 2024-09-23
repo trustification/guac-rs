@@ -1,13 +1,20 @@
+use crate::client::intrinsic::artifact::ArtifactSpec;
 use crate::client::intrinsic::has_sbom::query::query_has_sbom::{
     allHasSBOMTree, AllHasSbomTreeSubject, AllHasSbomTreeSubjectOnPackage, AllHasSbomTreeSubjectOnPackageNamespaces,
     AllHasSbomTreeSubjectOnPackageNamespacesNames, AllHasSbomTreeSubjectOnPackageNamespacesNamesVersions,
     AllHasSbomTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
 };
 use crate::client::intrinsic::has_sbom::{HasSBOM, HasSBOMSpec};
+use crate::client::intrinsic::is_dependency::query::query_is_dependency;
+use crate::client::intrinsic::is_dependency::{DependencyType, IsDependencySpec};
+use crate::client::intrinsic::is_occurence::IsOccurrenceSpec;
 use crate::client::intrinsic::package::{
     Package, PackageName, PackageNamespace, PackageQualifier, PackageQualifierSpec, PackageVersion, PkgSpec,
 };
-use crate::client::intrinsic::{PackageOrArtifact, PackageOrArtifactSpec};
+use crate::client::intrinsic::{
+    PackageOrArtifact, PackageOrArtifactSpec, PackageOrSourceSpec, PackageSourceOrArtifactSpec,
+};
+use async_nats::connection::ShouldFlush::No;
 use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
@@ -27,11 +34,24 @@ impl From<&HasSBOMSpec> for query_has_sbom::HasSBOMSpec {
             subject: value.subject.as_ref().map(|inner| inner.into()),
             uri: value.uri.clone(),
             algorithm: value.algorithm.clone(),
-            digest: value.digist.clone(),
+            digest: value.digest.clone(),
             download_location: value.download_location.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
             known_since: value.known_since,
+            document_ref: value.document_ref.clone(),
+            included_dependencies: value
+                .included_dependencies
+                .as_ref()
+                .map(|inner| inner.iter().map(|e| e.into()).collect()),
+            included_occurrences: value
+                .included_occurrences
+                .as_ref()
+                .map(|inner| inner.iter().map(|e| e.into()).collect()),
+            included_software: value
+                .included_software
+                .as_ref()
+                .map(|inner| inner.iter().map(|e| e.into()).collect()),
         }
     }
 }
@@ -68,6 +88,65 @@ impl From<&PackageQualifierSpec> for query_has_sbom::PackageQualifierSpec {
         Self {
             key: value.key.clone(),
             value: value.value.clone(),
+        }
+    }
+}
+
+impl From<&IsDependencySpec> for query_has_sbom::IsDependencySpec {
+    fn from(value: &IsDependencySpec) -> Self {
+        Self {
+            id: value.id.clone(),
+            package: value.package.as_ref().map(|inner| inner.into()),
+            dependency_package: value.dependent_package.as_ref().map(|inner| inner.into()),
+            version_range: value.version_range.clone(),
+            dependency_type: value.dependency_type.as_ref().map(|inner| inner.into()),
+            justification: value.justification.clone(),
+            origin: value.origin.clone(),
+            collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
+        }
+    }
+}
+
+impl From<&DependencyType> for query_has_sbom::DependencyType {
+    fn from(value: &DependencyType) -> Self {
+        match value {
+            DependencyType::Direct => Self::DIRECT,
+            DependencyType::Indirect => Self::INDIRECT,
+            DependencyType::Unknown => Self::UNKNOWN,
+        }
+    }
+}
+
+impl From<&IsOccurrenceSpec> for query_has_sbom::IsOccurrenceSpec {
+    fn from(value: &IsOccurrenceSpec) -> Self {
+        Self {
+            id: value.id.clone(),
+            subject: value.subject.as_ref().map(|inner| inner.into()),
+            artifact: value.artifact.as_ref().map(|inner| inner.into()),
+            justification: value.justification.clone(),
+            origin: value.origin.clone(),
+            collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
+        }
+    }
+}
+
+impl From<&PackageOrSourceSpec> for query_has_sbom::PackageOrSourceSpec {
+    fn from(value: &PackageOrSourceSpec) -> Self {
+        Self {
+            package: value.package.as_ref().map(|inner| inner.into()),
+            source: None,
+        }
+    }
+}
+
+impl From<&ArtifactSpec> for query_has_sbom::ArtifactSpec {
+    fn from(value: &ArtifactSpec) -> Self {
+        Self {
+            id: value.id.clone(),
+            algorithm: value.algorithm.clone(),
+            digest: value.digest.clone(),
         }
     }
 }

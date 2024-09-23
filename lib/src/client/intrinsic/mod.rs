@@ -1,16 +1,18 @@
-use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
+use crate::client::intrinsic::package::{IDorPkgInput, Package, PkgInputSpec, PkgSpec};
 use crate::client::semantic::SemanticGuacClient;
 use crate::client::GuacClient;
 use packageurl::PackageUrl;
 use reqwest::{Client, IntoUrl};
 use serde::{Deserialize, Serialize};
 
+pub mod artifact;
 pub mod certify_bad;
 pub mod certify_good;
 pub mod certify_vex_statement;
 pub mod certify_vuln;
 pub mod has_sbom;
 pub mod is_dependency;
+pub mod is_occurence;
 pub mod package;
 pub mod path;
 pub mod vuln_equal;
@@ -68,13 +70,13 @@ impl From<PackageUrl<'_>> for PackageSourceOrArtifactSpec {
 }
 
 pub struct PackageSourceOrArtifactInput {
-    package: Option<PkgInputSpec>,
+    package: Option<IDorPkgInput>,
     // source
     // artifact
 }
 
-impl From<PkgInputSpec> for PackageSourceOrArtifactInput {
-    fn from(package: PkgInputSpec) -> Self {
+impl From<IDorPkgInput> for PackageSourceOrArtifactInput {
+    fn from(package: IDorPkgInput) -> Self {
         Self { package: Some(package) }
     }
 }
@@ -101,7 +103,7 @@ pub struct PackageOrArtifactSpec {
 
 #[derive(Clone, Debug)]
 pub struct PackageOrArtifactInput {
-    package: Option<PkgInputSpec>,
+    package: Option<IDorPkgInput>,
     // artifact: Option<ArtifactInputSpec>,
 }
 
@@ -136,4 +138,10 @@ impl From<PkgMatchType> for MatchFlags {
     fn from(pkg: PkgMatchType) -> Self {
         Self { pkg }
     }
+}
+
+#[derive(Debug, Clone)]
+pub struct PackageOrSourceSpec {
+    package: Option<PkgSpec>,
+    // source
 }

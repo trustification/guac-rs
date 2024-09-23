@@ -1,7 +1,7 @@
 use guac::client::intrinsic::vuln_metadata::{
     VulnerabilityMetadataInputSpec, VulnerabilityMetadataSpec, VulnerabilityScoreType,
 };
-use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
+use guac::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilityInputSpec};
 use guac::client::GuacClient;
 
 use crate::common::guac_url;
@@ -12,9 +12,13 @@ mod common;
 async fn vuln_metadata() -> Result<(), anyhow::Error> {
     let client = GuacClient::new(&guac_url());
 
-    let vuln = VulnerabilityInputSpec {
-        r#type: "test-vuln".to_string(),
-        vulnerability_id: "ghsa-osv-cve-44".to_string(),
+    let vuln = IDorVulnerabilityInput {
+        vulnerability_input: Some(VulnerabilityInputSpec {
+            r#type: "test-vuln".to_string(),
+            vulnerability_id: "ghsa-osv-cve-44".to_string(),
+        }),
+        vulnerability_type_id: None,
+        vulnerability_node_id: None,
     };
 
     client.intrinsic().ingest_vulnerability(&vuln).await?;
@@ -25,6 +29,7 @@ async fn vuln_metadata() -> Result<(), anyhow::Error> {
         timestamp: Default::default(),
         origin: "test-origin".to_string(),
         collector: "test-collector".to_string(),
+        document_ref: "test-document-ref".to_string(),
     };
 
     client.intrinsic().ingest_vuln_metadata(&vuln, &metadata).await?;

@@ -4,8 +4,10 @@ use graphql_client::reqwest::post_graphql;
 
 use self::ingest::IngestCertifyVuln;
 use crate::client::intrinsic::certify_vuln::query::{query_certify_vuln, QueryCertifyVuln};
-use crate::client::intrinsic::package::{Package, PkgInputSpec, PkgSpec};
-use crate::client::intrinsic::vulnerability::{Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec};
+use crate::client::intrinsic::package::{IDorPkgInput, Package, PkgInputSpec, PkgSpec};
+use crate::client::intrinsic::vulnerability::{
+    IDorVulnerabilityInput, Vulnerability, VulnerabilityInputSpec, VulnerabilitySpec,
+};
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::{Error, Id};
 use serde::{Deserialize, Serialize};
@@ -19,8 +21,8 @@ type Time = chrono::DateTime<Utc>;
 impl IntrinsicGuacClient {
     pub async fn ingest_certify_vuln(
         &self,
-        package: &PkgInputSpec,
-        vulnerability: &VulnerabilityInputSpec,
+        package: &IDorPkgInput,
+        vulnerability: &IDorVulnerabilityInput,
         meta: &ScanMetadataInput,
     ) -> Result<Id, Error> {
         use self::ingest::ingest_certify_vuln;
@@ -84,6 +86,7 @@ pub struct ScanMetadata {
     pub time_scanned: Time,
     pub origin: String,
     pub collector: String,
+    pub document_ref: String,
 }
 
 pub type ScanMetadataInput = ScanMetadata;
@@ -100,4 +103,5 @@ pub struct CertifyVulnSpec {
     pub scanner_version: Option<String>,
     pub origin: Option<String>,
     pub collector: Option<String>,
+    pub document_ref: Option<String>,
 }

@@ -83,6 +83,7 @@ pub struct CertifyGoodSpec {
     pub origin: Option<String>,
     pub collector: Option<String>,
     pub known_since: Option<Time>,
+    pub document_ref: Option<String>,
 }
 
 impl From<&PackageUrl<'_>> for CertifyGoodSpec {
@@ -101,4 +102,5 @@ pub struct CertifyGoodInputSpec {
     pub origin: String,
     pub collector: String,
     pub known_since: Time,
+    pub document_ref: String,
 }

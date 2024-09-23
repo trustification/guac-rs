@@ -37,10 +37,11 @@ fragment allCertifyVulnTree on CertifyVuln {
         timeScanned
         origin
         collector
+        documentRef
     }
 }
 
-mutation IngestCertifyVuln($package: PkgInputSpec!, $vulnerability: VulnerabilityInputSpec!, $meta: ScanMetadataInput!) {
+mutation IngestCertifyVuln($package: IDorPkgInput!, $vulnerability: IDorVulnerabilityInput!, $meta: ScanMetadataInput!) {
     ingestCertifyVuln(
         pkg: $package
         vulnerability: $vulnerability

@@ -1,10 +1,11 @@
 use std::borrow::Cow;
 
 use graphql_client::reqwest::post_graphql;
+use ingest::ingest_package::IngestPackageIngestPackage;
 use packageurl::PackageUrl;
 use serde::{Deserialize, Serialize};
 
-use crate::client::intrinsic::package::ingest::IngestPackage;
+use crate::client::intrinsic::package::ingest::{ingest_package, IngestPackage};
 use crate::client::intrinsic::package::query::QueryPackages;
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::{Error, Id};
@@ -13,8 +14,7 @@ mod ingest;
 mod query;
 
 impl IntrinsicGuacClient {
-    pub async fn ingest_package(&self, package: &PkgInputSpec) -> Result<Id, Error> {
-        use self::ingest::ingest_package;
+    pub async fn ingest_package(&self, package: &IDorPkgInput) -> Result<IngestPackageIngestPackage, Error> {
         let variables = ingest_package::Variables {
             package: package.into(),
         };
@@ -260,5 +260,38 @@ impl TryFrom<&Package> for Vec<PackageUrl<'_>> {
     type Error = packageurl::Error;
     fn try_from(value: &Package) -> Result<Self, Self::Error> {
         value.try_as_purls()
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct IDorPkgInput {
+    pub package_type_id: Option<Id>,
+    pub package_namespace_id: Option<Id>,
+    pub package_name_id: Option<Id>,
+    pub package_version_id: Option<Id>,
+    pub package_input: Option<PkgInputSpec>,
+}
+
+impl From<&IDorPkgInput> for ingest_package::IDorPkgInput {
+    fn from(value: &IDorPkgInput) -> Self {
+        Self {
+            package_type_id: value.package_type_id.clone(),
+            package_namespace_id: value.package_namespace_id.clone(),
+            package_name_id: value.package_name_id.clone(),
+            package_version_id: value.package_version_id.clone(),
+            package_input: value.package_input.as_ref().map(|inner| inner.into()),
+        }
+    }
+}
+
+impl From<PackageUrl<'_>> for IDorPkgInput {
+    fn from(purl: PackageUrl<'_>) -> Self {
+        Self {
+            package_type_id: None,
+            package_namespace_id: None,
+            package_name_id: None,
+            package_version_id: None,
+            package_input: Some(purl.clone().into()),
+        }
     }
 }

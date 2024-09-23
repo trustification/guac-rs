@@ -152,6 +152,7 @@ impl From<&neighbors::AllCertifyVulnTreeMetadata> for ScanMetadata {
             time_scanned: value.time_scanned,
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }

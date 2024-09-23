@@ -2,7 +2,7 @@ use chrono::Utc;
 use graphql_client::GraphQLQuery;
 
 use crate::client::intrinsic::certify_good::CertifyGoodInputSpec;
-use crate::client::intrinsic::package::{PackageQualifierInputSpec, PkgInputSpec};
+use crate::client::intrinsic::package::{IDorPkgInput, PackageQualifierInputSpec, PkgInputSpec};
 use crate::client::intrinsic::{MatchFlags, PackageSourceOrArtifactInput, PkgMatchType};
 
 type Time = chrono::DateTime<Utc>;
@@ -39,6 +39,7 @@ impl From<&CertifyGoodInputSpec> for ingest_certify_good::CertifyGoodInputSpec {
             origin: value.origin.clone(),
             collector: value.collector.clone(),
             known_since: value.known_since,
+            document_ref: value.document_ref.clone(),
         }
     }
 }
@@ -52,6 +53,18 @@ impl From<&PkgInputSpec> for ingest_certify_good::PkgInputSpec {
             version: value.version.clone(),
             qualifiers: value.qualifiers.as_ref().map(|e| e.iter().map(|e| e.into()).collect()),
             subpath: value.subpath.clone(),
+        }
+    }
+}
+
+impl From<&IDorPkgInput> for ingest_certify_good::IDorPkgInput {
+    fn from(value: &IDorPkgInput) -> Self {
+        Self {
+            package_type_id: value.package_type_id.clone(),
+            package_namespace_id: value.package_namespace_id.clone(),
+            package_name_id: value.package_name_id.clone(),
+            package_version_id: value.package_version_id.clone(),
+            package_input: value.package_input.as_ref().map(|inner| inner.into()),
         }
     }
 }

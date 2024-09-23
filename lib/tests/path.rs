@@ -2,14 +2,14 @@ use std::str::FromStr;
 
 use packageurl::PackageUrl;
 
+use crate::common::guac_url;
 use guac::client::graph::Edge;
 use guac::client::intrinsic::certify_vuln::ScanMetadata;
 use guac::client::intrinsic::is_dependency::{DependencyType, IsDependencyInputSpec};
-use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
+use guac::client::intrinsic::package::IDorPkgInput;
+use guac::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilityInputSpec};
 use guac::client::intrinsic::PkgMatchType;
 use guac::client::GuacClient;
-
-use crate::common::guac_url;
 
 mod common;
 
@@ -22,10 +22,10 @@ async fn neighbor() -> Result<(), anyhow::Error> {
     let pkg_c = PackageUrl::from_str("pkg:rpm/trustification-neighbor-c@33.3")?;
     let pkg_d = PackageUrl::from_str("pkg:rpm/trustification-neighbor-d@044.4")?;
 
-    let pkg_a_id = client.intrinsic().ingest_package(&pkg_a.clone().into()).await?;
-    let _pkg_b_id = client.intrinsic().ingest_package(&pkg_b.clone().into()).await?;
-    let _pkg_c_id = client.intrinsic().ingest_package(&pkg_c.clone().into()).await?;
-    let _pkg_d_id = client.intrinsic().ingest_package(&pkg_d.clone().into()).await?;
+    let pkg_a_ids = client.intrinsic().ingest_package(&pkg_a.clone().into()).await?;
+    let _pkg_b_ids = client.intrinsic().ingest_package(&pkg_b.clone().into()).await?;
+    let _pkg_c_ids = client.intrinsic().ingest_package(&pkg_c.clone().into()).await?;
+    let _pkg_d_ids = client.intrinsic().ingest_package(&pkg_d.clone().into()).await?;
 
     // A -> B
     //   -> C -> D
@@ -42,6 +42,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
                 justification: "a-b justification".to_string(),
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;
@@ -60,6 +61,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
                 justification: "a-c justification".to_string(),
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;
@@ -78,6 +80,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
                 justification: "c-d justification".to_string(),
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;
@@ -86,19 +89,33 @@ async fn neighbor() -> Result<(), anyhow::Error> {
 
     client
         .intrinsic()
-        .ingest_vulnerability(&VulnerabilityInputSpec {
-            r#type: "osv".to_string(),
-            vulnerability_id: "ghsa-vuln-a".to_string(),
+        .ingest_vulnerability(&IDorVulnerabilityInput {
+            vulnerability_input: Some(VulnerabilityInputSpec {
+                r#type: "osv".to_string(),
+                vulnerability_id: "ghsa-vuln-a".to_string(),
+            }),
+            vulnerability_type_id: None,
+            vulnerability_node_id: None,
         })
         .await?;
 
     let _vuln_a = client
         .intrinsic()
         .ingest_certify_vuln(
-            &pkg_a.clone().into(),
-            &VulnerabilityInputSpec {
-                r#type: "osv".to_string(),
-                vulnerability_id: "ghsa-vuln-a".to_string(),
+            &IDorPkgInput {
+                package_type_id: None,
+                package_namespace_id: None,
+                package_name_id: None,
+                package_version_id: None,
+                package_input: Some(pkg_a.clone().into()),
+            },
+            &IDorVulnerabilityInput {
+                vulnerability_input: Some(VulnerabilityInputSpec {
+                    r#type: "osv".to_string(),
+                    vulnerability_id: "ghsa-vuln-a".to_string(),
+                }),
+                vulnerability_type_id: None,
+                vulnerability_node_id: None,
             },
             &ScanMetadata {
                 db_uri: "test-db-uri".to_string(),
@@ -108,25 +125,40 @@ async fn neighbor() -> Result<(), anyhow::Error> {
                 time_scanned: Default::default(),
                 origin: "test-vuln-origin".to_string(),
                 collector: "test-vuln-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;
 
     client
         .intrinsic()
-        .ingest_vulnerability(&VulnerabilityInputSpec {
-            r#type: "osv".to_string(),
-            vulnerability_id: "ghsa-vuln-d".to_string(),
+        .ingest_vulnerability(&IDorVulnerabilityInput {
+            vulnerability_input: Some(VulnerabilityInputSpec {
+                r#type: "osv".to_string(),
+                vulnerability_id: "ghsa-vuln-d".to_string(),
+            }),
+            vulnerability_type_id: None,
+            vulnerability_node_id: None,
         })
         .await?;
 
     let _vuln_d = client
         .intrinsic()
         .ingest_certify_vuln(
-            &pkg_d.clone().into(),
-            &VulnerabilityInputSpec {
-                r#type: "osv".to_string(),
-                vulnerability_id: "ghsa-vuln-d".to_string(),
+            &IDorPkgInput {
+                package_type_id: None,
+                package_namespace_id: None,
+                package_name_id: None,
+                package_version_id: None,
+                package_input: Some(pkg_d.clone().into()),
+            },
+            &IDorVulnerabilityInput {
+                vulnerability_input: Some(VulnerabilityInputSpec {
+                    r#type: "osv".to_string(),
+                    vulnerability_id: "ghsa-vuln-d".to_string(),
+                }),
+                vulnerability_type_id: None,
+                vulnerability_node_id: None,
             },
             &ScanMetadata {
                 db_uri: "test-db-uri".to_string(),
@@ -136,6 +168,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
                 time_scanned: Default::default(),
                 origin: "test-vuln-origin".to_string(),
                 collector: "test-vuln-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;
@@ -144,7 +177,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
     let _result = client
         .intrinsic()
         .neighbors(
-            &pkg_a_id,
+            &pkg_a_ids.package_version_id,
             //vec![]
             vec![Edge::PackageIsDependency],
         )
@@ -155,7 +188,7 @@ async fn neighbor() -> Result<(), anyhow::Error> {
     let result = client
         .intrinsic()
         .neighbors(
-            &pkg_a_id,
+            &pkg_a_ids.package_version_id,
             //vec![]
             vec![Edge::PackageCertifyVuln],
         )
@@ -190,6 +223,7 @@ async fn transitive_dependents() -> Result<(), anyhow::Error> {
                         justification: "justification".to_string(),
                         origin: "test-origin".to_string(),
                         collector: "test-collector".to_string(),
+                        document_ref: "test-document-ref".to_string(),
                     },
                 )
                 .await?;
@@ -257,6 +291,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
                         justification: "justification".to_string(),
                         origin: "test-origin".to_string(),
                         collector: "test-collector".to_string(),
+                        document_ref: "test-document-ref".to_string(),
                     },
                 )
                 .await?;
@@ -278,19 +313,33 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
 
     client
         .intrinsic()
-        .ingest_vulnerability(&VulnerabilityInputSpec {
-            r#type: "osv".to_string(),
-            vulnerability_id: "cve-log4shell".to_string(),
+        .ingest_vulnerability(&IDorVulnerabilityInput {
+            vulnerability_input: Some(VulnerabilityInputSpec {
+                r#type: "osv".to_string(),
+                vulnerability_id: "cve-log4shell".to_string(),
+            }),
+            vulnerability_type_id: None,
+            vulnerability_node_id: None,
         })
         .await?;
 
     client
         .intrinsic()
         .ingest_certify_vuln(
-            &PackageUrl::from_str("pkg:rpm/log4j@1.0")?.into(),
-            &VulnerabilityInputSpec {
-                r#type: "osv".to_string(),
-                vulnerability_id: "cve-log4shell".to_string(),
+            &IDorPkgInput {
+                package_type_id: None,
+                package_namespace_id: None,
+                package_name_id: None,
+                package_version_id: None,
+                package_input: Some(PackageUrl::from_str("pkg:rpm/log4j@1.0")?.into()),
+            },
+            &IDorVulnerabilityInput {
+                vulnerability_input: Some(VulnerabilityInputSpec {
+                    r#type: "osv".to_string(),
+                    vulnerability_id: "cve-log4shell".to_string(),
+                }),
+                vulnerability_type_id: None,
+                vulnerability_node_id: None,
             },
             &ScanMetadata {
                 db_uri: "test-db".to_string(),
@@ -300,6 +349,7 @@ async fn transitive_affected() -> Result<(), anyhow::Error> {
                 time_scanned: Default::default(),
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;

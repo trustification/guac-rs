@@ -1,4 +1,3 @@
-
 fragment allVulnMetadataTree on VulnerabilityMetadata {
     id
     vulnerability {
@@ -16,7 +15,7 @@ fragment allVulnMetadataTree on VulnerabilityMetadata {
     collector
 }
 
-mutation IngestVulnerabilityMetadata($vulnerability: VulnerabilityInputSpec!, $vulnerability_metadata: VulnerabilityMetadataInputSpec!) {
+mutation IngestVulnerabilityMetadata($vulnerability: IDorVulnerabilityInput!, $vulnerability_metadata: VulnerabilityMetadataInputSpec!) {
     ingestVulnerabilityMetadata(
         vulnerability: $vulnerability
         vulnerabilityMetadata: $vulnerability_metadata

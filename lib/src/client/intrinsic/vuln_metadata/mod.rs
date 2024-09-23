@@ -3,7 +3,7 @@ use graphql_client::reqwest::post_graphql;
 
 use crate::client::intrinsic::vuln_metadata::ingest::IngestVulnerabilityMetadata;
 use crate::client::intrinsic::vuln_metadata::query::{query_vulnerability_metadata, QueryVulnerabilityMetadata};
-use crate::client::intrinsic::vulnerability::{VulnerabilityInputSpec, VulnerabilitySpec};
+use crate::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilityInputSpec, VulnerabilitySpec};
 use crate::client::intrinsic::IntrinsicGuacClient;
 use crate::client::{Error, Id};
 
@@ -15,7 +15,7 @@ type Time = chrono::DateTime<Utc>;
 impl IntrinsicGuacClient {
     pub async fn ingest_vuln_metadata(
         &self,
-        vulnerability: &VulnerabilityInputSpec,
+        vulnerability: &IDorVulnerabilityInput,
         vulnerability_metadata: &VulnerabilityMetadataInputSpec,
     ) -> Result<Id, Error> {
         use self::ingest::ingest_vulnerability_metadata;
@@ -82,6 +82,7 @@ pub struct VulnerabilityMetadataInputSpec {
     pub timestamp: Time,
     pub origin: String,
     pub collector: String,
+    pub document_ref: String,
 }
 
 #[derive(Default, Debug, Clone)]
@@ -94,6 +95,7 @@ pub struct VulnerabilityMetadataSpec {
     pub timestamp: Option<Time>,
     pub origin: Option<String>,
     pub collector: Option<String>,
+    pub document_ref: Option<String>,
 }
 
 #[derive(Debug, Clone)]

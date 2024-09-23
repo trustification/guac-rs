@@ -1,32 +1,37 @@
 fragment allPkgTree on Package {
-  id
-  type
-  namespaces {
     id
-    namespace
-    names {
-      id
-      name
-      versions {
+    type
+    namespaces {
         id
-        version
-        qualifiers {
-          key
-          value
+        namespace
+        names {
+            id
+            name
+            versions {
+                id
+                version
+                qualifiers {
+                    key
+                    value
+                }
+                subpath
+            }
         }
-        subpath
-      }
     }
-  }
 }
 
-mutation IngestPackage($package: PkgInputSpec!) {
-  ingestPackage(pkg: $package)
+mutation IngestPackage($package: IDorPkgInput!) {
+    ingestPackage (pkg: $package) {
+        packageTypeID
+        packageNamespaceID
+        packageNameID
+        packageVersionID
+    }
 }
 
 query QueryPackages($package: PkgSpec!) {
-  packages(pkgSpec: $package) {
-    ...allPkgTree
-  }
+    packages(pkgSpec: $package) {
+        ...allPkgTree
+    }
 }
 

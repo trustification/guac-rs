@@ -46,7 +46,7 @@ fragment allCertifyVEXStatementTree on CertifyVEXStatement {
     collector
 }
 
-mutation IngestCertifyVexStatement($subject: PackageOrArtifactInput!, $vulnerability: VulnerabilityInputSpec!, $vex_statement: VexStatementInputSpec!) {
+mutation IngestCertifyVexStatement($subject: PackageOrArtifactInput!, $vulnerability: IDorVulnerabilityInput!, $vex_statement: VexStatementInputSpec!) {
     ingestVEXStatement(
         subject: $subject
         vulnerability: $vulnerability
@@ -58,7 +58,7 @@ query QueryCertifyVexStatement($certify_vex_statement_spec: CertifyVEXStatementS
     CertifyVEXStatement(
         certifyVEXStatementSpec: $certify_vex_statement_spec
     ) {
-      ...allCertifyVEXStatementTree
+        ...allCertifyVEXStatementTree
     }
 
 }

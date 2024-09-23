@@ -5,7 +5,7 @@ use packageurl::PackageUrl;
 use guac::client::intrinsic::certify_vex_statement::{
     CertifyVexStatementSpec, VexJustification, VexStatementInputSpec, VexStatus,
 };
-use guac::client::intrinsic::vulnerability::VulnerabilityInputSpec;
+use guac::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilityInputSpec};
 use guac::client::GuacClient;
 
 use crate::common::guac_url;
@@ -20,9 +20,13 @@ async fn certify_vex_statement() -> Result<(), anyhow::Error> {
 
     client.intrinsic().ingest_package(&package.clone().into()).await?;
 
-    let vuln = VulnerabilityInputSpec {
-        r#type: "cve".to_string(),
-        vulnerability_id: "CVE-123".to_string(),
+    let vuln = IDorVulnerabilityInput {
+        vulnerability_input: Some(VulnerabilityInputSpec {
+            r#type: "cve".to_string(),
+            vulnerability_id: "CVE-123".to_string(),
+        }),
+        vulnerability_type_id: None,
+        vulnerability_node_id: None,
     };
 
     client.intrinsic().ingest_vulnerability(&vuln).await?;
@@ -35,6 +39,7 @@ async fn certify_vex_statement() -> Result<(), anyhow::Error> {
         known_since: Default::default(),
         origin: "test-vex-origin".to_string(),
         collector: "test-vex-collector".to_string(),
+        document_ref: "test-document-ref".to_string(),
     };
 
     client

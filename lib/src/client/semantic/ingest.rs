@@ -46,6 +46,7 @@ impl Predicate<PackageUrl<'_>> for HasDependency<'_> {
                     justification: "".to_string(),
                     origin: "".to_string(),
                     collector: "".to_string(),
+                    document_ref: "".to_string(),
                 },
             )
             .await?;

@@ -2,9 +2,10 @@ use std::path::Path;
 use std::time::SystemTime;
 
 use serde::Serialize;
+use tonic::codegen::tokio_stream::StreamExt;
 use tonic::transport::{Certificate, Channel, ClientTlsConfig};
 
-use grpc::colect_subscriber_service_client::ColectSubscriberServiceClient;
+use grpc::collect_subscriber_service_client::CollectSubscriberServiceClient;
 use grpc::CollectDataType;
 use grpc::CollectEntryFilter;
 
@@ -72,20 +73,20 @@ impl From<&grpc::CollectEntry> for Entry {
 }
 
 pub struct CollectSubClient {
-    client: ColectSubscriberServiceClient<Channel>,
+    client: CollectSubscriberServiceClient<Channel>,
 }
 
 impl CollectSubClient {
     pub async fn new(url: String) -> anyhow::Result<Self> {
         Ok(Self {
-            client: grpc::colect_subscriber_service_client::ColectSubscriberServiceClient::connect(url).await?,
+            client: grpc::collect_subscriber_service_client::CollectSubscriberServiceClient::connect(url).await?,
         })
     }
 
     pub async fn new_with_ca_certificate(url: String, ca_certificate_pem_path: String) -> anyhow::Result<Self> {
         let cert = std::fs::read_to_string(ca_certificate_pem_path)?;
         Ok(Self {
-            client: grpc::colect_subscriber_service_client::ColectSubscriberServiceClient::connect(
+            client: grpc::collect_subscriber_service_client::CollectSubscriberServiceClient::connect(
                 tonic::transport::Endpoint::new(url)?
                     .tls_config(ClientTlsConfig::new().ca_certificate(Certificate::from_pem(cert)))?,
             )
@@ -106,11 +107,29 @@ impl CollectSubClient {
             since_time: since,
         };
 
-        let results = if let Ok(response) = self.client.get_collect_entries(request).await {
-            response.get_ref().entries.iter().map(|e| e.into()).collect()
-        } else {
-            vec![]
-        };
+        let mut results = vec![];
+        // Make the streaming request to the server
+        let get_collect_entries_result = self.client.get_collect_entries(request).await;
+        match get_collect_entries_result {
+            Ok(response) => {
+                let mut stream = response.into_inner();
+                // Process the stream of responses from the server
+                while let Some(stream_response) = stream.next().await {
+                    match stream_response {
+                        Ok(entries) => results.append(
+                            entries
+                                .entries
+                                .iter()
+                                .map(|e| e.into())
+                                .collect::<Vec<Entry>>()
+                                .as_mut(),
+                        ),
+                        Err(e) => println!("Error while streaming: {}", e),
+                    }
+                }
+            }
+            Err(e) => println!("Error while collecting entries: {}", e),
+        }
 
         Ok(results)
     }

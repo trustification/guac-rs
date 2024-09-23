@@ -1,5 +1,5 @@
 use crate::client::intrinsic::vuln_equal::VulnEqualInputSpec;
-use crate::client::intrinsic::vulnerability::VulnerabilityInputSpec;
+use crate::client::intrinsic::vulnerability::{IDorVulnerabilityInput, VulnerabilityInputSpec};
 use graphql_client::GraphQLQuery;
 
 #[derive(GraphQLQuery)]
@@ -25,6 +25,17 @@ impl From<&VulnEqualInputSpec> for ingest_vuln_equal::VulnEqualInputSpec {
             justification: value.justification.clone(),
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
+        }
+    }
+}
+
+impl From<&IDorVulnerabilityInput> for ingest_vuln_equal::IDorVulnerabilityInput {
+    fn from(vuln: &IDorVulnerabilityInput) -> Self {
+        Self {
+            vulnerability_input: vuln.vulnerability_input.as_ref().map(|vuln| vuln.into()),
+            vulnerability_node_id: vuln.vulnerability_node_id.clone(),
+            vulnerability_type_id: vuln.vulnerability_type_id.clone(),
         }
     }
 }

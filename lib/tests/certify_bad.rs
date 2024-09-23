@@ -33,6 +33,7 @@ async fn certify_bad() -> Result<(), anyhow::Error> {
                 origin: "test-origin".to_string(),
                 collector: "test-collector".to_string(),
                 known_since: Default::default(),
+                document_ref: "test-document-ref".to_string(),
             },
         )
         .await?;

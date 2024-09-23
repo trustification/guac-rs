@@ -40,6 +40,7 @@ impl From<&CertifyVexStatementSpec> for query_certify_vex_statement::CertifyVEXS
             known_since: value.known_since,
             origin: value.origin.clone(),
             collector: value.collector.clone(),
+            document_ref: value.document_ref.clone(),
         }
     }
 }

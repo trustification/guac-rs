@@ -1,33 +1,33 @@
 fragment allHasSBOMTree on HasSBOM {
     id
     subject {
-       __typename
-       ... on Package {
-           id
-           type
-           namespaces {
-               id
-               namespace
-               names {
-                   id
-                   name
-                   versions {
-                       id
-                       version
-                       qualifiers {
-                           key
-                           value
-                       }
-                       subpath
-                   }
-               }
-           }
-       }
-       ... on Artifact {
-           id
-           algorithm
-           digest
-       }
+        __typename
+        ... on Package {
+            id
+            type
+            namespaces {
+                id
+                namespace
+                names {
+                    id
+                    name
+                    versions {
+                        id
+                        version
+                        qualifiers {
+                            key
+                            value
+                        }
+                        subpath
+                    }
+                }
+            }
+        }
+        ... on Artifact {
+            id
+            algorithm
+            digest
+        }
     }
     uri
     algorithm,
@@ -40,11 +40,13 @@ fragment allHasSBOMTree on HasSBOM {
 
 mutation IngestHasSBOM(
     $subject: PackageOrArtifactInput!,
-    $hasSBOM: HasSBOMInputSpec!
+    $hasSBOM: HasSBOMInputSpec!,
+    $includes: HasSBOMIncludesInputSpec!
 ) {
     ingestHasSBOM(
         subject: $subject,
-        hasSBOM: $hasSBOM
+        hasSBOM: $hasSBOM,
+        includes: $includes
     )
 }
 
