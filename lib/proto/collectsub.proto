@@ -19,46 +19,46 @@ option go_package = "github.com/guacsec/guac/pkg/collectsub";
 package guacsec.guac.collect_subscriber.schema;
 
 enum CollectDataType {
-    DATATYPE_UNKNOWN = 0;
-    DATATYPE_GIT = 1;
-    DATATYPE_OCI = 2;
-    DATATYPE_PURL = 3;
-    DATATYPE_GITHUB_RELEASE = 4;
+  DATATYPE_UNKNOWN = 0;
+  DATATYPE_GIT = 1;
+  DATATYPE_OCI = 2;
+  DATATYPE_PURL = 3;
+  DATATYPE_GITHUB_RELEASE = 4;
 }
 
 // Generic types
 message CollectEntry {
-    CollectDataType type = 1;
-    string value = 2;
+  CollectDataType type = 1;
+  string value = 2;
+  int64 since_time = 3;
 }
 
-// rpc AddCollectEntry
+// rpc AddCollectEntries
 message AddCollectEntriesRequest {
-    repeated CollectEntry entries = 1;
+  repeated CollectEntry entries = 1;
 }
 
 message AddCollectEntriesResponse {
-    bool success = 1;
+  bool success = 1;
 }
-
 
 // rpc GetCollectEntries
 message CollectEntryFilter {
-    CollectDataType type = 1;
-    string glob = 2;
+  CollectDataType type = 1;
+  string glob = 2;
 }
 
 message GetCollectEntriesRequest {
-    repeated CollectEntryFilter filters = 1;
-    // since_time in unix epoch
-    int64 since_time = 2;
+  repeated CollectEntryFilter filters = 1;
+  // since_time in unix epoch
+  int64 since_time = 2;
 }
 
 message GetCollectEntriesResponse {
-    repeated CollectEntry entries = 1;
+  repeated CollectEntry entries = 1;
 }
 
-service ColectSubscriberService {
+service CollectSubscriberService {
   rpc AddCollectEntries(AddCollectEntriesRequest) returns (AddCollectEntriesResponse);
-  rpc GetCollectEntries (GetCollectEntriesRequest) returns (GetCollectEntriesResponse);
+  rpc GetCollectEntries (GetCollectEntriesRequest) returns (stream GetCollectEntriesResponse);
 }
