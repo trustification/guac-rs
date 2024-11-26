@@ -1,4 +1,4 @@
-version: "3"
+# version: "3"
 
 services:
   # Neo4j is turned down for now since we are currently only using the in memory backend

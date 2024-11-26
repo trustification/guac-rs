@@ -7,25 +7,25 @@ resolver = "2"
 
 [workspace.dependencies]
 anyhow = "1.0.39"
-async-nats = "0.35.1"
+async-nats = "0.38"
 async-trait = "0.1"
 chrono = "0.4.23"
 clap = "4.5.0"
 colored_json = "5.0.0"
 env_logger = "0.11.1"
-graphql_client = "0.14.0"
+graphql_client = {git = "https://github.com/graphql-rust/graphql-client", rev = "683951f335b22317ab18dd170809ad57838ffe9d", package = "graphql_client"}
 humantime = "2.1.0"
 packageurl = "0.4.0"
-prost = "0.12.3"
-reqwest = "0.11"
+prost = "0.13"
+reqwest = "0.12"
 serde = "1.0.114"
 serde_json = "1.0.56"
 strum = "0.26.1"
 strum_macros = "0.26.1"
-thiserror = "1"
+thiserror = "2"
 tokio = "1.36.0"
-tonic = { version = "0.11.0", features = ["tls"] }
-tonic-build = "0.11.0"
+tonic = { version = "0.12", features = ["tls"] }
+tonic-build = "0.12"
 
 # Do not generate debuginfo for dependencies in `dev` and `test` profiles. This
 # save us some disk space
