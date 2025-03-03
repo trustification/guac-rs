@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get install -y libsasl2-dev
     - uses: actions/checkout@v4
     - name: Install protobuf
       run: |
