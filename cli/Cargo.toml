@@ -10,11 +10,11 @@ description = "A command-line interface for working with [Guac](https://guac.sh)
 [dependencies]
 guac = { path = "../lib" }
 anyhow = { workspace = true }
-tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "process"] }
 serde_json = { workspace = true }
 colored_json = { workspace = true }
 clap = { workspace = true, features = ["derive"] }
-exporter = { git = "https://github.com/trustification/trustification.git", tag = "v0.1.0-nightly.9382a428" }
+#exporter = { git = "https://github.com/trustification/trustification.git", tag = "v0.1.0-nightly.9382a428" }
 env_logger = { workspace = true }
 humantime = { workspace = true }
 packageurl = { workspace = true }
