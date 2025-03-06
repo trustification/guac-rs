@@ -1,7 +1,8 @@
-use crate::client::intrinsic::artifact::ArtifactSpec;
+use crate::client::intrinsic::artifact::{Artifact, ArtifactSpec};
 use crate::client::intrinsic::has_sbom::query::query_has_sbom::{
-    allHasSBOMTree, AllHasSbomTreeSubject, AllHasSbomTreeSubjectOnPackage, AllHasSbomTreeSubjectOnPackageNamespaces,
-    AllHasSbomTreeSubjectOnPackageNamespacesNames, AllHasSbomTreeSubjectOnPackageNamespacesNamesVersions,
+    allHasSBOMTree, AllHasSbomTreeSubject, AllHasSbomTreeSubjectOnArtifact, AllHasSbomTreeSubjectOnPackage,
+    AllHasSbomTreeSubjectOnPackageNamespaces, AllHasSbomTreeSubjectOnPackageNamespacesNames,
+    AllHasSbomTreeSubjectOnPackageNamespacesNamesVersions,
     AllHasSbomTreeSubjectOnPackageNamespacesNamesVersionsQualifiers,
 };
 use crate::client::intrinsic::has_sbom::{HasSBOM, HasSBOMSpec};
@@ -171,9 +172,7 @@ impl From<&query_has_sbom::AllHasSbomTreeSubject> for PackageOrArtifact {
     fn from(value: &AllHasSbomTreeSubject) -> Self {
         match value {
             AllHasSbomTreeSubject::Package(inner) => PackageOrArtifact::Package(inner.into()),
-            AllHasSbomTreeSubject::Artifact(inner) => {
-                todo!()
-            }
+            AllHasSbomTreeSubject::Artifact(inner) => PackageOrArtifact::Artifact(inner.into()),
         }
     }
 }
@@ -224,6 +223,16 @@ impl From<&AllHasSbomTreeSubjectOnPackageNamespacesNamesVersionsQualifiers> for 
         Self {
             key: value.key.clone(),
             value: value.value.clone(),
+        }
+    }
+}
+
+impl From<&AllHasSbomTreeSubjectOnArtifact> for Artifact {
+    fn from(value: &AllHasSbomTreeSubjectOnArtifact) -> Self {
+        Self {
+            id: value.id.clone(),
+            algorithm: value.algorithm.clone(),
+            digest: value.digest.clone(),
         }
     }
 }

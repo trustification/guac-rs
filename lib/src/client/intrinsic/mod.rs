@@ -1,3 +1,4 @@
+use crate::client::intrinsic::artifact::Artifact;
 use crate::client::intrinsic::package::{IDorPkgInput, Package, PkgInputSpec, PkgSpec};
 use crate::client::semantic::SemanticGuacClient;
 use crate::client::GuacClient;
@@ -92,7 +93,7 @@ impl From<PackageUrl<'_>> for PackageSourceOrArtifactInput {
 #[derive(Clone, Debug)]
 pub enum PackageOrArtifact {
     Package(Package),
-    //Artifact(Artifact),
+    Artifact(Artifact),
 }
 
 #[derive(Clone, Debug)]

@@ -300,11 +300,15 @@ impl SemanticGuacClient {
         let data: <FindDependentProduct as GraphQLQuery>::ResponseData =
             response_body.data.ok_or(Error::GraphQL(vec![]))?;
 
-        let result = data
+        let mut result: Vec<String> = data
             .find_dependent_product
             .iter()
             .map(|entry| entry.uri.clone())
             .collect();
+        // Guac returns multiple time the same SBOM if it refers to multiple artifacts but here
+        // only the URI matters so sorting and dedup will ensure each URI is returned just once
+        result.sort_unstable();
+        result.dedup();
 
         Ok(result)
     }
